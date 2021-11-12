@@ -5,7 +5,7 @@ Created on Wed Dec 11 01:41:09 2019
 
 @author: yuichiro
 """
-
+/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/data/keras
 import glob
 Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
@@ -670,14 +670,14 @@ db_setting = 40
 import csv
 import pandas as pd
 
-date_in=[19950101,19951231]
+date_in=[19970101,19971231]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')
 
 DATE=sdate
 
-with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/afjpgu_cycle23_9.csv', 'w') as f:
+with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/afaf_sgepss_'+str(date_in[0])+'_'+str(date_in[1])+'.csv', 'w') as f:
     w = csv.DictWriter(f, fieldnames=["event_date", "event_hour", "event_minite", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list"])
     w.writeheader()
 
