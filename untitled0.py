@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Oct 23 21:57:01 2021
+Created on Fri Nov 12 10:14:43 2021
 
 @author: yuichiro
 """
 
-import glob
+import pandas as pd
 
-obs_dates = []
-files = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/afjpgusimpleselect/*/*/*.png')
-for file in files:
-    obs_time = int(file.split('/')[-1].split('_')[0])
-    if ((obs_time >= 20120101) & (obs_time <= 20171231)):
-        obs_dates.append(obs_time)
+file = '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/data/keras/pkl_file_af_jpgu_70/af_jpgu_inputdata_name128.csv'
 
-import collections
-c = collections.Counter(obs_dates)
-print(c.most_common(5))
+print (file)
+
+count = 0
+csv_input = pd.read_csv(filepath_or_buffer= file, sep=",")
+# print(csv_input['Time_list'])
+for i in range(len(csv_input)):
+    file_name = csv_input['file_name'][i]
+    test_or_train = csv_input['train_or_test'][i]
+    if (file_name == 'noise') and (test_or_train == 'train'):
+        count+= 1
+print (count)
+    
