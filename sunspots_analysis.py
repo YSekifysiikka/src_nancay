@@ -33,7 +33,7 @@ csv_input = pd.read_csv(filepath_or_buffer= file_gain, sep=";")
 # print(csv_input['Time_list'])
 for i in range(len(csv_input)):
     BG_obs_time_event = datetime.datetime(csv_input['Year'][i], csv_input['Month'][i], csv_input['Day'][i])
-    if (BG_obs_time_event >= datetime.datetime(1991, 1, 1)) & (BG_obs_time_event <= datetime.datetime(2021, 1, 1)):
+    if (BG_obs_time_event >= datetime.datetime(2012, 1, 1)) & (BG_obs_time_event <= datetime.datetime(2021, 1, 1)):
         sunspot_num = csv_input['sunspot_number'][i]
         if not sunspot_num == -1:
             sunspot_obs_times.append(BG_obs_time_event)
@@ -65,6 +65,7 @@ print ('filerate top: ' + str(len(sunspot_obs_times[topidx])/len(sunspot_obs_tim
 # plt.axvline(datetime.datetime(2012,1,1), ls = "--", color = "navy")
 # plt.axvline(datetime.datetime(2015,1,1), ls = "--", color = "navy")
 # plt.axvline(datetime.datetime(2010,1,1), ls = "--", color = "navy")
+plt.xlim(datetime.datetime(2012, 1, 1), datetime.datetime(2021, 1, 1))
 plt.ylabel('Sunspot number '+' $S_n$', fontsize = 20)
 plt.show()
 plt.close()

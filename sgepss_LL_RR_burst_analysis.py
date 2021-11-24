@@ -947,10 +947,11 @@ velocity_hist_analysis_micro_ordinary_solar_cycle_dependence(velocity_1fp, veloc
 #95%信頼区間は母数によって値かえる
 #http://kogolab.chillout.jp/elearn/hamburger/chap2/sec3.html
 print ('DR analysis')
-df = pd.DataFrame([[len(each_freq_drift[0]), np.nanmean(each_freq_drift[0]), np.nanstd(each_freq_drift[0]), np.nanmin(each_freq_drift[0]), np.nanmax(each_freq_drift[0]), np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), np.nanmean(each_freq_drift[0]) - np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])),np.nanmean(each_freq_drift[0]) + np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), np.nanmean(each_freq_drift[0]) - 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])),np.nanmean(each_freq_drift[0]) + 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0]))],
-                   [len(each_freq_drift[1]), np.nanmean(each_freq_drift[1]), np.nanstd(each_freq_drift[1]), np.nanmin(each_freq_drift[1]), np.nanmax(each_freq_drift[1]), np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])), np.nanmean(each_freq_drift[1]) - np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) + np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])), 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) - 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) + 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1]))],
-                   [len(each_freq_drift[2]), np.nanmean(each_freq_drift[2]), np.nanstd(each_freq_drift[2]), np.nanmin(each_freq_drift[2]), np.nanmax(each_freq_drift[2]), np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])), np.nanmean(each_freq_drift[2]) - np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) + np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])), 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) - 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) + 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2]))],
-                   [len(each_freq_drift[3]), np.nanmean(each_freq_drift[3]), np.nanstd(each_freq_drift[3]), np.nanmin(each_freq_drift[3]), np.nanmax(each_freq_drift[3]), np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])), np.nanmean(each_freq_drift[3]) - np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) + np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])), 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) - 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) + 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3]))]], 
+# df = pd.DataFrame([[len(each_freq_drift[0]), np.nanmean(each_freq_drift[0]), np.nanstd(each_freq_drift[0]), np.nanmin(each_freq_drift[0]), np.nanmax(each_freq_drift[0]), np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), np.nanmean(each_freq_drift[0]) - np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])),np.nanmean(each_freq_drift[0]) + np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), np.nanmean(each_freq_drift[0]) - 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])),np.nanmean(each_freq_drift[0]) + 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0]))],
+#                    [len(each_freq_drift[1]), np.nanmean(each_freq_drift[1]), np.nanstd(each_freq_drift[1]), np.nanmin(each_freq_drift[1]), np.nanmax(each_freq_drift[1]), np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])), np.nanmean(each_freq_drift[1]) - np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) + np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])), 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) - 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) + 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1]))],
+#                    [len(each_freq_drift[2]), np.nanmean(each_freq_drift[2]), np.nanstd(each_freq_drift[2]), np.nanmin(each_freq_drift[2]), np.nanmax(each_freq_drift[2]), np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])), np.nanmean(each_freq_drift[2]) - np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) + np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])), 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) - 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) + 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2]))],
+#                    [len(each_freq_drift[3]), np.nanmean(each_freq_drift[3]), np.nanstd(each_freq_drift[3]), np.nanmin(each_freq_drift[3]), np.nanmax(each_freq_drift[3]), np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])), np.nanmean(each_freq_drift[3]) - np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) + np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])), 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) - 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) + 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3]))]], 
+
 index=['Micro solar maximum', 'Micro solar minimum', 'Ordinary solar maximum', 'Ordinary solar minimum'], 
 columns=['Event Num', 'AVE DR','STD DR','DR Min', 'DR Max', 'DR SE', 'AVE - SE', 'AVE + SE', '95%信頼区間', '95%信頼区間下限', '95%信頼区間上限'])
 pd.set_option('display.max_columns', 150)
@@ -979,55 +980,55 @@ pd.set_option('display.max_columns', 150)
 print (df)
 
 
-# freq_drift_min = np.nanmin([np.min(each_freq_drift[0]), np.nanmin(each_freq_drift[1]), np.nanmin(each_freq_drift[2]), np.nanmin(each_freq_drift[3])]) - 0.5
-# freq_drift_max = np.nanmax([np.max(each_freq_drift[0]), np.nanmax(each_freq_drift[1]), np.nanmax(each_freq_drift[2]), np.nanmax(each_freq_drift[3])]) + 0.5
+freq_drift_min = np.nanmin([np.min(each_freq_drift[0]), np.nanmin(each_freq_drift[1]), np.nanmin(each_freq_drift[2]), np.nanmin(each_freq_drift[3])]) - 0.5
+freq_drift_max = np.nanmax([np.max(each_freq_drift[0]), np.nanmax(each_freq_drift[1]), np.nanmax(each_freq_drift[2]), np.nanmax(each_freq_drift[3])]) + 0.5
 
 
-
-# # each_obs_time = np.array(each_obs_time)
-# for i in range(len(each_obs_time)):
-#     nd_obs_time = np.array(each_obs_time[i])
-#     if i == 0 or i == 1:
-#         burst_type = "Micro type Ⅲ burst"
-#         if i == 0:
-#             burst_period = "around the solar maximum"
-#         else:
-#             burst_period = "around the solar minimum"
-#     else:
-#         burst_type = "Ordinary type Ⅲ burst"
-#         if i == 2:
-#             burst_period = "around the solar maximum"
-#         else:
-#             burst_period = "around the solar minimum"
-#     for period in analysis_period:
-#         sdate,edate=period
-#         if len(nd_obs_time[(nd_obs_time <= edate) & (nd_obs_time >= sdate)]) > 0:
-#             DATE=sdate
-#             while DATE <= edate:
-#                 if len(nd_obs_time[(nd_obs_time <= datetime.datetime.combine((DATE+relativedelta(months=move_ave_analysis)).date(), datetime.datetime.min.time())) & (nd_obs_time >= DATE)]) > 0:
-#                     index = np.where((nd_obs_time <= datetime.datetime.combine((DATE+relativedelta(months=move_ave_analysis)).date(), datetime.datetime.min.time())) & (nd_obs_time >= DATE))[0]
-#                     ax = plt.subplot()
-#                     ax.plot(nd_obs_time[index[0]:index[-1]+1], each_freq_drift[i][index[0]:index[-1]+1], '.')
+move_ave_analysis = 1
+# each_obs_time = np.array(each_obs_time)
+for i in range(len(each_obs_time)):
+    nd_obs_time = np.array(each_obs_time[i])
+    if i == 0 or i == 1:
+        burst_type = "Micro type Ⅲ burst"
+        if i == 0:
+            burst_period = "around the solar maximum"
+        else:
+            burst_period = "around the solar minimum"
+    else:
+        burst_type = "Ordinary type Ⅲ burst"
+        if i == 2:
+            burst_period = "around the solar maximum"
+        else:
+            burst_period = "around the solar minimum"
+    for period in analysis_period:
+        sdate,edate=period
+        if len(nd_obs_time[(nd_obs_time <= edate) & (nd_obs_time >= sdate)]) > 0:
+            DATE=sdate
+            while DATE <= edate:
+                if len(nd_obs_time[(nd_obs_time <= datetime.datetime.combine((DATE+relativedelta(months=move_ave_analysis)).date(), datetime.datetime.min.time())) & (nd_obs_time >= DATE)]) > 0:
+                    index = np.where((nd_obs_time <= datetime.datetime.combine((DATE+relativedelta(months=move_ave_analysis)).date(), datetime.datetime.min.time())) & (nd_obs_time >= DATE))[0]
+                    ax = plt.subplot()
+                    ax.plot(nd_obs_time[index[0]:index[-1]+1], each_freq_drift[i][index[0]:index[-1]+1], '.')
                     
-#                     xfmt = mdates.DateFormatter("%m/%d")
-#                     xloc = mdates.DayLocator(interval=60)
-#                     ax.xaxis.set_major_locator(xloc)
-#                     ax.xaxis.set_major_formatter(xfmt)
+                    xfmt = mdates.DateFormatter("%m/%d")
+                    xloc = mdates.DayLocator(interval=60)
+                    ax.xaxis.set_major_locator(xloc)
+                    ax.xaxis.set_major_formatter(xfmt)
                     
-#                     ax.set_ylim(freq_drift_min, freq_drift_max)
-#                     ax.set_title(burst_type + ' observed '+burst_period + '\n'+DATE.strftime(format='%Y%m%d')+' - ' + (datetime.datetime.combine((DATE+relativedelta(months=move_ave_analysis)).date(), datetime.datetime.min.time())-datetime.timedelta(days=1)).strftime(format='%Y%m%d'), fontsize = 14)
-#                     ax.set_ylabel("DRs[MHz/s]", fontsize = 12)
-#                     ax.set_xlabel("Time", fontsize = 12)
-#                     plt.show()
-#                     plt.close()
+                    ax.set_ylim(freq_drift_min, freq_drift_max)
+                    ax.set_title(burst_type + ' observed '+burst_period + '\n'+DATE.strftime(format='%Y%m%d')+' - ' + (datetime.datetime.combine((DATE+relativedelta(months=move_ave_analysis)).date(), datetime.datetime.min.time())-datetime.timedelta(days=1)).strftime(format='%Y%m%d'), fontsize = 14)
+                    ax.set_ylabel("DRs[MHz/s]", fontsize = 12)
+                    ax.set_xlabel("Time", fontsize = 12)
+                    plt.show()
+                    plt.close()
 
                 
 
 
 
 
-#                 DATE+=relativedelta(months = move_ave_analysis)
-#                 DATE = datetime.datetime.combine(DATE.date(), datetime.datetime.min.time())
+                DATE+=relativedelta(months = move_ave_analysis)
+                DATE = datetime.datetime.combine(DATE.date(), datetime.datetime.min.time())
 
 # solar_maximum = [datetime.datetime(2000, 1, 1), datetime.datetime(2003, 1, 1)]
 # solar_minimum = [datetime.datetime(2007, 1, 1), datetime.datetime(2010, 1, 1)]

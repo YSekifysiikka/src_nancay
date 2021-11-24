@@ -48,7 +48,7 @@ def numerical_diff_wangmax_dn_dr(factor, r):
 sun_to_earth = 150000000
 sun_radius = 696000
 light_v = 300000 #[km/s]
-time_rate = 0.33
+time_rate = 0.13
 # time_rate2 = 0.42
 
 print ('velocity= ' + str(time_rate) +  'c')

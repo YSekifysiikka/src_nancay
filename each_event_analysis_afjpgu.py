@@ -756,35 +756,45 @@ for i in range(len(each_obs_time)):
                 DATE = datetime.datetime.combine(DATE.date(), datetime.datetime.min.time())
 
 
+move_ave_analysis = 1
+
+for i in range(len(each_obs_time)):
+    nd_obs_time = np.array(each_obs_time[i])
+    if i == 0 or i == 1:
+        burst_type = "Micro type Ⅲ burst"
+        if i == 0:
+            burst_period = "around the solar maximum"
+        else:
+            burst_period = "around the solar minimum"
+    else:
+        sys.exit()
+    for period in analysis_period:
+        sdate,edate=period
+        if len(nd_obs_time[(nd_obs_time <= edate) & (nd_obs_time >= sdate)]) > 0:
+            DATE=sdate
+            while DATE <= edate:
+                if len(nd_obs_time[(nd_obs_time <= datetime.datetime.combine((DATE+relativedelta(months=move_ave_analysis)).date(), datetime.datetime.min.time())) & (nd_obs_time >= DATE)]) > 0:
+                    index = np.where((nd_obs_time <= datetime.datetime.combine((DATE+relativedelta(months=move_ave_analysis)).date(), datetime.datetime.min.time())) & (nd_obs_time >= DATE))[0]
+                    ax = plt.subplot()
+                    ax.plot(nd_obs_time[index[0]:index[-1]+1], each_freq_drift[i][index[0]:index[-1]+1], '.')
+                    
+                    xfmt = mdates.DateFormatter("%m/%d")
+                    xloc = mdates.DayLocator(interval=60)
+                    ax.xaxis.set_major_locator(xloc)
+                    ax.xaxis.set_major_formatter(xfmt)
+                    
+                    ax.set_ylim(freq_drift_min, freq_drift_max)
+                    ax.set_title(burst_type + ' observed '+burst_period + '\n'+DATE.strftime(format='%Y%m%d')+' - ' + (datetime.datetime.combine((DATE+relativedelta(months=move_ave_analysis)).date(), datetime.datetime.min.time())-datetime.timedelta(days=1)).strftime(format='%Y%m%d'), fontsize = 14)
+                    ax.set_ylabel("DRs[MHz/s]", fontsize = 12)
+                    ax.set_xlabel("Time", fontsize = 12)
+                    plt.show()
+                    plt.close()
+
+                
 
 
 
-# plt.title('Time gap between 40MHz-37.5MHz: Micro')
-# plt.hist(np.array(time_list_micro)[:,0])
-# plt.xlabel('Time')
-# plt.ylabel('Event number')
-# plt.show()
-# plt.close()
-# plt.title('Time gap between 35MHz-32.5MHz: Micro')
-# plt.hist(np.array(time_list_micro)[:,1])
-# plt.xlabel('Time')
-# plt.ylabel('Event number')
-# plt.show()
 
-# print('Max: '+str(np.max(np.array(time_list_micro)[:,0])) + ' Min: ' + str(np.min(np.max(np.array(time_list_micro)[:,0]))))
-    
-# plt.title('Time gap between 40MHz-37.5MHz: Ordinary')
-# plt.hist(np.array(time_list_ordinary)[:,0])
-# plt.xlabel('Time')
-# plt.ylabel('Event number')
-# plt.show()
-# plt.close()
-# plt.title('Time gap between 35MHz-32.5MHz: Ordinary')
-# plt.hist(np.array(time_list_ordinary)[:,1])
-# plt.xlabel('Time')
-# plt.ylabel('Event number')
-# plt.show()
+                DATE+=relativedelta(months = move_ave_analysis)
+                DATE = datetime.datetime.combine(DATE.date(), datetime.datetime.min.time())
 
-# print('Max: '+str(np.max(np.array(time_list_ordinary)[:,0])) + ' Min: ' + str(np.min(np.max(np.array(time_list_ordinary)[:,0]))))
-    
-    

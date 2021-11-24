@@ -37,10 +37,10 @@ ax1 = fig.add_subplot(111)
 for factor in factor_list:
 
     h2_1 = np.arange(1, 4, 0.1)
-    newkirk = factor * 4.2 * 10 ** (4+4.32/h24_1)
+    newkirk = factor * 4.2 * 10 ** (4+4.32/h2_1)
     x2_1 = newkirk
     if factor == 3:
-        ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×Newkirk model', color = 'r')
+        ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×Newkirk model',color = 'r')
     elif factor == 1:
         ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×Newkirk model', color = 'b')
     plt.grid(which='both')
@@ -51,15 +51,17 @@ for factor in factor_list:
         ln1 = ax2.plot(h2_1,freq, color = 'r')
     elif factor == 1:
         ln1 = ax2.plot(h2_1,freq, color = 'b')
+
+    allen_model = factor * 10**8 * (2.99*(h2_1)**(-16)+1.55*(h2_1)**(-6)+0.036*(h2_1)**(-1.5))
+    x2_1 = allen_model
+    if factor == 3:
+        ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×B-A model',linestyle =  '--', color = 'r')
+    elif factor == 1:
+        ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×B-A model',linestyle =  '--', color = 'b')
     ax2.set_yscale('log')
     
     # h2_1 = np.arange(1, 4.2, 0.1)
-    # allen_model = factor * 10**8 * (2.99*(h2_1)**(-16)+1.55*(h2_1)**(-6)+0.036*(h2_1)**(-1.5))
-    # x2_1 = allen_model
-    # if factor == 5:
-    #     ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×B-A model', color = 'r')
-    # elif factor == 1:
-    #     ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×B-A model', color = 'b')
+
     # plt.grid(which='both')
     # freq=9*np.sqrt(allen_model)/10**3
     # ax2=ax1.twinx()
@@ -119,7 +121,7 @@ ax1 = fig.add_subplot(111)
 for factor in factor_list:
 
     
-    factor = 4
+    factor = 3
     h2_1 = np.arange(1, 4, 0.1)
     newkirk = factor * 4.2 * 10 ** (4+4.32/h2_1)
     x2_1 = newkirk
@@ -161,6 +163,11 @@ for factor in factor_list:
     wang_max_1 = -4.42158e+06/h2_1 + 5.41656e+07/(h2_1)**2 - 1.86150e+08 /(h2_1)**3 + 2.13102e+08/(h2_1)**4
     x2_1 = wang_max_1
     ln1 = ax1.plot(h2_1, x2_1, ls = '--', color = "r")
+    
+    h2_1 = np.arange(1, 4, 0.1)
+    Leblanc = 3.3e+05/(h2_1)**2 + 4.1e+06 /(h2_1)**4 + 8.0e+07/(h2_1)**6
+    x2_1 = Leblanc
+    ln1 = ax1.plot(h2_1, x2_1, label = 'Leblanc', color = "k")
 
 
     ax1.set_yscale('log')
