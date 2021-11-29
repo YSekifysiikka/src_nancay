@@ -834,7 +834,7 @@ event_check_days = 1
 width = 5
 
 
-date_in=[20150923,20150923]
+date_in=[19950101,19950101]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')

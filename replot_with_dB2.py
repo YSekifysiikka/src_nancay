@@ -164,7 +164,7 @@ def read_data(Parent_directory, file_name, move_ave, Freq_start, Freq_end):
     diff_db_min_med = (diff_move_db.T - min_db).T
     return diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs, diff_move_db, diff_move_RR_db, diff_move_LL_db
 
-# diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency= read_data(Parent_directory, 'srn_nda_routine_sun_edr_201401010755_201401011553_V13.cdf', 3, 80, 30)
+
 
 
 import math

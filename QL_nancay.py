@@ -172,10 +172,10 @@ def separated_data_LL_RR(LL, RR, diff_db_min_med, epoch, time_co, time_band, t, 
 
 
 
-    diff_db_plot_sep = diff_db_min_med[freq_start_idx:freq_end_idx + 1, time - time_band - time_co:time]
-    diff_db_sep =  diff_db[freq_start_idx:freq_end_idx + 1, time - time_band - time_co:time]
-    LL_sep = LL[freq_start_idx:freq_end_idx + 1, time - time_band - time_co:time]
-    RR_sep = RR[freq_start_idx:freq_end_idx + 1, time - time_band - time_co:time]
+    diff_db_plot_sep = diff_db_min_med[:, time - time_band - time_co:time]
+    diff_db_sep =  diff_db[:, time - time_band - time_co:time]
+    LL_sep = LL[:, time - time_band - time_co:time]
+    RR_sep = RR[:, time - time_band - time_co:time]
     return LL_sep, RR_sep, diff_db_plot_sep, x_lims, time, Time_start, Time_end, t, diff_db_sep
     
 
@@ -189,11 +189,11 @@ def quick_look(date_OBs, x_lims, LL_sep, RR_sep, diff_db_min_med, Frequency_star
     y_lims = [Frequency_end, Frequency_start]
 
     plt.close(1)
-    fig = plt.figure(1,figsize=(20,3))
+    fig = plt.figure(1,figsize=(16,9))
 
 
-    # ax0, ax1, ax2, ax3, ax4 = fig.subplots(5, 1, sharey=True,sharex=True)
-    ax0 = fig.subplots(1, 1, sharey=True,sharex=True)
+    ax0, ax1, ax2, ax3, ax4 = fig.subplots(5, 1, sharey=True,sharex=True)
+    # ax0 = fig.subplots(1, 1, sharey=True,sharex=True)
     fig.suptitle('NANCAY DECAMETER ARRAY: '+year+
                      '-'+month+'-'+day + '  ' + Time_start[:5] + ' - ' + Time_end[:5],fontsize=25)
     # plt.ylabel('Frequency [MHz]',fontsize=18)
@@ -203,48 +203,48 @@ def quick_look(date_OBs, x_lims, LL_sep, RR_sep, diff_db_min_med, Frequency_star
     # gs = gridspec.GridSpec(4, 1, height_ratios=[1, 1, 1, 1]) 
     # ax0 = plt.subplot(gs[0])
 
-    plt.ylabel('Frequency [MHz]',fontsize=15)
-    plt.xlabel('Time (UT)',fontsize=15)
-    ax_0 = ax0.imshow(diff_db_sep, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
-              aspect='auto',cmap='jet',vmin=17,vmax=30)
-    ax0.xaxis_date()
-    date_format = mdates.DateFormatter('%H:%M:%S')
-    ax0.xaxis.set_major_formatter(date_format)
-
-    cbar = fig.colorbar(ax_0, ax=ax0)
-    cbar.set_label("Decibel [dB]", fontsize = '20')
-    cbar.ax.tick_params(labelsize=15)
-    plt.tick_params(labelsize = 15)
-
-    
-
-    # ax_0 = ax0.imshow(diff_db_min_med, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
-    #           aspect='auto',cmap='jet',vmin=0,vmax=10)
+    # plt.ylabel('Frequency [MHz]',fontsize=15)
+    # plt.xlabel('Time (UT)',fontsize=15)
+    # ax_0 = ax0.imshow(diff_db_sep, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
+    #           aspect='auto',cmap='jet',vmin=17,vmax=30)
     # ax0.xaxis_date()
     # date_format = mdates.DateFormatter('%H:%M:%S')
     # ax0.xaxis.set_major_formatter(date_format)
 
     # cbar = fig.colorbar(ax_0, ax=ax0)
-    # cbar.set_label("from \nBackground [dB]")
+    # cbar.set_label("Decibel [dB]", fontsize = '20')
+    # cbar.ax.tick_params(labelsize=15)
+    # plt.tick_params(labelsize = 15)
 
-    # # plt.colorbar(ax0,label='from Background [dB]')
     
-    # ax_1 = ax1.imshow(LL_sep, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
-    #           aspect='auto',cmap='jet',vmin=0,vmax=10)
-    # cbar = fig.colorbar(ax_1, ax=ax1)
-    # cbar.set_label("from \nBackground [dB]")
-    # ax_2 = ax2.imshow(RR_sep, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
-    #           aspect='auto',cmap='jet',vmin=0,vmax=10)
-    # cbar = fig.colorbar(ax_2, ax=ax2)
-    # cbar.set_label("from \nBackground [dB]")
-    # ax_3 = ax3.imshow((LL_sep - RR_sep)/(LL_sep + RR_sep), extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
-    #           aspect='auto',cmap='jet',vmin=-1,vmax=1)
-    # cbar = fig.colorbar(ax_3, ax=ax3)
-    # cbar.set_label("Ratio [dB]")
-    # ax_4 = ax4.imshow((LL_sep - RR_sep)/(LL_sep + RR_sep), extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
-    #           aspect='auto',cmap='jet',vmin=-0.25,vmax=0.25)
-    # cbar = fig.colorbar(ax_4, ax=ax4)
-    # cbar.set_label("Ratio [dB]")
+
+    ax_0 = ax0.imshow(diff_db_min_med, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
+              aspect='auto',cmap='jet',vmin=0,vmax=10)
+    ax0.xaxis_date()
+    date_format = mdates.DateFormatter('%H:%M:%S')
+    ax0.xaxis.set_major_formatter(date_format)
+
+    cbar = fig.colorbar(ax_0, ax=ax0)
+    cbar.set_label("from \nBackground [dB]")
+
+    # plt.colorbar(ax0,label='from Background [dB]')
+    
+    ax_1 = ax1.imshow(LL_sep, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
+              aspect='auto',cmap='jet',vmin=0,vmax=10)
+    cbar = fig.colorbar(ax_1, ax=ax1)
+    cbar.set_label("from \nBackground [dB]")
+    ax_2 = ax2.imshow(RR_sep, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
+              aspect='auto',cmap='jet',vmin=0,vmax=10)
+    cbar = fig.colorbar(ax_2, ax=ax2)
+    cbar.set_label("from \nBackground [dB]")
+    ax_3 = ax3.imshow((LL_sep - RR_sep)/(LL_sep + RR_sep), extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
+              aspect='auto',cmap='jet',vmin=-1,vmax=1)
+    cbar = fig.colorbar(ax_3, ax=ax3)
+    cbar.set_label("Ratio [dB]")
+    ax_4 = ax4.imshow((LL_sep - RR_sep)/(LL_sep + RR_sep), extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
+              aspect='auto',cmap='jet',vmin=-0.25,vmax=0.25)
+    cbar = fig.colorbar(ax_4, ax=ax4)
+    cbar.set_label("Ratio [dB]")
 
 #R-L/R+L
 
@@ -310,8 +310,8 @@ def quick_look(date_OBs, x_lims, LL_sep, RR_sep, diff_db_min_med, Frequency_star
 
 sigma_value = 2
 after_plot = str('af_sgepss')
-# time_band = 1740
-time_band = 5340
+time_band = 1740
+# time_band = 5340
 time_co = 60
 move_ave = 3
 duration = 7
@@ -340,15 +340,35 @@ Freq_end = 30
 #     cnn_model = load_model_flare(Parent_directory, file_name = '/solar_burst/Nancay/data/keras/pkl_file_new/keras_param_128_0.9945.hdf5', 
 #                 color_setting = 1, image_size = 128, fw = 3, strides = 1, fn_conv2d = 16, output_size = 2)
 
-year = str(2019)
-start_date, end_date = final_txt_make(Parent_directory, Parent_lab, int(year), , 414)
-gen = file_generator(file_path)
-for file in gen:
-    file_name = file[:-1]
-    LL_min, RR_min, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs,  diff_db= read_data_LL_RR(Parent_directory, file_name, move_ave, Freq_start, Freq_end)
 
-    for t in range (math.floor(((diff_db_min_med.shape[1]-time_co)/time_band) + 1)):
-        LL_plot_sep, RR_plot_sep, diff_db_plot_sep, x_lims, time, Time_start, Time_end, t_1, diff_db_sep = separated_data_LL_RR(LL_min, RR_min, diff_db_min_med, epoch, time_co, time_band, t,  diff_db)
-        quick_look(date_OBs, x_lims, LL_plot_sep, RR_plot_sep, diff_db_plot_sep, Frequency_start, Frequency_end, Time_start, Time_end, diff_db_sep)
-        # plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
 
+
+import pandas as pd
+
+date_in=[19950101,19971231]
+start_day,end_day=date_in
+sdate=pd.to_datetime(start_day,format='%Y%m%d')
+edate=pd.to_datetime(end_day,format='%Y%m%d')
+
+DATE=sdate
+while DATE <= edate:
+    date=DATE.strftime(format='%Y%m%d')
+    print(date)
+    try:
+        yyyy = date[:4]
+        mm = date[4:6]
+        file_names = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/data/'+yyyy+'/'+mm+'/*'+ date +'*cdf')
+        for file_name in file_names:
+            file_name = file_name.split('/')[10]
+            if int(yyyy) <= 1997:
+                LL_min, RR_min, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs,  diff_db= read_data_LL_RR(Parent_directory, file_name, 3, 70, 30)
+            else:
+                LL_min, RR_min, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs,  diff_db= read_data_LL_RR(Parent_directory, file_name, 3, 80, 30)
+        
+            for t in range (math.floor(((diff_db_min_med.shape[1]-time_co)/time_band) + 1)):
+                LL_plot_sep, RR_plot_sep, diff_db_plot_sep, x_lims, time, Time_start, Time_end, t_1, diff_db_sep = separated_data_LL_RR(LL_min, RR_min, diff_db_min_med, epoch, time_co, time_band, t,  diff_db)
+                quick_look(date_OBs, x_lims, LL_plot_sep, RR_plot_sep, diff_db_plot_sep, Frequency_start, Frequency_end, Time_start, Time_end, diff_db_sep)
+                # plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
+    except:
+        print('Plot error: ',date)
+    DATE+=pd.to_timedelta(1,unit='day')

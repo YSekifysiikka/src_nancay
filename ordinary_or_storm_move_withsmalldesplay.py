@@ -674,7 +674,7 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
 
 
 date_in=[20120101,20121231]
-check_dir_original = 'afjpgu_simple_select'
+check_dir_original = 'afjpgusimpleselect'
 factor = 0.5
 # date_in=[20170101,20200101]
 # date_in[0]
@@ -694,8 +694,8 @@ if __name__=='__main__':
     for year in year_list:
         check_plots = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/'+check_dir_original+'/' + check_dir + '/'+year+'/*.png')
         for check_plot in check_plots:
-            if int(check_plot.split('/')[11].split('_')[0]) >= date_in[0]:
-                if int(check_plot.split('/')[11].split('_')[0]) <= date_in[1]:
+            if int(check_plot.split('/')[-1].split('_')[0]) >= date_in[0]:
+                if int(check_plot.split('/')[-1].split('_')[0]) <= date_in[1]:
                     count += 1
 
 
