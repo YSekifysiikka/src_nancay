@@ -11,8 +11,8 @@ import shutil
 import datetime
 import numpy as np
 
-file_dir_1 = '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_af_sgepss/flare_clear/simple/*.png'
-file_dir_2 = '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_af_jpgu/flare_clear/simple/*.png'
+file_dir_2 = '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_af_sgepss/flare_clear/simple/*.png'
+file_dir_1 = '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_af_jpgu/flare_clear/simple/*.png'
 
 files_1 = glob.glob(file_dir_1)
 files_2 = glob.glob(file_dir_2)

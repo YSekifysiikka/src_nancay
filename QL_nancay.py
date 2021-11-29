@@ -341,7 +341,7 @@ Freq_end = 30
 #                 color_setting = 1, image_size = 128, fw = 3, strides = 1, fn_conv2d = 16, output_size = 2)
 
 year = str(2019)
-start_date, end_date = final_txt_make(Parent_directory, Parent_lab, int(year), 414, 414)
+start_date, end_date = final_txt_make(Parent_directory, Parent_lab, int(year), , 414)
 gen = file_generator(file_path)
 for file in gen:
     file_name = file[:-1]

@@ -21,8 +21,8 @@ flare_csv = pd.read_csv(filepath_or_buffer= Parent_directory + file_final, sep="
 
 
 files = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_final_clear_event/*compare.png')
-sdate = '20170101'
-edate = '20201231'
+sdate = '19950101'
+edate = '19971231'
 files_list = []
 for i in range(len(files)):
     if int(files[i].split('/')[-1].split('_')[0]) >= int(sdate) and int(files[i].split('/')[-1].split('_')[0]) <= int(edate):
@@ -40,8 +40,8 @@ for i in range (len(flare_csv['peak'])):
     pd_peak_time = pd.to_datetime(flare_csv['peak'][i].split('/')[0] + flare_csv['peak'][i].split('/')[1] + flare_csv['peak'][i].split('/')[2].split(' ')[0] + flare_csv['peak'][i].split('/')[2].split(' ')[1].split(':')[0] + flare_csv['peak'][i].split('/')[2].split(' ')[1].split(':')[1],format='%Y%m%d%H%M')
     pd_start_time = pd.to_datetime(flare_csv['start'][i].split('/')[0] + flare_csv['start'][i].split('/')[1] + flare_csv['start'][i].split('/')[2].split(' ')[0] + flare_csv['start'][i].split('/')[2].split(' ')[1].split(':')[0] + flare_csv['start'][i].split('/')[2].split(' ')[1].split(':')[1],format='%Y%m%d%H%M')
     pd_end_time = pd.to_datetime(flare_csv['end'][i].split('/')[0] + flare_csv['end'][i].split('/')[1] + flare_csv['end'][i].split('/')[2].split(' ')[0] + flare_csv['end'][i].split('/')[2].split(' ')[1].split(':')[0] + flare_csv['end'][i].split('/')[2].split(' ')[1].split(':')[1],format='%Y%m%d%H%M')
-    if pd_end_time < pd.to_datetime('20170101'):
-        sys.exit()
+    # if pd_end_time < pd.to_datetime('20170101'):
+    #     sys.exit()
 
 
 

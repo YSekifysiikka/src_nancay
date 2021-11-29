@@ -862,11 +862,14 @@ each_freq_drift_1 = []
 each_start_frequency_1 = []
 each_end_frequency_1 = []
 each_duration_1 = []
+each_freqdrift_duration_1 = []
 each_obs_time_1 = []
 each_freq_drift = []
+each_duration = []
 each_start_frequency = []
 each_end_frequency = []
 each_duration = []
+each_freqdrift_duration = []
 each_obs_time = []
 velocity_fp_1 = []
 velocity_fp_2 = []
@@ -884,6 +887,7 @@ for burst_type in burst_types:
         sunspot_list = sunspot_list_micro
         velocity_fp_list = velocity_fp_list_micro
         velocity_2fp_list = velocity_2fp_list_micro
+        duration = duration_micro
     elif burst_type == "Ordinary type Ⅲ burst":
         obs_time = obs_time_ordinary
         freq_drift = freq_drift_ordinary
@@ -892,6 +896,7 @@ for burst_type in burst_types:
         sunspot_list = sunspot_list_ordinary
         velocity_fp_list = velocity_fp_list_ordinary
         velocity_2fp_list = velocity_2fp_list_ordinary
+        duration = duration_ordinary
     else:
         break
 
@@ -904,22 +909,27 @@ for burst_type in burst_types:
         each_obs_time_1.append(obs_time[drift_idx].tolist())
         velocity_fp_1.append(velocity_fp_list[drift_idx].tolist())
         velocity_fp_2.append(velocity_2fp_list[drift_idx].tolist())
+        each_freqdrift_duration_1.append(duration[drift_idx].tolist())
         freq_idx = np.where((period[0] <= obs_time) & (period[1] >= obs_time))[0]
         each_start_frequency_1.append(start_freq[freq_idx].tolist())
         each_end_frequency_1.append(end_freq[freq_idx].tolist())
-
+        each_duration_1.append(duration[freq_idx].tolist())
 
         # print (each_end_frequency_list)
 for num in [0,1,4,5]:
     each_freq_drift_1[num].extend(each_freq_drift_1[num+2])
     each_start_frequency_1[num].extend(each_start_frequency_1[num+2])
     each_end_frequency_1[num].extend(each_end_frequency_1[num+2])
+    each_duration_1[num].extend(each_duration_1[num+2])
+    each_freqdrift_duration_1[num].extend(each_freqdrift_duration_1[num+2])
     each_obs_time_1[num].extend(each_obs_time_1[num+2])
     velocity_fp_1[num].extend(velocity_fp_1[num+2])
     velocity_fp_2[num].extend(velocity_fp_2[num+2])
     each_freq_drift.append(each_freq_drift_1[num])
     each_start_frequency.append(each_start_frequency_1[num])
     each_end_frequency.append(each_end_frequency_1[num])
+    each_duration.append(each_duration_1[num])
+    each_freqdrift_duration.append(each_freqdrift_duration_1[num])
     each_obs_time.append(each_obs_time_1[num])
     velocity_1fp.append(velocity_fp_1[num])
     velocity_2fp.append(velocity_fp_2[num])
@@ -937,6 +947,17 @@ start_end_duration_hist_analysis_solar_cycle_dependence()
 velocity_hist_analysis_solar_cycle_dependence(velocity_1fp, velocity_2fp)
 velocity_hist_analysis_micro_ordinary_solar_cycle_dependence(velocity_1fp, velocity_2fp)
 
+#継続時間と周波数ドリフト率
+# target = np.array(each_freqdrift_duration[1])
+# target_1 = np.array(each_freq_drift[1])
+# plt.plot(target, target_1, '.')
+# for i in range(np.min(target), np.max(target)+1, 1):
+#     y_err = np.std(target_1[np.where(target == i)[0]])
+#     y = np.mean(target_1[np.where(target == i)[0]])
+#     plt.errorbar(i, y, yerr = y_err, capsize=5, fmt='o', markersize=10, ecolor='black', markeredgecolor = "black", color='w')
+
+
+
 
 # print ('\nMicro-solar maximum: Event Num ' +str(len(each_freq_drift[0])) + '\nFrequency drift rates\nMean DR '+str(np.nanmean(each_freq_drift[0]))+'  STD DR '+str(np.nanstd(each_freq_drift[0]))+'\nDR Max ' + str(np.nanmax(each_freq_drift[0]))+'  DR Min '+str(np.nanmin(each_freq_drift[0]))+'\nRadial velocity(fp)\nMean RV(fp) '+str(np.nanmean(velocity_1fp[0]))+'  STD RV(fp) '+str(np.nanstd(velocity_1fp[0]))+'\nRV(fp) Max ' + str(np.nanmax(velocity_1fp[0]))+'  RV(fp) Min '+str(np.nanmin(velocity_1fp[0]))+'\nRadial velocity(2fp)\nMean RV(2fp) '+str(np.nanmean(velocity_2fp[0]))+'  STD RV(2fp) '+str(np.nanstd(velocity_2fp[0]))+'\nRV(2fp) Max ' + str(np.nanmax(velocity_2fp[0]))+'  RV(2fp) Min '+str(np.nanmin(velocity_2fp[0])))
 # print ('\nMicro-solar minimum: Event Num ' +str(len(each_freq_drift[1])) + '\nFrequency drift rates\nMean DR '+str(np.nanmean(each_freq_drift[1]))+'  STD DR '+str(np.nanstd(each_freq_drift[1]))+'\nDR Max ' + str(np.nanmax(each_freq_drift[1]))+'  DR Min '+str(np.nanmin(each_freq_drift[1]))+'\nRadial velocity(fp)\nMean RV(fp) '+str(np.nanmean(velocity_1fp[1]))+'  STD RV(fp) '+str(np.nanstd(velocity_1fp[1]))+'\nRV(fp) Max ' + str(np.nanmax(velocity_1fp[1]))+'  RV(fp) Min '+str(np.nanmin(velocity_1fp[1]))+'\nRadial velocity(2fp)\nMean RV(2fp) '+str(np.nanmean(velocity_2fp[1]))+'  STD RV(2fp) '+str(np.nanstd(velocity_2fp[1]))+'\nRV(2fp) Max ' + str(np.nanmax(velocity_2fp[1]))+'  RV(2fp) Min '+str(np.nanmin(velocity_2fp[1])))
@@ -947,10 +968,10 @@ velocity_hist_analysis_micro_ordinary_solar_cycle_dependence(velocity_1fp, veloc
 #95%信頼区間は母数によって値かえる
 #http://kogolab.chillout.jp/elearn/hamburger/chap2/sec3.html
 print ('DR analysis')
-# df = pd.DataFrame([[len(each_freq_drift[0]), np.nanmean(each_freq_drift[0]), np.nanstd(each_freq_drift[0]), np.nanmin(each_freq_drift[0]), np.nanmax(each_freq_drift[0]), np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), np.nanmean(each_freq_drift[0]) - np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])),np.nanmean(each_freq_drift[0]) + np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), np.nanmean(each_freq_drift[0]) - 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])),np.nanmean(each_freq_drift[0]) + 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0]))],
-#                    [len(each_freq_drift[1]), np.nanmean(each_freq_drift[1]), np.nanstd(each_freq_drift[1]), np.nanmin(each_freq_drift[1]), np.nanmax(each_freq_drift[1]), np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])), np.nanmean(each_freq_drift[1]) - np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) + np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])), 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) - 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) + 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1]))],
-#                    [len(each_freq_drift[2]), np.nanmean(each_freq_drift[2]), np.nanstd(each_freq_drift[2]), np.nanmin(each_freq_drift[2]), np.nanmax(each_freq_drift[2]), np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])), np.nanmean(each_freq_drift[2]) - np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) + np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])), 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) - 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) + 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2]))],
-#                    [len(each_freq_drift[3]), np.nanmean(each_freq_drift[3]), np.nanstd(each_freq_drift[3]), np.nanmin(each_freq_drift[3]), np.nanmax(each_freq_drift[3]), np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])), np.nanmean(each_freq_drift[3]) - np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) + np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])), 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) - 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) + 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3]))]], 
+df = pd.DataFrame([[len(each_freq_drift[0]), np.nanmean(each_freq_drift[0]), np.nanstd(each_freq_drift[0]), np.nanmin(each_freq_drift[0]), np.nanmax(each_freq_drift[0]), np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), np.nanmean(each_freq_drift[0]) - np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])),np.nanmean(each_freq_drift[0]) + np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])), np.nanmean(each_freq_drift[0]) - 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0])),np.nanmean(each_freq_drift[0]) + 1.96*np.nanstd(each_freq_drift[0])/np.sqrt(len(each_freq_drift[0]))],
+                    [len(each_freq_drift[1]), np.nanmean(each_freq_drift[1]), np.nanstd(each_freq_drift[1]), np.nanmin(each_freq_drift[1]), np.nanmax(each_freq_drift[1]), np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])), np.nanmean(each_freq_drift[1]) - np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) + np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])), 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) - 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1])),np.nanmean(each_freq_drift[1]) + 1.98*np.nanstd(each_freq_drift[1])/np.sqrt(len(each_freq_drift[1]))],
+                    [len(each_freq_drift[2]), np.nanmean(each_freq_drift[2]), np.nanstd(each_freq_drift[2]), np.nanmin(each_freq_drift[2]), np.nanmax(each_freq_drift[2]), np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])), np.nanmean(each_freq_drift[2]) - np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) + np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])), 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) - 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2])),np.nanmean(each_freq_drift[2]) + 2*np.nanstd(each_freq_drift[2])/np.sqrt(len(each_freq_drift[2]))],
+                    [len(each_freq_drift[3]), np.nanmean(each_freq_drift[3]), np.nanstd(each_freq_drift[3]), np.nanmin(each_freq_drift[3]), np.nanmax(each_freq_drift[3]), np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])), np.nanmean(each_freq_drift[3]) - np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) + np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])), 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) - 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3])),np.nanmean(each_freq_drift[3]) + 2.197*np.nanstd(each_freq_drift[3])/np.sqrt(len(each_freq_drift[3]))]], 
 
 index=['Micro solar maximum', 'Micro solar minimum', 'Ordinary solar maximum', 'Ordinary solar minimum'], 
 columns=['Event Num', 'AVE DR','STD DR','DR Min', 'DR Max', 'DR SE', 'AVE - SE', 'AVE + SE', '95%信頼区間', '95%信頼区間下限', '95%信頼区間上限'])

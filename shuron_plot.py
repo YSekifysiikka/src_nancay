@@ -329,6 +329,7 @@ def sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  q
 
     if len(TYPE3_group)>0:
         arr_shuron = [[-10 for i in range(time_band + time_co)] for j in range(Frequency.shape[0])]
+        arr_shuron_1 = [[-10 for i in range(time_band + time_co)] for j in range(Frequency.shape[0])]
         for m in range (len(TYPE3_group[0])):
             if len(TYPE3_group[0][m]) >= duration:
                 if TYPE3_group[0][m][0] >= 0 and TYPE3_group[0][m][-1] <= diff_db_min_med.shape[1]:  
@@ -339,8 +340,10 @@ def sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  q
                         for q in range(len(check_start_time_l)):
                             for p in range(len(y_over_analysis_data_l[check_start_time_l[q]])):
                                 arr[y_over_analysis_data_l[check_start_time_l[q]][p]][TYPE3_group[0][m][i] - (time - time_band - time_co)] = diff_db_plot_sep[y_over_analysis_data_l[check_start_time_l[q]][p]][TYPE3_group[0][m][i] - (time - time_band - time_co)]
+                                arr_shuron_1[y_over_analysis_data_l[check_start_time_l[q]][p]][TYPE3_group[0][m][i] - (time - time_band - time_co)] = 100
                             print (TYPE3_group[0][m][i] - (time - time_band - time_co))
                     arr_freq_time = np.array(arr)
+                    # plot_array_threshold(arr_shuron_1, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
                     
 
 
@@ -362,8 +365,8 @@ def sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  q
                                         arr_1[frequency_separate[0][i][j]][k] = arr_freq_time[frequency_separate[0][i][j]][k]
                                         arr_shuron[frequency_separate[0][i][j]][k] = 100
                             arr_sep_freq = np.array(arr_1)
-                            plot_array_threshold(arr_shuron, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
-                            # plot_array_threshold(arr_sep_freq, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
+                            # plot_array_threshold(arr_shuron, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
+                            plot_array_threshold(arr_sep_freq, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
 
                             time_sequence = []
                             time_sequence_final_group = []
@@ -707,7 +710,7 @@ db_setting = 40
 import csv
 import pandas as pd
 
-date_in=[20130308,20130308]
+date_in=[20130717,20130717]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')
@@ -745,7 +748,7 @@ while DATE <= edate:
                 diff_db_plot_sep, diff_db_sep, x_lims, time, Time_start, Time_end, t_1 = separated_data(diff_db, diff_db_min_med, epoch, time_co, time_band, t)
                 print (time)
                 # if (time == 22500) or (time == 22160) or (time == 9920):
-                if (time == 18760):
+                if (time == 12300):
 # 18020
 # 2013-03-08 13:02:26.000760
 # 13:02:26-13:09:06
@@ -777,3 +780,6 @@ while DATE <= edate:
     except:
         print('Plot error: ',date)
     DATE+=pd.to_timedelta(1,unit='day')
+    
+    
+    
