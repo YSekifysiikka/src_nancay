@@ -701,7 +701,7 @@ check_freq = 40
 
 import csv
 
-csv_name = 'afjpgu_LL_RR_cnn_flare_plot.csv'
+csv_name = 'afjpgu_LL_RR_cnn_flare_plot2.csv'
 with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/' + csv_name, 'w') as f:
     w = csv.DictWriter(f, fieldnames=["event_date", "event_hour", "event_minite", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "peak_dB_40MHz", "peak_RR_40MHz", "peak_LL_40MHz"])
     w.writeheader()
@@ -711,50 +711,51 @@ with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_a
         check_date_list.append(file.split('/')[-1].split('_')[0])
     check_dates = sorted(list(set(check_date_list)))
     for check_date in check_dates:
-        yyyy = check_date[:4]
-        mm = check_date[4:6]
-        file_name = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/data/'+yyyy+'/'+mm+'/*'+ check_date +'*cdf')[0].split('/')[10]
-        if int(yyyy) <= 1997:
-            diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs, diff_move_db, diff_move_RR_db, diff_move_LL_db= read_data(Parent_directory, file_name, 3, 70, 30)
-        else:
-            diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs, diff_move_db, diff_move_RR_db, diff_move_LL_db= read_data(Parent_directory, file_name, 3, 80, 30)
-        target_pics = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_final_flare_related/'+yyyy+'/'+check_date+'*.png')
-        Frequency_40_index = np.where(Frequency == getNearestValue(Frequency,check_freq))[0][0]
-        print(Frequency_40_index)
-        for target_pic in target_pics:
-            if (int(target_pic.split('/')[-1].split('_')[3])/time_band).is_integer() is True:
-                t = int(int(target_pic.split('/')[-1].split('_')[3])/time_band)
+        if int(check_date) >= 20020929:
+            yyyy = check_date[:4]
+            mm = check_date[4:6]
+            file_name = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/data/'+yyyy+'/'+mm+'/*'+ check_date +'*cdf')[0].split('/')[10]
+            if int(yyyy) <= 1997:
+                diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs, diff_move_db, diff_move_RR_db, diff_move_LL_db= read_data(Parent_directory, file_name, 3, 70, 30)
             else:
-                t = math.floor((diff_db_min_med.shape[1]-time_co)/time_band)
-            # for t in range (math.floor(((diff_db_min_med.shape[1]-time_co)/time_band) + 1)):
-            diff_db_plot_sep, diff_db_sep, x_lims, time, Time_start, Time_end, t_1, diff_move_db_sep, diff_move_RR_db_sep, diff_move_LL_db_sep = separated_data(diff_db, diff_db_min_med, epoch, time_co, time_band, t, diff_move_db, diff_move_RR_db, diff_move_LL_db)
-            arr_threshold, mean_l_list, quartile_db_l, quartile_power, diff_power_last_l, stdev_sub = threshold_array(diff_db_plot_sep, freq_start_idx, freq_end_idx, sigma_value, Frequency, threshold_frequency, duration)
-            # plot_array_threshold(arr_threshold, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
-            arr_5_list, event_start_list, event_end_list, freq_start_list, freq_end_list, event_time_gap_list, freq_gap_list, vmin_1_list, vmax_1_list, freq_list, time_list, arr_sep_time_list = sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  quartile_power, time, duration, resolution, Status, cnn_plot_time, t_1)
-            if len(arr_5_list) == 0:
-                pass
-            else:
-                for i in range(len(arr_5_list)):
-                    # print ('a')
-                    if event_start_list[i] == target_pic.split('/')[-1].split('_')[5] and event_end_list[i] == target_pic.split('/')[-1].split('_')[6]:
-                        if freq_start_list[i] == target_pic.split('/')[-1].split('_')[7] and freq_end_list[i] == target_pic.split('/')[-1].split('_')[8].split('c')[0]:
-                            if int(yyyy) < 2012:
-                                save_directory = cnn_detection(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model_1, save_place, Frequency, x_lims)
-                            else:
-                                save_directory = cnn_detection(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model_2, save_place, Frequency, x_lims)
-                            if save_directory.split('/')[-1] == 'flare':
-                                residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, freq_list[i], time_list[i], save_place, residual_threshold, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i])
-                                if min(residual_list) <= residual_threshold:
-                                    plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
-                                    best_factor = np.argmin(residual_list) + 1
-                                    time_event = dt.timedelta(seconds=(int(event_end_list[i]) + int(event_start_list[i]))/2) + dt.datetime(int(date_OBs[0:4]), int(date_OBs[4:6]), int(date_OBs[6:8]),int(Time_start[0:2]), int(Time_start[3:5]), int(Time_start[6:8]))
-                                    date_event = str(time_event.date())[0:4] + str(time_event.date())[5:7] + str(time_event.date())[8:10]
-                                    date_event_hour = str(time_event.hour)
-                                    date_event_minute = str(time_event.minute)
-                                    print (time_rate_final)
-                                    idx_peak = np.where(freq_list[i] ==getNearestValue(freq_list[i], 40))[0][0]
-                                    RR_peak = diff_move_RR_db_sep[Frequency_40_index, time_list[i][idx_peak]]
-                                    LL_peak = diff_move_LL_db_sep[Frequency_40_index, time_list[i][idx_peak]]
-                                    peak_dB = diff_move_db_sep[Frequency_40_index, time_list[i][idx_peak]]
-                                    w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start_list[i],'event_end': event_end_list[i],'freq_start': freq_start_list[i],'freq_end':freq_end_list[i], 'factor':best_factor, 'peak_time_list':time_list[i], 'peak_freq_list':freq_list[i], "peak_dB_40MHz":peak_dB, "peak_RR_40MHz":RR_peak, "peak_LL_40MHz":LL_peak})            
-    
+                diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs, diff_move_db, diff_move_RR_db, diff_move_LL_db= read_data(Parent_directory, file_name, 3, 80, 30)
+            target_pics = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_final_flare_related/'+yyyy+'/'+check_date+'*.png')
+            Frequency_40_index = np.where(Frequency == getNearestValue(Frequency,check_freq))[0][0]
+            print(Frequency_40_index)
+            for target_pic in target_pics:
+                if (int(target_pic.split('/')[-1].split('_')[3])/time_band).is_integer() is True:
+                    t = int(int(target_pic.split('/')[-1].split('_')[3])/time_band)
+                else:
+                    t = math.floor((diff_db_min_med.shape[1]-time_co)/time_band)
+                # for t in range (math.floor(((diff_db_min_med.shape[1]-time_co)/time_band) + 1)):
+                diff_db_plot_sep, diff_db_sep, x_lims, time, Time_start, Time_end, t_1, diff_move_db_sep, diff_move_RR_db_sep, diff_move_LL_db_sep = separated_data(diff_db, diff_db_min_med, epoch, time_co, time_band, t, diff_move_db, diff_move_RR_db, diff_move_LL_db)
+                arr_threshold, mean_l_list, quartile_db_l, quartile_power, diff_power_last_l, stdev_sub = threshold_array(diff_db_plot_sep, freq_start_idx, freq_end_idx, sigma_value, Frequency, threshold_frequency, duration)
+                # plot_array_threshold(arr_threshold, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
+                arr_5_list, event_start_list, event_end_list, freq_start_list, freq_end_list, event_time_gap_list, freq_gap_list, vmin_1_list, vmax_1_list, freq_list, time_list, arr_sep_time_list = sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  quartile_power, time, duration, resolution, Status, cnn_plot_time, t_1)
+                if len(arr_5_list) == 0:
+                    pass
+                else:
+                    for i in range(len(arr_5_list)):
+                        # print ('a')
+                        if event_start_list[i] == target_pic.split('/')[-1].split('_')[5] and event_end_list[i] == target_pic.split('/')[-1].split('_')[6]:
+                            if freq_start_list[i] == target_pic.split('/')[-1].split('_')[7] and freq_end_list[i] == target_pic.split('/')[-1].split('_')[8].split('c')[0]:
+                                if int(yyyy) < 2012:
+                                    save_directory = cnn_detection(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model_1, save_place, Frequency, x_lims)
+                                else:
+                                    save_directory = cnn_detection(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model_2, save_place, Frequency, x_lims)
+                                if save_directory.split('/')[-1] == 'flare':
+                                    residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, freq_list[i], time_list[i], save_place, residual_threshold, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i])
+                                    if min(residual_list) <= residual_threshold:
+                                        plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
+                                        best_factor = np.argmin(residual_list) + 1
+                                        time_event = dt.timedelta(seconds=(int(event_end_list[i]) + int(event_start_list[i]))/2) + dt.datetime(int(date_OBs[0:4]), int(date_OBs[4:6]), int(date_OBs[6:8]),int(Time_start[0:2]), int(Time_start[3:5]), int(Time_start[6:8]))
+                                        date_event = str(time_event.date())[0:4] + str(time_event.date())[5:7] + str(time_event.date())[8:10]
+                                        date_event_hour = str(time_event.hour)
+                                        date_event_minute = str(time_event.minute)
+                                        print (time_rate_final)
+                                        idx_peak = np.where(freq_list[i] ==getNearestValue(freq_list[i], 40))[0][0]
+                                        RR_peak = diff_move_RR_db_sep[Frequency_40_index, time_list[i][idx_peak]]
+                                        LL_peak = diff_move_LL_db_sep[Frequency_40_index, time_list[i][idx_peak]]
+                                        peak_dB = diff_move_db_sep[Frequency_40_index, time_list[i][idx_peak]]
+                                        w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start_list[i],'event_end': event_end_list[i],'freq_start': freq_start_list[i],'freq_end':freq_end_list[i], 'factor':best_factor, 'peak_time_list':time_list[i], 'peak_freq_list':freq_list[i], "peak_dB_40MHz":peak_dB, "peak_RR_40MHz":RR_peak, "peak_LL_40MHz":LL_peak})            
+        

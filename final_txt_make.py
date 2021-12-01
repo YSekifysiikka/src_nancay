@@ -650,7 +650,7 @@ def plot_data(diff_db_plot_sep, diff_db_sep, freq_list, time_list, arr_5, x_time
 
 
 sigma_value = 2
-after_plot = str('afjpgu_flare_event')
+after_plot = str('afjpgu_shuron_event')
 time_band = 340
 time_co = 60
 move_ave = 3
@@ -658,7 +658,7 @@ duration = 7
 threshold_frequency = 3.5
 threshold_frequency_final = 10.5
 cnn_plot_time = 50
-save_place = 'cnn_used_data/cnn_af_jpgu'
+save_place = 'cnn_used_data/cnn_shuron'
 color_setting, image_size = 1, 128
 img_rows, img_cols = image_size, image_size
 factor_list = [1,2,3,4,5]
@@ -670,14 +670,14 @@ db_setting = 40
 import csv
 import pandas as pd
 
-date_in=[19950916,19951231]
+date_in=[20170531,20181231]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')
 
 DATE=sdate
 
-with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/afaf_sgepss_'+str(date_in[0])+'_'+str(date_in[1])+'.csv', 'w') as f:
+with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/shuron_'+str(date_in[0])+'_'+str(date_in[1])+'.csv', 'w') as f:
     w = csv.DictWriter(f, fieldnames=["event_date", "event_hour", "event_minite", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list"])
     w.writeheader()
 

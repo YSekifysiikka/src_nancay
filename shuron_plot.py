@@ -341,7 +341,7 @@ def sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  q
                             for p in range(len(y_over_analysis_data_l[check_start_time_l[q]])):
                                 arr[y_over_analysis_data_l[check_start_time_l[q]][p]][TYPE3_group[0][m][i] - (time - time_band - time_co)] = diff_db_plot_sep[y_over_analysis_data_l[check_start_time_l[q]][p]][TYPE3_group[0][m][i] - (time - time_band - time_co)]
                                 arr_shuron_1[y_over_analysis_data_l[check_start_time_l[q]][p]][TYPE3_group[0][m][i] - (time - time_band - time_co)] = 100
-                            print (TYPE3_group[0][m][i] - (time - time_band - time_co))
+                            # print (TYPE3_group[0][m][i] - (time - time_band - time_co))
                     arr_freq_time = np.array(arr)
                     # plot_array_threshold(arr_shuron_1, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
                     
@@ -366,7 +366,7 @@ def sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  q
                                         arr_shuron[frequency_separate[0][i][j]][k] = 100
                             arr_sep_freq = np.array(arr_1)
                             # plot_array_threshold(arr_shuron, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
-                            plot_array_threshold(arr_sep_freq, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
+                            # plot_array_threshold(arr_sep_freq, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
 
                             time_sequence = []
                             time_sequence_final_group = []
@@ -710,10 +710,13 @@ db_setting = 40
 import csv
 import pandas as pd
 
-date_in=[20130717,20130717]
+
+selecteddata = '20180405_080517_081157_680_1080_392_399_79.825_38.525compare.png'
+date_in=[int(selecteddata.split('_')[0]),int(selecteddata.split('_')[0])]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')
+
 
 DATE=sdate
 
@@ -746,13 +749,47 @@ while DATE <= edate:
             
             for t in range (math.floor(((diff_db_min_med.shape[1]-time_co)/time_band) + 1)):
                 diff_db_plot_sep, diff_db_sep, x_lims, time, Time_start, Time_end, t_1 = separated_data(diff_db, diff_db_min_med, epoch, time_co, time_band, t)
-                print (time)
-                # if (time == 22500) or (time == 22160) or (time == 9920):
-                if (time == 12300):
-# 18020
-# 2013-03-08 13:02:26.000760
-# 13:02:26-13:09:06
-# 18420
+                if len(selecteddata) >0:
+                    if Time_start[0:2]+Time_start[3:5]+Time_start[6:8] == selecteddata.split('_')[1]:
+                        print (time)
+                        
+                        # if (time == 22500) or (time == 22160) or (time == 9920):
+                        # if (time == 12300):
+        # 18020
+        # 2013-03-08 13:02:26.000760
+        # 13:02:26-13:09:06
+        # 18420
+                        arr_threshold, mean_l_list, quartile_db_l, quartile_power, diff_power_last_l, stdev_sub = threshold_array(diff_db_plot_sep, freq_start_idx, freq_end_idx, sigma_value, Frequency, threshold_frequency, duration)
+                        aaa = np.where(arr_threshold > 0, 100, 0)
+                        plot_array_threshold(aaa, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
+        
+                        arr_5_list, event_start_list, event_end_list, freq_start_list, freq_end_list, event_time_gap_list, freq_gap_list, vmin_1_list, vmax_1_list, freq_list, time_list, arr_sep_time_list = sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  quartile_power, time, duration, resolution, Status, cnn_plot_time, t_1)
+                        plot_array_threshold_2(diff_db_sep, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx, min_db, quartile_db_l)
+                        if len(arr_5_list) == 0:
+                            pass
+                        else:
+                            for i in range(len(arr_5_list)):
+                                save_directory = cnn_detection(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model, save_place, Frequency, x_lims)
+                                if save_directory.split('/')[-1] == 'flare':
+                                    residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, freq_list[i], time_list[i], save_place, residual_threshold, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i])
+                                    print (min(residual_list))
+                                    if min(residual_list) <= residual_threshold:
+                                        plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
+                                        best_factor = np.argmin(residual_list) + 1
+                                        time_event = dt.timedelta(seconds=(int(event_end_list[i]) + int(event_start_list[i]))/2) + dt.datetime(int(date_OBs[0:4]), int(date_OBs[4:6]), int(date_OBs[6:8]),int(Time_start[0:2]), int(Time_start[3:5]), int(Time_start[6:8]))
+                                        date_event = str(time_event.date())[0:4] + str(time_event.date())[5:7] + str(time_event.date())[8:10]
+                                        date_event_hour = str(time_event.hour)
+                                        date_event_minute = str(time_event.minute)
+                                        print (time_rate_final)
+                else:
+                    print (time)
+                    
+                    # if (time == 22500) or (time == 22160) or (time == 9920):
+                    # if (time == 12300):
+    # 18020
+    # 2013-03-08 13:02:26.000760
+    # 13:02:26-13:09:06
+    # 18420
                     arr_threshold, mean_l_list, quartile_db_l, quartile_power, diff_power_last_l, stdev_sub = threshold_array(diff_db_plot_sep, freq_start_idx, freq_end_idx, sigma_value, Frequency, threshold_frequency, duration)
                     aaa = np.where(arr_threshold > 0, 100, 0)
                     plot_array_threshold(aaa, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)

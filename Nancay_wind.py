@@ -527,50 +527,68 @@ Freq_end = 30
 year = str(2002)
 start_date, end_date = final_txt_make(Parent_directory, Parent_lab, int(year), 101,1231)
 gen = file_generator(file_path)
-for file in gen:
-    file_name = file[:-1]
-    LL_min, RR_min, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs= read_data_LL_RR(Parent_directory, file_name, move_ave, Freq_start, Freq_end)
 
-    for t in range (math.floor(((diff_db_min_med.shape[1]-time_co)/time_band) + 1)):
-        LL_plot_sep, RR_plot_sep, diff_db_plot_sep, x_lims, time, Time_start, Time_end, t_1 = separated_data_LL_RR(LL_min, RR_min, diff_db_min_med, epoch, time_co, time_band, t)
-        quick_look(date_OBs, x_lims, LL_plot_sep, RR_plot_sep, diff_db_plot_sep, Frequency_start, Frequency_end, Time_start, Time_end)
-        if int(Time_start.split(':')[2]) >= 30:
-            wind_Time = dt.datetime(int(year), int(date_OBs[4:6]), int(date_OBs[6:8]), int(Time_start.split(':')[0]), int(Time_start.split(':')[1])) + datetime.timedelta(minutes=1)
-        else:
-            wind_Time = dt.datetime(int(year), int(date_OBs[4:6]), int(date_OBs[6:8]), int(Time_start.split(':')[0]), int(Time_start.split(':')[1]))
-        waves_setting_1 = {'receiver'   : 'rad1',
-                         'date_in'    : int(date_OBs[:8]),#yyyymmdd
-                         'HH'         : str(wind_Time.hour).zfill(2),#hour
-                         'MM'         : str(wind_Time.minute).zfill(2),#minute
-                         'SS'         : '00',#second
-                         'duration'   :  29,#min
-                         'freq_band'  :  [0.3, 0.7],
-                         'init_param' : [0, 0],
-                         'bounds'     : ([-np.inf, -np.inf], [np.inf, np.inf]),
-                         'directry'   : '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/wind/data/R1/'+date_OBs[:4]+'/'+date_OBs[4:6]+'/'
-                         }
-        waves_setting_2 = {'receiver'   : 'rad2',
-                         'date_in'    : int(date_OBs[:8]),#yyyymmdd
-                         'HH'         : str(wind_Time.hour).zfill(2),#hour
-                         'MM'         : str(wind_Time.minute).zfill(2),#minute
-                         'SS'         : '00',#second
-                         'duration'   :  29,#min
-                         'freq_band'  :  [0.3, 0.7],
-                         'init_param' : [0, 0],
-                         'bounds'     : ([-np.inf, -np.inf], [np.inf, np.inf]),
-                         'directry'   : '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/wind/data/R2/'+date_OBs[:4]+'/'+date_OBs[4:6]+'/'
-                         }
-        try:
-            rw_1 = read_waves(**waves_setting_1)
-            rw_2 = read_waves(**waves_setting_2)
-            
-            receiver_1 = waves_setting_1['receiver']
-            receiver_2 = waves_setting_2['receiver']
-            data_1 = rw_1.read_rad(receiver_1)
-            data_2 = rw_2.read_rad(receiver_2)
-            radio_plot(data_1, receiver_1, data_2, receiver_2, diff_db_plot_sep, x_lims, Frequency_start, Frequency_end, Time_start, Time_end, date_OBs[:8])
-        except:
-            print ('No data: wind' + date_OBs[:8])
+date_in=[19950101,19971231]
+start_day,end_day=date_in
+sdate=pd.to_datetime(start_day,format='%Y%m%d')
+edate=pd.to_datetime(end_day,format='%Y%m%d')
+
+DATE=sdate
 
 
+while DATE <= edate:
+    date=DATE.strftime(format='%Y%m%d')
+    print(date)
+    try:
+        yyyy = date[:4]
+        mm = date[4:6]
+        file_names = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/data/'+yyyy+'/'+mm+'/*'+ date +'*cdf')
+        for file_name in file_names:
+            file_name = file_name.split('/')[10]
+            LL_min, RR_min, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs= read_data_LL_RR(Parent_directory, file_name, move_ave, Freq_start, Freq_end)
+        
+            for t in range (math.floor(((diff_db_min_med.shape[1]-time_co)/time_band) + 1)):
+                LL_plot_sep, RR_plot_sep, diff_db_plot_sep, x_lims, time, Time_start, Time_end, t_1 = separated_data_LL_RR(LL_min, RR_min, diff_db_min_med, epoch, time_co, time_band, t)
+                quick_look(date_OBs, x_lims, LL_plot_sep, RR_plot_sep, diff_db_plot_sep, Frequency_start, Frequency_end, Time_start, Time_end)
+                if int(Time_start.split(':')[2]) >= 30:
+                    wind_Time = dt.datetime(int(year), int(date_OBs[4:6]), int(date_OBs[6:8]), int(Time_start.split(':')[0]), int(Time_start.split(':')[1])) + datetime.timedelta(minutes=1)
+                else:
+                    wind_Time = dt.datetime(int(year), int(date_OBs[4:6]), int(date_OBs[6:8]), int(Time_start.split(':')[0]), int(Time_start.split(':')[1]))
+                waves_setting_1 = {'receiver'   : 'rad1',
+                                 'date_in'    : int(date_OBs[:8]),#yyyymmdd
+                                 'HH'         : str(wind_Time.hour).zfill(2),#hour
+                                 'MM'         : str(wind_Time.minute).zfill(2),#minute
+                                 'SS'         : '00',#second
+                                 'duration'   :  29,#min
+                                 'freq_band'  :  [0.3, 0.7],
+                                 'init_param' : [0, 0],
+                                 'bounds'     : ([-np.inf, -np.inf], [np.inf, np.inf]),
+                                 'directry'   : '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/wind/data/R1/'+date_OBs[:4]+'/'+date_OBs[4:6]+'/'
+                                 }
+                waves_setting_2 = {'receiver'   : 'rad2',
+                                 'date_in'    : int(date_OBs[:8]),#yyyymmdd
+                                 'HH'         : str(wind_Time.hour).zfill(2),#hour
+                                 'MM'         : str(wind_Time.minute).zfill(2),#minute
+                                 'SS'         : '00',#second
+                                 'duration'   :  29,#min
+                                 'freq_band'  :  [0.3, 0.7],
+                                 'init_param' : [0, 0],
+                                 'bounds'     : ([-np.inf, -np.inf], [np.inf, np.inf]),
+                                 'directry'   : '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/wind/data/R2/'+date_OBs[:4]+'/'+date_OBs[4:6]+'/'
+                                 }
+                try:
+                    rw_1 = read_waves(**waves_setting_1)
+                    rw_2 = read_waves(**waves_setting_2)
+                    
+                    receiver_1 = waves_setting_1['receiver']
+                    receiver_2 = waves_setting_2['receiver']
+                    data_1 = rw_1.read_rad(receiver_1)
+                    data_2 = rw_2.read_rad(receiver_2)
+                    radio_plot(data_1, receiver_1, data_2, receiver_2, diff_db_plot_sep, x_lims, Frequency_start, Frequency_end, Time_start, Time_end, date_OBs[:8])
+                except:
+                    print ('No data: wind' + date_OBs[:8])
+
+    except:
+        print('Plot error: ',date)
+    DATE+=pd.to_timedelta(1,unit='day')
 
