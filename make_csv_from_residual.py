@@ -20,7 +20,7 @@ import shutil
 import csv
 labelsize = 18
 fontsize = 20
-Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 file_final = "/solar_burst/Nancay/analysis_data/residual_test_final.csv"
 csv_input_final = pd.read_csv(filepath_or_buffer= Parent_directory + file_final, sep=",")
