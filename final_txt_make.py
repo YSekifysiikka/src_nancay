@@ -670,7 +670,7 @@ db_setting = 40
 import csv
 import pandas as pd
 
-date_in=[20170531,20181231]
+date_in=[20130712,20131231]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')
