@@ -6,13 +6,13 @@ Created on Wed Sep  2 15:35:42 2020
 @author: yuichiro
 """
 import csv
-Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 #20140404-20191231
 
-year = '2020'
+year = '2012'
 start = int(year + '0101')
-end = int(year + '1231')
-with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_' + year + '_.csv', 'w') as f:
+end = int(year + '0101')
+with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_' + year + '_1.csv', 'w') as f:
     w = csv.DictWriter(f, fieldnames=["event_date", "event_hour", "event_minite", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor"])
     w.writeheader()
     import sys

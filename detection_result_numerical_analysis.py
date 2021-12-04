@@ -18,12 +18,39 @@ cnn_all_files = [Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_
                  Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/*.png',
                  Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/others/simple/*.png']
 
-date_in=[20170101, 20201231]
+date_in=[20170101, 20201231] 
 
 flare_files = []
 flare_clear_files = []
 others_files = []
 
+for cnn_files_dir in cnn_all_files:
+    burst_type = cnn_files_dir.split('/')[-3]
+    cnn_files = glob.glob(cnn_files_dir)
+    for cnn_file in cnn_files:
+        if burst_type == 'flare':
+            if (int(cnn_file.split('/')[-1].split('_')[0]) >= date_in[0]) and (int(cnn_file.split('/')[-1].split('_')[0]) <= date_in[1]):
+                flare_files.append(cnn_file.split('/')[-1])
+        elif burst_type == 'flare_clear':
+            if (int(cnn_file.split('/')[-1].split('_')[0]) >= date_in[0]) and (int(cnn_file.split('/')[-1].split('_')[0]) <= date_in[1]):
+                flare_clear_files.append(cnn_file.split('/')[-1])
+        else:
+            if (int(cnn_file.split('/')[-1].split('_')[0]) >= date_in[0]) and (int(cnn_file.split('/')[-1].split('_')[0]) <= date_in[1]):
+                others_files.append(cnn_file.split('/')[-1])
+
+final_selected_files = []
+selected_files = glob.glob(Parent_directory + '/solar_burst/Nancay/plot/afjpgusimpleselect/*/*/*.png')
+for selected_file in selected_files:
+    if (int(selected_file.split('/')[-1].split('_')[0]) >= date_in[0]) and (int(selected_file.split('/')[-1].split('_')[0]) <= date_in[1]):
+        files = glob.glob(Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/' + selected_file.split('/')[-1].split('p')[0] + 'compare.png')
+        if len(files) == 1:
+            print ('Yes')
+            final_selected_files.append(selected_file.split('/')[-1])
+        else:
+            print ('Error')
+            sys.exit()
+            
+date_in=[20120101, 20141231] 
 for cnn_files_dir in cnn_all_files:
     burst_type = cnn_files_dir.split('/')[-3]
     cnn_files = glob.glob(cnn_files_dir)

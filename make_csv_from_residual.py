@@ -74,6 +74,8 @@ for i in range(len(csv_input_final)):
         #     File = glob.glob(path, recursive=True)
         #     shutil.copy(File[0],  Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/'+ str(date_event)[:4] + '/' + File[0].split('/')[Parent_lab + 6])
 # #誤差のplot
+y_residual_0 = np.array(y_residual_0)
+print(len(np.where(y_residual_0<=1.35)[0])/len(y_residual_0))
 plt.close(1)
 fig = plt.figure(figsize=(20,10),dpi=80)
 ax1 = fig.add_subplot(1, 2, 1)
@@ -84,13 +86,14 @@ ax1.tick_params(axis='y', labelsize=labelsize)
 ax1.set_xlabel('Fitting error', fontsize=fontsize)
 ax1.set_ylabel('The number of events', fontsize=fontsize)
 ax1.set_xlim(0,8)
-ax1.axvline(1.16, ls = "--", color = "navy")
+ax1.axvline(1.35, ls = "--", color = "navy")
 ax2.hist(y_residual_1, bins = 200)
 ax2.tick_params(axis='x', labelsize=labelsize)
 ax2.tick_params(axis='y', labelsize=labelsize)
 ax2.set_xlabel('Fitting error', fontsize=fontsize)
 ax2.set_ylabel('The number of events', fontsize=fontsize)
 plt.show()
+plt.close()
 
 
 
