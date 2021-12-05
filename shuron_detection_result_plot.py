@@ -12,7 +12,8 @@ import numpy as np
 from dateutil.relativedelta import relativedelta
 import sys
 import matplotlib.pyplot as plt
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 event_date_list = []
 event_time_list = []
 event_month_list = []

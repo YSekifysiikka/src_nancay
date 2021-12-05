@@ -650,7 +650,6 @@ def plot_data(diff_db_plot_sep, diff_db_sep, freq_list, time_list, arr_5, x_time
 
 
 sigma_value = 2
-after_plot = str('afjpgu_shuron_event')
 time_band = 340
 time_co = 60
 move_ave = 3
@@ -658,82 +657,126 @@ duration = 7
 threshold_frequency = 3.5
 threshold_frequency_final = 10.5
 cnn_plot_time = 50
-save_place = 'cnn_used_data/cnn_shuron'
+save_place = 'cnn_used_data/shuron_plot_random'
 color_setting, image_size = 1, 128
 img_rows, img_cols = image_size, image_size
 factor_list = [1,2,3,4,5]
 residual_threshold = 1.35
 db_setting = 40
-
+after_plot = str('cnn_used_data/cnn_shuron')
 
 
 import csv
 import pandas as pd
 
-date_in=[20120107,20120107]
-start_day,end_day=date_in
-sdate=pd.to_datetime(start_day,format='%Y%m%d')
-edate=pd.to_datetime(end_day,format='%Y%m%d')
 
-DATE=sdate
-
-with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/shuron_'+str(date_in[0])+'_'+str(date_in[1])+'.csv', 'w') as f:
-    w = csv.DictWriter(f, fieldnames=["event_date", "event_hour", "event_minite", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list"])
+year = '2014'
+start = int(year + '0101')
+end = int(year + '1231')
+with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_shuron' + year + '_' + str(start)[4:] +'.csv', 'w') as f:
+    w = csv.DictWriter(f, fieldnames=["event_date", "event_hour", "event_minite", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor"])
     w.writeheader()
-
-    while DATE <= edate:
-        date=DATE.strftime(format='%Y%m%d')
-        print(date)
-        try:
-            yyyy = date[:4]
-            mm = date[4:6]
-            file_names = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/data/'+yyyy+'/'+mm+'/*'+ date +'*cdf')
-            for file_name in file_names:
-                file_name = file_name.split('/')[10]
-                if int(yyyy) <= 2010:
-                    cnn_model = load_model_flare(Parent_directory, file_name = '/solar_burst/Nancay/data/keras/pkl_file_af_jpgu_70/af_jpgu_keras_param.hdf5', 
-                                color_setting = 1, image_size = 128, fw = 3, strides = 1, fn_conv2d = 16, output_size = 2)
-                elif int(yyyy) >= 2010:
-                    cnn_model = load_model_flare(Parent_directory, file_name = '/solar_burst/Nancay/data/keras/pkl_file_new/keras_param_128_0.9945.hdf5', 
-                                color_setting = 1, image_size = 128, fw = 3, strides = 1, fn_conv2d = 16, output_size = 2)
+    Obs_date = []
+    path = Parent_directory + '/solar_burst/Nancay/plot/'+ after_plot +'/flare/simple/*' + '.png'
+    File = glob.glob(path, recursive=True)
+    path_1 = Parent_directory + '/solar_burst/Nancay/plot/'+ after_plot +'/flare_clear/simple/*' + '.png'
+    File_1 = glob.glob(path_1, recursive=True)
+    File.extend(File_1)
+    # print(File)
+    File1=len(File)
+    # print (File1)
+    for cstr in File:
+        a = cstr.split('/')
+        line = a[-1]
+        file_name_separate = line.split('_')
+        if not file_name_separate[4] == 'sigma':
+            Obs_date.append(file_name_separate[0])
+    Obs_date_list = np.unique(Obs_date)
     
-    
-                if int(yyyy) <= 1997:
-                    diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs= read_data(Parent_directory, file_name, 3, 70, 30)
-                else:
-                    diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs= read_data(Parent_directory, file_name, 3, 80, 30)
-                print (Frequency_start, Frequency_end)
-            
-    
+    #from_20110404_30-80MHz
+    Obs_date_final = []
+    for x in range(len(Obs_date_list)):
+        if int(Obs_date_list[x]) >= start:
+            if int(Obs_date_list[x]) <= end:
+                Obs_date_final.append(Obs_date_list[x])
+    Obs_date_final = sorted(Obs_date_final)
                 
-                for t in range (math.floor(((diff_db_min_med.shape[1]-time_co)/time_band) + 1)):
-                    diff_db_plot_sep, diff_db_sep, x_lims, time, Time_start, Time_end, t_1 = separated_data(diff_db, diff_db_min_med, epoch, time_co, time_band, t)
-                    arr_threshold, mean_l_list, quartile_db_l, quartile_power, diff_power_last_l, stdev_sub = threshold_array(diff_db_plot_sep, freq_start_idx, freq_end_idx, sigma_value, Frequency, threshold_frequency, duration)
-                    # plot_array_threshold(arr_threshold, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
-                    arr_5_list, event_start_list, event_end_list, freq_start_list, freq_end_list, event_time_gap_list, freq_gap_list, vmin_1_list, vmax_1_list, freq_list, time_list, arr_sep_time_list = sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  quartile_power, time, duration, resolution, Status, cnn_plot_time, t_1)
-                    if len(arr_5_list) == 0:
-                        pass
-                    else:
-                        for i in range(len(arr_5_list)):
-                            save_directory = cnn_detection(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model, save_place, Frequency, x_lims)
-                            if save_directory.split('/')[-1] == 'flare':
-                                residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, freq_list[i], time_list[i], save_place, residual_threshold, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i])
-                                if int(event_start_list[i]) == int(Obs_burst_start[z]):
-                                    if int(event_end_list[i]) == int(Obs_burst_end[z]):
-                                # print (min(residual_list))
-                                # if min(residual_list) <= residual_threshold:
-                                        # plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
-                                        best_factor = np.argmin(residual_list) + 1
-                                        time_event = dt.timedelta(seconds=(int(event_end_list[i]) + int(event_start_list[i]))/2) + dt.datetime(int(date_OBs[0:4]), int(date_OBs[4:6]), int(date_OBs[6:8]),int(Time_start[0:2]), int(Time_start[3:5]), int(Time_start[6:8]))
-                                        date_event = str(time_event.date())[0:4] + str(time_event.date())[5:7] + str(time_event.date())[8:10]
-                                        date_event_hour = str(time_event.hour)
-                                        date_event_minute = str(time_event.minute)
-                                        print (time_rate_final)
-                                        w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start_list[i],'event_end': event_end_list[i],'freq_start': freq_start_list[i],'freq_end':freq_end_list[i], 'factor':best_factor, 'peak_time_list':time_list[i], 'peak_freq_list':freq_list[i]})
+    #####################
+    #plot_date_time_select
+    for x in range(len(Obs_date_final)):
+        Obs_time_start = []
+        Obs_burst_start = []
+        Obs_burst_end = []
+        year = Obs_date_final[x][:4]
+        month = Obs_date_final[x][4:6]
+        day = Obs_date_final[x][6:8]
+    #        path = Parent_directory + '/solar_burst/Nancay/plot/'+ after_plot +'/'+ after_after_check +'/' +str(sigma_value)+ '/' + year + '/'+ month +'/'+ Obs_date_final[x] +'*'
+        path = Parent_directory + '/solar_burst/Nancay/plot/'+ after_plot +'/flare/simple/'+ Obs_date_final[x] +'*' + '.png'
+        File = glob.glob(path, recursive=True)
+        path_1 = Parent_directory + '/solar_burst/Nancay/plot/'+ after_plot +'/flare_clear/simple/'+ Obs_date_final[x] +'*' + '.png'
+        File_1 = glob.glob(path_1, recursive=True)
+        File.extend(File_1)
+        File1=len(File)
+        # print (File1)
+        for cstr in File:
+            a = cstr.split('/')
+            line = a[-1]
+            file_name_separate = line.split('_')
+            Obs_time_start.append(int(file_name_separate[3]))
+            Obs_burst_start.append(int(file_name_separate[5]))
+            Obs_burst_end.append(int(file_name_separate[6]))
+    # #####################
+    # #data_import_and_editation
+        path = Parent_directory + '/solar_burst/Nancay/data/'+year+'/'+month+'/*' + year + month + day + '*_' + year + month + day + '*' + '.cdf'
+        file_names = glob.glob(path, recursive=True)
+
+        for file_name in file_names:
+            file_name = file_name.split('/')[10]
+            if int(year) <= 2010:
+                cnn_model = load_model_flare(Parent_directory, file_name = '/solar_burst/Nancay/data/keras/pkl_file_af_jpgu_70/af_jpgu_keras_param.hdf5', 
+                            color_setting = 1, image_size = 128, fw = 3, strides = 1, fn_conv2d = 16, output_size = 2)
+            elif int(year) >= 2010:
+                cnn_model = load_model_flare(Parent_directory, file_name = '/solar_burst/Nancay/data/keras/pkl_file_new/keras_param_128_0.9945.hdf5', 
+                            color_setting = 1, image_size = 128, fw = 3, strides = 1, fn_conv2d = 16, output_size = 2)
 
 
-        except:
-            print('Plot error: ',date)
-        DATE+=pd.to_timedelta(1,unit='day')
+            if int(year) <= 1997:
+                diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs= read_data(Parent_directory, file_name, 3, 70, 30)
+            else:
+                diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs= read_data(Parent_directory, file_name, 3, 80, 30)
+            print (Frequency_start, Frequency_end)
+        
+            for z in range(len(Obs_time_start)):
+                if int(Obs_time_start[z]) % time_band == 0:
+                    t = round(int(Obs_time_start[z])/time_band)
+                else:
+                    t = (diff_db_min_med.shape[1] + (-1*(time_band+time_co)))/time_band
             
-            
+            # for t in range (math.floor(((diff_db_min_med.shape[1]-time_co)/time_band) + 1)):
+                diff_db_plot_sep, diff_db_sep, x_lims, time, Time_start, Time_end, t_1 = separated_data(diff_db, diff_db_min_med, epoch, time_co, time_band, t)
+                arr_threshold, mean_l_list, quartile_db_l, quartile_power, diff_power_last_l, stdev_sub = threshold_array(diff_db_plot_sep, freq_start_idx, freq_end_idx, sigma_value, Frequency, threshold_frequency, duration)
+                # plot_array_threshold(arr_threshold, x_lims, Frequency, date_OBs, freq_start_idx, freq_end_idx)
+                arr_5_list, event_start_list, event_end_list, freq_start_list, freq_end_list, event_time_gap_list, freq_gap_list, vmin_1_list, vmax_1_list, freq_list, time_list, arr_sep_time_list = sep_array(arr_threshold, diff_db_plot_sep, Frequency, time_band, time_co,  quartile_power, time, duration, resolution, Status, cnn_plot_time, t_1)
+                if len(arr_5_list) == 0:
+                    pass
+                else:
+                    for i in range(len(arr_5_list)):
+                        save_directory = cnn_detection(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model, save_place, Frequency, x_lims)
+                        if save_directory.split('/')[-1] == 'flare':
+                            residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, freq_list[i], time_list[i], save_place, residual_threshold, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i])
+                            print (min(residual_list))
+                            if int(event_start_list[i]) == int(Obs_burst_start[z]):
+                                if int(event_end_list[i]) == int(Obs_burst_end[z]):
+                            # if min(residual_list) <= residual_threshold:
+                                    # plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
+                                    best_factor = np.argmin(residual_list) + 1
+                                    time_event = dt.timedelta(seconds=(int(event_end_list[i]) + int(event_start_list[i]))/2) + dt.datetime(int(date_OBs[0:4]), int(date_OBs[4:6]), int(date_OBs[6:8]),int(Time_start[0:2]), int(Time_start[3:5]), int(Time_start[6:8]))
+                                    date_event = str(time_event.date())[0:4] + str(time_event.date())[5:7] + str(time_event.date())[8:10]
+                                    date_event_hour = str(time_event.hour)
+                                    date_event_minute = str(time_event.minute)
+                                    print (time_rate_final)
+                                    w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start_list[i],'event_end': event_end_list[i],'freq_start': freq_start_list[i],'freq_end':freq_end_list[i], 'factor':best_factor})
+
+
+        
+        

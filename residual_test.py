@@ -6,13 +6,15 @@ Created on Wed Sep  2 15:35:42 2020
 @author: yuichiro
 """
 import csv
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+
 #20140404-20191231
 
-year = '2012'
+year = '2019'
 start = int(year + '0101')
-end = int(year + '0101')
-with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_' + year + '_1.csv', 'w') as f:
+end = int(year + '0413')
+with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_shuron' + year + '.csv', 'w') as f:
     w = csv.DictWriter(f, fieldnames=["event_date", "event_hour", "event_minite", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor"])
     w.writeheader()
     import sys
@@ -40,7 +42,7 @@ with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_' +
     sigma_mul = 1
     #when you only check one threshold
     sigma_value = 2
-    after_plot = str('cnn_simple')
+    after_plot = str('cnn_used_data/cnn_shuron')
     plot_dic = str('residual_test_misawaT')
     #x_start_range = 10
     #x_end_range = 79.825
@@ -144,7 +146,7 @@ with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_' +
     # print (File1)
     for cstr in File:
         a = cstr.split('/')
-        line = a[Parent_lab + 7]
+        line = a[-1]
         file_name_separate = line.split('_')
         if not file_name_separate[4] == 'sigma':
             Obs_date.append(file_name_separate[0])
@@ -174,7 +176,7 @@ with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_' +
         # print (File1)
         for cstr in File:
             a = cstr.split('/')
-            line = a[Parent_lab + 7]
+            line = a[-1]
             file_name_separate = line.split('_')
             Obs_time_start.append(int(file_name_separate[3]))
             Obs_burst_start.append(int(file_name_separate[5]))
@@ -182,7 +184,7 @@ with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_' +
     # #####################
     # #data_import_and_editation
         path = Parent_directory + '/solar_burst/Nancay/data/'+year+'/'+month+'/*' + year + month + day + '*_' + year + month + day + '*' + '.cdf'
-        file_name = glob.glob(path, recursive=True)[0].split('/')[Parent_lab + 6]
+        file_name = glob.glob(path, recursive=True)[0].split('/')[-1]
         # print (File)
         # print (Obs_time_start)
     

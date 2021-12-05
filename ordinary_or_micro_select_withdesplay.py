@@ -663,10 +663,10 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
 #20190506
 #20090629以降再確認
 #20130423以降再確認
-date_in=[20141030,20201231]
+date_in=[19951030,19951231]
 
-check_dir = 'afjpgu_simple_flare_event/'
-save_dir = 'afjpgu_simple_select'
+check_dir = 'afjpgu_increasing_flare_event/'
+save_dir = 'afjpgusimpleselect'
 # date_in[0]
 # glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/af_sgepss/'+yyyy+'/'+yyyy+mm+dd+'_*.png')
 
@@ -683,8 +683,8 @@ if __name__=='__main__':
     for year in year_list:
         check_plots = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/'+check_dir +year+'/*.png')
         for check_plot in check_plots:
-            if int(check_plot.split('/')[10].split('_')[0]) >= date_in[0]:
-                if int(check_plot.split('/')[10].split('_')[0]) <= date_in[1]:
+            if int(check_plot.split('/')[-1].split('_')[0]) >= date_in[0]:
+                if int(check_plot.split('/')[-1].split('_')[0]) <= date_in[1]:
                     count += 1
             
 

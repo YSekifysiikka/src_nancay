@@ -219,7 +219,7 @@ def radio_plot(data_1, receiver_1, data_2, receiver_2, diff_db_plot_sep, x_lims,
 
     y_lims = [Frequency_end, Frequency_start]
     ax.imshow(diff_db_plot_sep, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
-              aspect='auto',cmap='jet',vmin=10,vmax=30)
+              aspect='auto',cmap='jet',vmin=10,vmax=40)
     ax.xaxis_date()
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     ax.tick_params(labelsize=10)
@@ -258,10 +258,10 @@ def radio_plot(data_1, receiver_1, data_2, receiver_2, diff_db_plot_sep, x_lims,
     ax2.xaxis.tick_bottom()
     ax2.set_yscale('log')
 
-    if not os.path.isdir(Parent_directory + '/solar_burst/Nancaywind_2/'+year + '/' + month):
-        os.makedirs(Parent_directory + '/solar_burst/Nancaywind_2/'+year + '/' + month)
-    filename = Parent_directory + '/solar_burst/Nancaywind_2/'+year + '/' + month + '/'+year+month+day+'_'+Time_start[0:2]+Time_start[3:5]+Time_start[6:8]+'_'+Time_end[0:2]+Time_end[3:5]+Time_end[6:8]+ '.png'
-    plt.savefig(filename)
+    # if not os.path.isdir(Parent_directory + '/solar_burst/Nancaywind_2/'+year + '/' + month):
+    #     os.makedirs(Parent_directory + '/solar_burst/Nancaywind_2/'+year + '/' + month)
+    # filename = Parent_directory + '/solar_burst/Nancaywind_2/'+year + '/' + month + '/'+year+month+day+'_'+Time_start[0:2]+Time_start[3:5]+Time_start[6:8]+'_'+Time_end[0:2]+Time_end[3:5]+Time_end[6:8]+ '.png'
+    # plt.savefig(filename)
     plt.show()
     return
 
@@ -543,7 +543,7 @@ Freq_end = 10
 
 
 
-date_in=[19950101,19971231]
+date_in=[20170711,20170711]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')

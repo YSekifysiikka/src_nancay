@@ -20,9 +20,11 @@ import shutil
 import csv
 labelsize = 18
 fontsize = 20
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
-file_final = "/solar_burst/Nancay/analysis_data/residual_test_final.csv"
+# file_final = "/solar_burst/Nancay/analysis_data/residual_test_final.csv"
+file_final = "/solar_burst/Nancay/analysis_data/residual_test_shuron_final.csv"
 csv_input_final = pd.read_csv(filepath_or_buffer= Parent_directory + file_final, sep=",")
 
 # with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_max_10.csv', 'w') as f:
@@ -74,8 +76,8 @@ for i in range(len(csv_input_final)):
         #     File = glob.glob(path, recursive=True)
         #     shutil.copy(File[0],  Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/'+ str(date_event)[:4] + '/' + File[0].split('/')[Parent_lab + 6])
 # #誤差のplot
-y_residual_0 = np.array(y_residual_0)
-print(len(np.where(y_residual_0<=1.35)[0])/len(y_residual_0))
+y_residual_0 = np.sqrt(np.array(y_residual_0))
+print(len(np.where(y_residual_0<=1.35)[0])/(len(y_residual_0)))
 plt.close(1)
 fig = plt.figure(figsize=(20,10),dpi=80)
 ax1 = fig.add_subplot(1, 2, 1)
