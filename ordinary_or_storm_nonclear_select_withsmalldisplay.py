@@ -29,8 +29,9 @@ WINDOW_NAME_8 = 'SDO_0211'
 
 # Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+
 Parent_lab = len(Parent_directory.split('/')) - 1
-file_final = "/hinode_catalog/Hinode Flare Catalogue.csv"
+file_final = "/hinode_catalog/Hinode Flare Catalogue new.csv"
 csv_input_final = pd.read_csv(filepath_or_buffer= Parent_directory + file_final, sep=",")
 
 
@@ -52,8 +53,7 @@ def ordinary_or_storm():
             return 'maybe_ordinary'
         elif choice in ['flo']:
             i += 1
-            return 'flare_associated_ordinary'
-
+            return 'flare_related_ordinary'
 
 def wind_geotail_flare(yyyy, mm, dd, WINDOW_NAME_0, WINDOW_NAME_1, WINDOW_NAME_4):        
     if os.path.isfile(Parent_directory + "/solar_burst/wind/plot_QL/" + yyyy + "/wav_summary_" + yyyy + mm + dd + ".png") == True:
@@ -88,7 +88,6 @@ def wind_geotail_flare(yyyy, mm, dd, WINDOW_NAME_0, WINDOW_NAME_1, WINDOW_NAME_4
         cv2.namedWindow(WINDOW_NAME_4, cv2.WINDOW_AUTOSIZE)
         cv2.imshow(WINDOW_NAME_4, image_flare)
         cv2.moveWindow(WINDOW_NAME_4, 1450, 451)
-        # cv2.moveWindow(WINDOW_NAME_4, 1450, 825*factor)
     else:
         print('No data: Flare')
     cv2.waitKey(1)
@@ -314,8 +313,8 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
     WINDOW_NAME_7  = 'SDO_0193'
     WINDOW_NAME_8 = 'SDO_0211'
 
-    
-    files = sorted(glob.glob(Parent_directory + '/solar_burst/Nancay/plot/'+check_dir_original+'/' + check_dir + '/'+yyyy+'/'+yyyy+mm+dd+'_*.png'))
+
+    files = sorted(glob.glob(Parent_directory + '/solar_burst/Nancay/plot/'+check_dir+yyyy+'/'+yyyy+mm+dd+'_*.png'))
     if len(files) > 0:
         cv2.startWindowThread()
         wind_geotail_flare(yyyy, mm, dd, WINDOW_NAME_0, WINDOW_NAME_1, WINDOW_NAME_4)
@@ -327,14 +326,16 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
             nancay_QL_list = sorted(glob.glob(Parent_directory + '/solar_burst/Nancay/QL/' + yyyy + '/' + mm + '/' + str_date + '*'))
             SDO_0193_list = sorted(glob.glob(Parent_directory + "/solar_pic/sdo_0193/" + yyyy + "/" + mm+ "/" + str_date + "*.jpg"))
             SDO_0211_list = sorted(glob.glob(Parent_directory + "/solar_pic/sdo_0211/" + yyyy + "/" + mm+ "/" + str_date + "*.jpg"))
+            # start_time = pd.to_datetime(date + file.split('/')[-1].split('_')[2],format='%Y%m%d%H%M%S') + pd.to_timedelta(int(file.split('/')[-1].split('_')[7]),unit='sec')
             start_time = pd.to_datetime(date + file.split('/')[-1].split('_')[1],format='%Y%m%d%H%M%S') + pd.to_timedelta(int(file.split('/')[-1].split('_')[5]),unit='sec')
             print (start_time)
             int_start_time = int(start_time.strftime("%H%M%S"))
             str_start_time = start_time.strftime("%H:%M")
 
-            img_nancay = cv2.imread(file, cv2.IMREAD_COLOR)
-            img_nancay_1 = img_nancay[40:3480, 800:9500]
-            image_nancay = cv2.resize(img_nancay_1, dsize=None, fx=0.15*factor, fy=0.15*factor)
+            img_nancay_1 = cv2.imread(file, cv2.IMREAD_COLOR)
+            # img_nancay_1 = img_nancay[40:3480, 800:9500]
+            # image_nancay = img_nancay[40:3480, 800:9500]
+            image_nancay = cv2.resize(img_nancay_1, dsize=None, fx=0.9*factor, fy=0.9*factor)
             cv2.namedWindow(WINDOW_NAME_2 + str_start_time, cv2.WINDOW_AUTOSIZE)
             cv2.imshow(WINDOW_NAME_2 + str_start_time, image_nancay)
             cv2.moveWindow(WINDOW_NAME_2 + str_start_time, 2585, 0)
@@ -398,8 +399,8 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
                     stime_list = []
                     for NWQL in Nancay_wind_QL:
                         stime_list.append(int(NWQL.split('.')[0].split('_')[2]))
-                    plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind2/' + yyyy + '/' + mm + '/' + str_date +  '_*' + str(min(stime_list)) +'_*')[0]
                     # plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind/' + yyyy + '/' + mm + '/' + str_date +  '_*' + str(min(stime_list)) +'_*')[0]
+                    plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind2/' + yyyy + '/' + mm + '/' + str_date +  '_*' + str(min(stime_list)) +'_*')[0]
                 img_nancay_wind_QL = cv2.imread(plot_nancay_wind_QL, cv2.IMREAD_COLOR)
                 img_nancay_wind_QL_1 = img_nancay_wind_QL[100:800, 50:800]
                 image_nancay_wind_QL = cv2.resize(img_nancay_wind_QL_1, dsize=None, fx=1.75*factor, fy=1.75*factor)
@@ -430,8 +431,7 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
                     plot_sdo_0193 = glob.glob(Parent_directory + '/solar_pic/sdo_0193/' + yyyy + '/' + mm + '/' + str_date +  '_*' + str(min(stime_list)) +'_*')[0]
     
                 sdo_time_0193 = '  '+plot_sdo_0193.split('_')[3][:2] + ':' + plot_sdo_0193.split('_')[3][2:4]
-                img_sdo_0193_1 = cv2.imread(plot_sdo_0193, cv2.IMREAD_COLOR)
-                img_sdo_0193 = cv2.resize(img_sdo_0193_1, dsize=None, fx=1*factor, fy=1*factor)
+                img_sdo_0193 = cv2.imread(plot_sdo_0193, cv2.IMREAD_COLOR)
                 # print(img_sdo_0193)
                 # img_sdo_0193_1 = img_sdo_0193
                 # image_sdo_0193 = cv2.resize(img_sdo_0193_1, dsize=None, fx=1, fy=1)
@@ -464,6 +464,7 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
                 # image_sdo_0211 = cv2.resize(img_sdo_0211_1, dsize=None, fx=1, fy=1)
                 cv2.namedWindow(WINDOW_NAME_8+sdo_time_0211, cv2.WINDOW_AUTOSIZE)
                 cv2.imshow(WINDOW_NAME_8+sdo_time_0211, img_sdo_0211)
+                # cv2.moveWindow(WINDOW_NAME_8+sdo_time_0211, 1965, 1212)
                 cv2.moveWindow(WINDOW_NAME_8+sdo_time_0211, 1707, 655)
                 cv2.waitKey(1)
 
@@ -511,7 +512,7 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
                         # image_nancay_QL = cv2.resize(img_nancay_QL_1, dsize=None, fx=0.72, fy=0.72)
                         cv2.namedWindow(WINDOW_NAME_6, cv2.WINDOW_AUTOSIZE)
                         cv2.imshow(WINDOW_NAME_6, image_nancay_wind_QL)
-                        cv2.moveWindow(WINDOW_NAME_6, 1982, 0)
+                        cv2.moveWindow(WINDOW_NAME_6, 1928, 0)
                         cv2.waitKey(1)
                     else:
                         print ('No data found: Nancay Wind QL')
@@ -543,7 +544,7 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
                         # image_nancay_QL = cv2.resize(img_nancay_QL_1, dsize=None, fx=0.72, fy=0.72)
                         cv2.namedWindow(WINDOW_NAME_6, cv2.WINDOW_AUTOSIZE)
                         cv2.imshow(WINDOW_NAME_6, image_nancay_wind_QL)
-                        cv2.moveWindow(WINDOW_NAME_6, 1982, 0)
+                        cv2.moveWindow(WINDOW_NAME_6, 1928, 0)
 
                         cv2.waitKey(1)
                     else:
@@ -637,80 +638,77 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
                             print ('No data found: SDO 0211')
 
                 else:
-                    if choice_result == check_dir:
-                        print ('choose other choice')
-                        pass
-                    else:
-                        if choice_result == 'ordinary':
-                            file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+check_dir_original+'/ordinary/'+yyyy
-                            if not os.path.isdir(file_dir):
-                                os.makedirs(file_dir)
-                            if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
-                                os.remove(file)
-                            else:
-                                shutil.move(file, file_dir)
-                            check_num += 1
-                        elif choice_result == 'flare_associated_ordinary':
-                            file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+check_dir_original+'/flare_associated_ordinary/'+yyyy
-                            if not os.path.isdir(file_dir):
-                                os.makedirs(file_dir)
-                            if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
-                                os.remove(file)
-                            else:
-                                shutil.move(file, file_dir)
-                            check_num += 1
-                        elif choice_result == 'maybe_ordinary':
-                            file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+check_dir_original+'/maybe_ordinary/'+yyyy
-                            if not os.path.isdir(file_dir):
-                                os.makedirs(file_dir)
-                            if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
-                                os.remove(file)
-                            else:
-                                shutil.move(file, file_dir)
-                            check_num += 1
-
-                        elif choice_result == 'storm':
-                            file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+check_dir_original+'/storm/'+yyyy
-                            if not os.path.isdir(file_dir):
-                                os.makedirs(file_dir)
-                            if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
-                                os.remove(file)
-                            else:
-                                shutil.move(file, file_dir)
-                            check_num += 1
-                        elif choice_result == 'marginal':
-                            file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+check_dir_original+'/marginal/'+yyyy
-                            if not os.path.isdir(file_dir):
-                                os.makedirs(file_dir)
-                            if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
-                                os.remove(file)
+                    if choice_result == 'ordinary':
+                        file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+save_dir+'/ordinary/'+yyyy
+                        if not os.path.isdir(file_dir):
+                            os.makedirs(file_dir)
+                        if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
+                            os.remove(file)
+                        else:
                             shutil.move(file, file_dir)
-                            check_num += 1
-                        elif choice_result == 'pass':
-                            # file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+check_dir_original+'/marginal/'+yyyy
-                            # if not os.path.isdir(file_dir):
-                                # os.makedirs(file_dir)
-                            # shutil.copy(file, file_dir)
-                            check_num += 1
-                            pass
-                        # print (WINDOW_NAME_8+sdo_time_0211)
-                        window_close(file, files, WINDOW_NAME_2 + str_start_time, WINDOW_NAME_3, WINDOW_NAME_7+sdo_time_0193, WINDOW_NAME_8+sdo_time_0211)
+                        check_num += 1
+                    elif choice_result == 'storm':
+                        file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+save_dir+'/storm/'+yyyy
+                        if not os.path.isdir(file_dir):
+                            os.makedirs(file_dir)
+                        if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
+                            os.remove(file)
+                        else:
+                            shutil.move(file, file_dir)
+                        check_num += 1
+                    elif choice_result == 'flare_associated_ordinary':
+                        file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+save_dir+'/flare_associated_ordinary/'+yyyy
+                        if not os.path.isdir(file_dir):
+                            os.makedirs(file_dir)
+                        if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
+                            os.remove(file)
+                        else:
+                            shutil.move(file, file_dir)
+                        check_num += 1
+                    elif choice_result == 'maybe_ordinary':
+                        file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+save_dir+'/maybe_ordinary/'+yyyy
+                        if not os.path.isdir(file_dir):
+                            os.makedirs(file_dir)
+                        if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
+                            os.remove(file)
+                        else:
+                            shutil.move(file, file_dir)
+                        check_num += 1
+                    elif choice_result == 'marginal':
+                        file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+save_dir+'/marginal/'+yyyy
+                        if not os.path.isdir(file_dir):
+                            os.makedirs(file_dir)
+                        if os.path.isfile(file_dir + '/' + file.split('/')[-1]):
+                            os.remove(file)
+                        shutil.move(file, file_dir)
+                        check_num += 1
+                    elif choice_result == 'pass':
+                        # file_dir = Parent_directory + '/solar_burst/Nancay/plot/'+save_dir+'/marginal/'+yyyy
+                        # if not os.path.isdir(file_dir):
+                            # os.makedirs(file_dir)
+                        # shutil.copy(file, file_dir)
+                        check_num += 1
+                        pass
+                    # print (WINDOW_NAME_8+sdo_time_0211)
+                    window_close(file, files, WINDOW_NAME_2 + str_start_time, WINDOW_NAME_3, WINDOW_NAME_7+sdo_time_0193, WINDOW_NAME_8+sdo_time_0211)
 
     return count
 
 
+#20130203綺麗
 
-
-
-date_in=[19950101,19971231]
-check_dir_original = 'afjpgusimpleselect'
+#20190506
+#20090629以降再確認
+#20130423以降再確認
+date_in=[20120101,20141231]
 factor = 0.5
-# date_in=[20170101,20200101]
+
+check_dir = 'cnn_used_data/cnn_final_others_flare_related/'
+save_dir = 'afjpgunonsimpleselect'
 # date_in[0]
 # glob.glob(Parent_directory + '/solar_burst/Nancay/plot/af_sgepss/'+yyyy+'/'+yyyy+mm+dd+'_*.png')
 
 if __name__=='__main__':
-    check_dir = ordinary_or_storm()
     start_day,end_day=date_in
     sdate=pd.to_datetime(start_day,format='%Y%m%d')
     edate=pd.to_datetime(end_day,format='%Y%m%d')
@@ -721,21 +719,28 @@ if __name__=='__main__':
         syear += 1
     count = 0
     for year in year_list:
-        check_plots = glob.glob(Parent_directory + '/solar_burst/Nancay/plot/'+check_dir_original+'/' + check_dir + '/'+year+'/*.png')
+        check_plots = glob.glob(Parent_directory + '/solar_burst/Nancay/plot/'+check_dir +year+'/*.png')
         for check_plot in check_plots:
             if int(check_plot.split('/')[-1].split('_')[0]) >= date_in[0]:
                 if int(check_plot.split('/')[-1].split('_')[0]) <= date_in[1]:
                     count += 1
-
+            
 
     DATE=sdate
     while DATE <= edate:
         date=DATE.strftime(format='%Y%m%d')
         print(date)
+        # sdo_mp4(date)
         try:
             count = wind_geotail_nancay_plot_classification(date, DATE, count, check_dir)
+            # th2 = sdo_mp4(date)
+            # th1 = threading.Thread(target=wind_geotail_nancay_plot_classification(date, count))
+            # th2.start()
+            # th1.start()
+            
         except:
             print('Plot error: ',date)
             break
         DATE+=pd.to_timedelta(1,unit='day')
 
+        

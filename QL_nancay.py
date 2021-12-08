@@ -20,7 +20,8 @@ import os
 # import os
 
 
-Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
 def file_generator(file):
@@ -138,8 +139,8 @@ def separated_data_LL_RR(LL, RR, diff_db_min_med, epoch, time_co, time_band, t, 
         t = (diff_db_min_med.shape[1] + (-1*(time_band+time_co)))/time_band
     # if t >  36:
     #     sys.exit()
-    if t == 1:
-        t = (5340+1980)/time_band
+    # if t == 1:
+    #     t = (5340+1980)/time_band
     time = round(time_band*t)
 
     print (time)
@@ -345,7 +346,7 @@ Freq_end = 30
 
 import pandas as pd
 
-date_in=[19950101,19971231]
+date_in=[19951007,19951008]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')
@@ -357,7 +358,7 @@ while DATE <= edate:
     try:
         yyyy = date[:4]
         mm = date[4:6]
-        file_names = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/data/'+yyyy+'/'+mm+'/*'+ date +'*cdf')
+        file_names = glob.glob(Parent_directory + '/solar_burst/Nancay/data/'+yyyy+'/'+mm+'/*'+ date +'*cdf')
         for file_name in file_names:
             file_name = file_name.split('/')[10]
             if int(yyyy) <= 1997:
