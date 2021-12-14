@@ -650,7 +650,7 @@ def plot_data(diff_db_plot_sep, diff_db_sep, freq_list, time_list, arr_5, x_time
 
 
 sigma_value = 2
-after_plot = str('afjpgu_shuron_event')
+after_plot = str('afjpgu_shuron_event_1')
 time_band = 340
 time_co = 60
 move_ave = 3
@@ -658,7 +658,7 @@ duration = 7
 threshold_frequency = 3.5
 threshold_frequency_final = 10.5
 cnn_plot_time = 50
-save_place = 'cnn_used_data/cnn_shuron'
+save_place = 'cnn_used_data/shuron_plot_random'
 color_setting, image_size = 1, 128
 img_rows, img_cols = image_size, image_size
 factor_list = [1,2,3,4,5]
@@ -670,7 +670,7 @@ db_setting = 40
 import csv
 import pandas as pd
 
-date_in=[20120107,20120107]
+date_in=[20040908,20040912]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')
@@ -718,18 +718,18 @@ with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/shuron_
                             save_directory = cnn_detection(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model, save_place, Frequency, x_lims)
                             if save_directory.split('/')[-1] == 'flare':
                                 residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, freq_list[i], time_list[i], save_place, residual_threshold, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i])
-                                if int(event_start_list[i]) == int(Obs_burst_start[z]):
-                                    if int(event_end_list[i]) == int(Obs_burst_end[z]):
-                                # print (min(residual_list))
-                                # if min(residual_list) <= residual_threshold:
-                                        # plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
-                                        best_factor = np.argmin(residual_list) + 1
-                                        time_event = dt.timedelta(seconds=(int(event_end_list[i]) + int(event_start_list[i]))/2) + dt.datetime(int(date_OBs[0:4]), int(date_OBs[4:6]), int(date_OBs[6:8]),int(Time_start[0:2]), int(Time_start[3:5]), int(Time_start[6:8]))
-                                        date_event = str(time_event.date())[0:4] + str(time_event.date())[5:7] + str(time_event.date())[8:10]
-                                        date_event_hour = str(time_event.hour)
-                                        date_event_minute = str(time_event.minute)
-                                        print (time_rate_final)
-                                        w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start_list[i],'event_end': event_end_list[i],'freq_start': freq_start_list[i],'freq_end':freq_end_list[i], 'factor':best_factor, 'peak_time_list':time_list[i], 'peak_freq_list':freq_list[i]})
+                                # if int(event_start_list[i]) == int(Obs_burst_start[z]):
+                                #     if int(event_end_list[i]) == int(Obs_burst_end[z]):
+                                print (min(residual_list))
+                                if min(residual_list) <= residual_threshold:
+                                    plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
+                                    best_factor = np.argmin(residual_list) + 1
+                                    time_event = dt.timedelta(seconds=(int(event_end_list[i]) + int(event_start_list[i]))/2) + dt.datetime(int(date_OBs[0:4]), int(date_OBs[4:6]), int(date_OBs[6:8]),int(Time_start[0:2]), int(Time_start[3:5]), int(Time_start[6:8]))
+                                    date_event = str(time_event.date())[0:4] + str(time_event.date())[5:7] + str(time_event.date())[8:10]
+                                    date_event_hour = str(time_event.hour)
+                                    date_event_minute = str(time_event.minute)
+                                    print (time_rate_final)
+                                    w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start_list[i],'event_end': event_end_list[i],'freq_start': freq_start_list[i],'freq_end':freq_end_list[i], 'factor':best_factor, 'peak_time_list':time_list[i], 'peak_freq_list':freq_list[i]})
 
 
         except:

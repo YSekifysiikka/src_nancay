@@ -1010,7 +1010,7 @@ def change_event_time_range():
 
 def change_event_freq_range():
     choice = input("Input freq range: ").lower()
-    freq_list = [float(choice.split(',')[0]),int(choice.split(',')[1])]
+    freq_list = [float(choice.split(',')[0]),float(choice.split(',')[1])]
     return freq_list
 
 def select_time():
@@ -1065,7 +1065,8 @@ def wind_geotail_flare(yyyy, mm, dd, WINDOW_NAME_0, WINDOW_NAME_1, WINDOW_NAME_4
         image_geotail = cv2.resize(img_geotail_1, dsize=None, fx=0.9*efactor, fy=0.9*efactor)
         cv2.namedWindow(WINDOW_NAME_1, cv2.WINDOW_AUTOSIZE)
         cv2.imshow(WINDOW_NAME_1, image_geotail)
-        cv2.moveWindow(WINDOW_NAME_1, 1450, 250)
+        # cv2.moveWindow(WINDOW_NAME_1, 1450, 250)
+        cv2.moveWindow(WINDOW_NAME_1, 1450, 440)
     else:
         print('No data: Geotail')
     if len(glob.glob(Parent_directory + '/hinode_catalog/flare_plot/' + yyyy+mm+dd +'.png')) == 1:
@@ -1079,7 +1080,8 @@ def wind_geotail_flare(yyyy, mm, dd, WINDOW_NAME_0, WINDOW_NAME_1, WINDOW_NAME_4
         image_flare = cv2.resize(img_flare_1, dsize=None, fx=1.455*efactor, fy=1.455*efactor)
         cv2.namedWindow(WINDOW_NAME_4, cv2.WINDOW_AUTOSIZE)
         cv2.imshow(WINDOW_NAME_4, image_flare)
-        cv2.moveWindow(WINDOW_NAME_4, 1450, 451)
+        # cv2.moveWindow(WINDOW_NAME_4, 1450, 451)
+        cv2.moveWindow(WINDOW_NAME_4, 1450, 825)
         # cv2.moveWindow(WINDOW_NAME_4, 1450, 825*factor)
     else:
         print('No data: Flare')
@@ -1123,7 +1125,7 @@ import shutil
 import os
 import sys
 import cv2
-efactor = 0.5
+efactor = 1
 
 
 def flare_check(yyyy):
@@ -1146,10 +1148,13 @@ def flare_check(yyyy):
     return flare_times
 
 
+cv2.waitKey(1)
+cv2.destroyAllWindows()
+cv2.waitKey(1)
 
-# /Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/2012/20120607_091026_091706_4760_5160_218_399_62.85_29.95compare.png
+#20140708
 
-selected_date = '20120607'
+selected_date = '20140903'
 yyyy = selected_date[:4]
 mm = selected_date[4:6]
 dd = selected_date[6:8]
@@ -1211,11 +1216,12 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                     cv2.destroyAllWindows()
                     cv2.waitKey(1)
                     sys.exit()
-                selected_stime = datetime.datetime.strptime(str(select).split('_')[0]+str(select).split('_')[1], '%Y%m%d%H%M%S') + datetime.timedelta(seconds=int(str(select).split('_')[5])) - datetime.timedelta(seconds=1)
+                selected_stime = datetime.datetime.strptime(str(select).split('_')[0]+str(select).split('_')[1], '%Y%m%d%H%M%S') + datetime.timedelta(seconds=int(str(select).split('_')[5]))
                 selected_time  = selected_stime.strftime("%H:%M:%S")
                 print (selected_time)
                 selected_idx_2 = np.arange(int(str(select).split('_')[3]), int(str(select).split('_')[4])+1, 1)
                 s_event_time, e_event_time = [int(str(select).split('_')[5]),int(str(select).split('_')[6])]
+                selected_time_range = int(str(select).split('_')[6]) - int(str(select).split('_')[5]) + 1
 
                 if (int(str(select).split('_')[3])/time_band).is_integer() is True:
                     t_1 = int(int(str(select).split('_')[3])/time_band)
@@ -1243,7 +1249,7 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                     stime_list = []
                     for NWQL in Nancay_wind_QL:
                         stime_list.append(int(NWQL.split('.')[0].split('_')[2]))
-                    plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind2/' + yyyy + '/' + mm + '/' + selected_date +  '_*' + str(min(stime_list)) +'_*')[0]
+                    plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind3/' + yyyy + '/' + mm + '/' + selected_date +  '_*' + str(min(stime_list)) +'_*')[0]
                     # plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind/' + yyyy + '/' + mm + '/' + str_date +  '_*' + str(min(stime_list)) +'_*')[0]
                 img_nancay_wind_QL = cv2.imread(plot_nancay_wind_QL, cv2.IMREAD_COLOR)
                 img_nancay_wind_QL_1 = img_nancay_wind_QL[100:800, 50:800]
@@ -1252,7 +1258,8 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                 # image_nancay_QL = cv2.resize(img_nancay_QL_1, dsize=None, fx=0.72, fy=0.72)
                 cv2.namedWindow(WINDOW_NAME_6, cv2.WINDOW_AUTOSIZE)
                 cv2.imshow(WINDOW_NAME_6, image_nancay_wind_QL)
-                cv2.moveWindow(WINDOW_NAME_6, 1928, 0)
+                # cv2.moveWindow(WINDOW_NAME_6, 1928, 0)
+                cv2.moveWindow(WINDOW_NAME_6, 2409, 0)
                 cv2.waitKey(1)
 
 
@@ -1337,14 +1344,18 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                                         time_gap_arr = x_time[resi_idx][np.where(y_freq[resi_idx] == freq_list_new[0])[0][0]:np.where(y_freq[resi_idx] == freq_list_new[-1])[0][0] + 1] - np.array(time_list_new)
                                         delete_idx = np.where(np.abs(time_gap_arr) >= 2 * residual_list[resi_idx])[0]
                                         selected_idx_3 = np.where(np.abs(time_gap_arr) < 2 * residual_list[resi_idx])[0]
-                                        residual_list, x_time, y_freq, time_rate_final = residual_detection(factor_list, np.array(freq_list_new)[selected_idx_3], np.array(time_list_new)[selected_idx_3], freq_list_new)
-                                        resi_idx = np.argmin(residual_list)
-                                        selected_event_plot_2(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, delete_idx, selected_idx_3, date_event_hour, date_event_minute)
+                                        if len(np.array(freq_list_new)[selected_idx_3]) == 0:
+                                            print ('freq_time error')
+                                        else:
+                                            residual_list, x_time, y_freq, time_rate_final = residual_detection(factor_list, np.array(freq_list_new)[selected_idx_3], np.array(time_list_new)[selected_idx_3], freq_list_new)
+                                            resi_idx = np.argmin(residual_list)
+                                            selected_event_plot_2(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, delete_idx, selected_idx_3, date_event_hour, date_event_minute)
                                     elif z >= 1:
                                         change_check = change_check_formula()
                                         if change_check == 't':
                                             time_list_setting = change_event_time_range()
                                             s_event_start, e_event_end = np.array(time_list_setting) + int(str(select).split('_')[3])
+                                            selected_idx = np.arange(s_event_start, e_event_end+1, 1)
                                         elif change_check == 'f':
                                             freq_list_setting = change_event_freq_range()
                                             s_event_freq, e_event_freq = np.array(freq_list_setting)
@@ -1353,7 +1364,7 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                                             freq_list_setting = change_event_freq_range()
                                             s_event_freq, e_event_freq = np.array(freq_list_setting)
                                             s_event_start, e_event_end = np.array(time_list_setting) + int(str(select).split('_')[3])
-                                        selected_idx = np.arange(s_event_start, e_event_end+1, 1)
+                                            selected_idx = np.arange(s_event_start, e_event_end+1, 1)
                                         freq_start_idx = np.where(Frequency == getNearestValue(Frequency, s_event_freq))[0][0]
                                         freq_end_idx = np.where(Frequency == getNearestValue(Frequency, e_event_freq))[0][0]
                                         sep_arr_sep_time_list =  arr_sep_time_list[i][freq_start_idx:freq_end_idx + 1, selected_idx - selected_idx_2[0]]

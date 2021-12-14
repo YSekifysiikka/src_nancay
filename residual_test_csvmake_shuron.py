@@ -670,7 +670,7 @@ import csv
 import pandas as pd
 
 
-year = '2012'
+year = '2019'
 start = int(year + '0716')
 end = int(year + '1231')
 with open(Parent_directory+ '/solar_burst/Nancay/analysis_data/residual_test_shuron' + year + '_' + str(start)[4:] +'.csv', 'w') as f:

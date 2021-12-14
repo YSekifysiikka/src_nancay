@@ -45,7 +45,6 @@ for i in range(len(csv_input_final)):
     freq_end = csv_input_final['freq_end'][i]
     freq_range = ((freq_start - freq_end)/0.175) + 1
     # residual_list_1 = np.sqrt(residual_list_1/freq_range)
-    residual_list_1 = np.sqrt(residual_list_1)
     y_residual_0.append(min(residual_list_1))
     if min(residual_list_1)  < 0.3:
     #     # if min(residual_list_1) > 0.2:
@@ -62,22 +61,24 @@ for i in range(len(csv_input_final)):
         best_factor = csv_input_final[["factor"][0]][i]
         # factor_list.append(best_factor)
         y_residual_1.append(min(residual_list_1))
-        #     w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start,'event_end': event_end,'freq_start': freq_start,'freq_end':freq_end, 'factor':best_factor})
+    #     w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start,'event_end': event_end,'freq_start': freq_start,'freq_end':freq_end, 'factor':best_factor})
 
-        # #     # ファイルの確認コード
-        #     path = Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/' + str(date_event)[:4] + '/' + str(date_event) + '*' + str(event_start) + '_' + str(event_end) + '_' + str(freq_start) + '_' + str(freq_end)+ 'compare.png'
-        #     File = glob.glob(path, recursive=True)
-        #     File1=len(File)
-        #     print (File1)
-        #     if not os.path.isdir(Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/' + str(date_event)[:4]):
-        #         os.makedirs(Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/' + str(date_event)[:4] )
-        #     shutil.copy(File[0],  Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/' + str(date_event)[:4] + '/'+ File[0].split('/')[Parent_lab + 6])
-        #     path = Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/' + str(date_event)[:4] + '/' + str(date_event) + '*' + str(event_start) + '_' + str(event_end) + '_' + str(freq_start) + '_' + str(freq_end)+ 'peak.png'
-        #     File = glob.glob(path, recursive=True)
-        #     shutil.copy(File[0],  Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/'+ str(date_event)[:4] + '/' + File[0].split('/')[Parent_lab + 6])
+    # #     # ファイルの確認コード
+    #     path = Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/' + str(date_event)[:4] + '/' + str(date_event) + '*' + str(event_start) + '_' + str(event_end) + '_' + str(freq_start) + '_' + str(freq_end)+ 'compare.png'
+    #     File = glob.glob(path, recursive=True)
+    #     File1=len(File)
+    #     print (File1)
+    #     if not os.path.isdir(Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/' + str(date_event)[:4]):
+    #         os.makedirs(Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/' + str(date_event)[:4] )
+    #     shutil.copy(File[0],  Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/' + str(date_event)[:4] + '/'+ File[0].split('/')[Parent_lab + 6])
+    #     path = Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/' + str(date_event)[:4] + '/' + str(date_event) + '*' + str(event_start) + '_' + str(event_end) + '_' + str(freq_start) + '_' + str(freq_end)+ 'peak.png'
+    #     File = glob.glob(path, recursive=True)
+    #     shutil.copy(File[0],  Parent_directory + '/solar_burst/Nancay/plot/residual_test_1/10_/'+ str(date_event)[:4] + '/' + File[0].split('/')[Parent_lab + 6])
 # #誤差のplot
-y_residual_0 = np.sqrt(np.array(y_residual_0))
-print(len(np.where(y_residual_0<=1.35)[0])/(len(y_residual_0)))
+residual_threshold =1.35
+y_residual_0 = np.array(y_residual_0)
+print (len(y_residual_0), len(np.where(y_residual_0<=residual_threshold)[0]))
+print(len(np.where(y_residual_0<=residual_threshold)[0])/(len(y_residual_0)))
 plt.close(1)
 fig = plt.figure(figsize=(20,10),dpi=80)
 ax1 = fig.add_subplot(1, 2, 1)
@@ -87,7 +88,7 @@ ax1.tick_params(axis='x', labelsize=labelsize)
 ax1.tick_params(axis='y', labelsize=labelsize)
 ax1.set_xlabel('Fitting error', fontsize=fontsize)
 ax1.set_ylabel('The number of events', fontsize=fontsize)
-ax1.set_xlim(0,8)
+ax1.set_xlim(0,11)
 ax1.axvline(1.35, ls = "--", color = "navy")
 ax2.hist(y_residual_1, bins = 200)
 ax2.tick_params(axis='x', labelsize=labelsize)

@@ -34,7 +34,7 @@ def download_waves_data(date):
             urllib.request.urlretrieve(url1+url2,"{0}".format(title))
 
 
-date_in=[19950101,19971231]
+date_in=[20040903,20140912]
 
 
 if __name__=='__main__':

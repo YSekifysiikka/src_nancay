@@ -20,8 +20,8 @@ import os
 # import os
 
 
-# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
 def file_generator(file):
@@ -346,7 +346,7 @@ Freq_end = 30
 
 import pandas as pd
 
-date_in=[19951007,19951008]
+date_in=[20040908,20040912]
 start_day,end_day=date_in
 sdate=pd.to_datetime(start_day,format='%Y%m%d')
 edate=pd.to_datetime(end_day,format='%Y%m%d')

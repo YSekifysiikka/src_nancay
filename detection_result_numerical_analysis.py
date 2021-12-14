@@ -19,7 +19,7 @@ cnn_all_files = [Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_
                  Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/*.png',
                  Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/others/simple/*.png']
 
-date_in=[20180101, 20181231] 
+date_in=[20120101, 20201231] 
 
 flare_files = []
 flare_clear_files = []

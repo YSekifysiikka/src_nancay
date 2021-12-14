@@ -6,8 +6,8 @@ Created on Wed Nov 24 14:46:17 2021
 @author: yuichiro
 """
 import glob
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
-# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
 
@@ -261,7 +261,7 @@ def plot_array_threshold_2(arr_threshold, x_lims, Frequency, date_OBs, freq_star
     gs = gridspec.GridSpec(6, 4)
     axes_2 = figure_.add_subplot(gs[:, :])
     ax2 = axes_2.imshow(arr_threshold, extent = [x_lims[0], x_lims[1],  Frequency[-1], Frequency[0]], 
-              aspect='auto',cmap='jet',vmin= -5 + min_db[db_standard],vmax = quartile_db_l[db_standard] + min_db[db_standard] + 5)
+              aspect='auto',cmap='jet',vmin= -5 + min_db[db_standard],vmax = quartile_db_l[db_standard] + min_db[db_standard] + 15)
     # ax2 = axes_2.imshow(arr_threshold ,
     #           aspect='auto',cmap='jet',vmin= 2 ,vmax = 12)
     axes_2.xaxis_date()
@@ -1056,7 +1056,7 @@ def selected_event_plot_2(freq_list, time_list, x_time, y_freq, time_rate_final,
     axes_2.plot(np.array(time_list)[delete_idx], np.array(freq_list)[delete_idx], "ko", label = 'Peak data(deleted)', markersize=4)
     y_cmap = selected_Frequency
     x_cmap = np.arange(s_event_time, e_event_time + 1, 1)
-    cs = axes_2.contourf(x_cmap, y_cmap, arr_sep_time, levels= 30, extend='both', vmin= 0,vmax = quartile_db_l[db_standard] + 10)
+    cs = axes_2.contourf(x_cmap, y_cmap, arr_sep_time, levels= 30, extend='both', vmin= 15,vmax = quartile_db_l[db_standard] + 25)
     cs.cmap.set_over('red')
     cs.cmap.set_under('blue')
     cycle = 0
@@ -1128,13 +1128,13 @@ import csv
 import pandas as pd
 
 
-selecteddata = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/afjpgunonsimpleselect/flare_associated_ordinary/2012/20120119_123946_124626_16660_17060_169_218_61.1_29.95compare.png'
+selecteddata =  '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/afjpgunonsimpleselect/done/solarmin/20180211_114806_115446_6120_6520_134_162_70.375_29.95compare.png'
 if len(selecteddata.split('/')) > 1:
     selecteddata = selecteddata.split('/')[-1]
 selecteddata_stime = int(selecteddata.split('_')[5])
 selecteddata_etime = int(selecteddata.split('_')[6])
 
-csvfile = selecteddata.split('.p')[0] + '1.csv'
+csvfile = selecteddata.split('.p')[0] + '.csv'
 
 
 
@@ -1216,11 +1216,11 @@ for file_name in file_names:
                                     print (time_rate_final)
                                     # s_event_time, e_event_time = [90,99]
                                     # s_event_time, e_event_time = [345, 355]
-                                    s_event_time, e_event_time = [317, 321]
-                                    s_event_time, e_event_time = [selecteddata_stime, selecteddata_etime ]
-                                    # s_event_freq, e_event_freq = [67, 30]
+                                    # s_event_time, e_event_time = [282,289]
+                                    s_event_time, e_event_time = [selecteddata_stime, selecteddata_etime]
+                                    # s_event_freq, e_event_freq = [52, 33]
                                     # s_event_time, e_event_time = [366, 372]
-                                    # s_event_freq, e_event_freq = [int(np.max(y_freq)), 35]
+                                    # s_event_freq, e_event_freq = [int(np.max(y_freq)), 33]
                                     # s_event_time, e_event_time = [int(np.min(x_time) - 10), int(np.max(x_time) + 10)]
                                     s_event_freq, e_event_freq = [int(np.max(y_freq)), int(np.min(y_freq))]
                                     freq_start_idx = np.where(Frequency == getNearestValue(Frequency, s_event_freq))[0][0]

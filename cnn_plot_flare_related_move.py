@@ -17,8 +17,8 @@ import datetime
 import numpy as np
 
 
-# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 file_final = "/hinode_catalog/Hinode Flare Catalogue new.csv"
 
@@ -86,7 +86,7 @@ for i in range (len(flare_csv['peak'])):
                                 print (pd.to_datetime(files_list[j].split('/')[-1].split('_')[0] + files_list[j].split('/')[-1].split('_')[1],format='%Y%m%d%H%M%S')+ pd.to_timedelta(int(files_list[j].split('/')[-1].split('_')[5]),unit='second'))
                                 event_list.append(pd.to_datetime(files_list[j].split('/')[-1].split('_')[0] + files_list[j].split('/')[-1].split('_')[1],format='%Y%m%d%H%M%S')+ pd.to_timedelta(int(files_list[j].split('/')[-1].split('_')[5]),unit='second'))
         
-                                file_dir = Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_final_nonclear_flare_related/'+ yyyy
+                                file_dir = Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_final_nonclear_nonflare_related_micro/'+ yyyy
                                 if not os.path.isdir(file_dir):
                                     os.makedirs(file_dir)
                                 if not os.path.isfile(file_dir+'/'+files_list[j].split('/')[-1]):
