@@ -36,6 +36,7 @@ y_residual_0 = []
 y_residual_1 = []
 file_name = []
 
+
 for i in range(len(csv_input_final)):
     velocity = csv_input_final[["velocity"][0]][i].lstrip("['")[:-1].split(',')
     residual = csv_input_final[["residual"][0]][i].lstrip("['")[:-1].split(',')
@@ -46,21 +47,24 @@ for i in range(len(csv_input_final)):
     freq_range = ((freq_start - freq_end)/0.175) + 1
     # residual_list_1 = np.sqrt(residual_list_1/freq_range)
     y_residual_0.append(min(residual_list_1))
-    if min(residual_list_1)  < 0.3:
-    #     # if min(residual_list_1) > 0.2:
+    date_event = csv_input_final['event_date'][i]
+    if min(residual_list_1)  < 0.5:
+        if np.argmin(residual_list_1) == 3:
     #         # print('b')
-        date_event = csv_input_final['event_date'][i]
-        date_event_hour = csv_input_final['event_hour'][i]
-        date_event_minute = csv_input_final['event_minite'][i]
-        time_rate_final = csv_input_final['velocity'][i]
-        residual_list = min(residual_list_1)
-        event_start = csv_input_final['event_start'][i]
-        event_end = csv_input_final['event_end'][i]
-        # freq_start = csv_input_final['freq_start'][i]
-        # freq_end = csv_input_final['freq_end'][i]
-        best_factor = csv_input_final[["factor"][0]][i]
-        # factor_list.append(best_factor)
-        y_residual_1.append(min(residual_list_1))
+            
+            date_event = csv_input_final['event_date'][i]
+            date_event_hour = csv_input_final['event_hour'][i]
+            date_event_minute = csv_input_final['event_minite'][i]
+            time_rate_final = csv_input_final['velocity'][i]
+            residual_list = min(residual_list_1)
+            event_start = csv_input_final['event_start'][i]
+            event_end = csv_input_final['event_end'][i]
+            # freq_start = csv_input_final['freq_start'][i]
+            # freq_end = csv_input_final['freq_end'][i]
+            best_factor = csv_input_final[["factor"][0]][i]
+            # factor_list.append(best_factor)
+            y_residual_1.append(min(residual_list_1))
+            print (date_event, date_event_hour, date_event_minute)
     #     w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start,'event_end': event_end,'freq_start': freq_start,'freq_end':freq_end, 'factor':best_factor})
 
     # #     # ファイルの確認コード
@@ -80,21 +84,23 @@ y_residual_0 = np.array(y_residual_0)
 print (len(y_residual_0), len(np.where(y_residual_0<=residual_threshold)[0]))
 print(len(np.where(y_residual_0<=residual_threshold)[0])/(len(y_residual_0)))
 plt.close(1)
-fig = plt.figure(figsize=(20,10),dpi=80)
+fig = plt.figure(figsize=(18,8),dpi=80)
 ax1 = fig.add_subplot(1, 2, 1)
 ax2 = fig.add_subplot(1, 2, 2)
 ax1.hist(y_residual_0, bins = 200)
 ax1.tick_params(axis='x', labelsize=labelsize)
 ax1.tick_params(axis='y', labelsize=labelsize)
-ax1.set_xlabel('Fitting error', fontsize=fontsize)
-ax1.set_ylabel('The number of events', fontsize=fontsize)
-ax1.set_xlim(0,11)
-ax1.axvline(1.35, ls = "--", color = "navy")
+ax1.set_xlabel('Standard deviation [s]', fontsize=fontsize)
+ax1.set_ylabel('Number of events', fontsize=fontsize)
+ax1.set_xlim(0,9)
+ax1.axvline(1.35, ls = "--", color = "r", label = 'Threshold 1.35[s]')
+ax1.legend(fontsize = 18)
 ax2.hist(y_residual_1, bins = 200)
 ax2.tick_params(axis='x', labelsize=labelsize)
 ax2.tick_params(axis='y', labelsize=labelsize)
 ax2.set_xlabel('Fitting error', fontsize=fontsize)
 ax2.set_ylabel('The number of events', fontsize=fontsize)
+
 plt.show()
 plt.close()
 
