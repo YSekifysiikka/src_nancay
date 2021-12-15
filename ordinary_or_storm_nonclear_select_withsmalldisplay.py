@@ -27,8 +27,8 @@ WINDOW_NAME_6 = 'Nancay Wind'
 WINDOW_NAME_7  = 'SDO_0193'
 WINDOW_NAME_8 = 'SDO_0211'
 
-# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 
 Parent_lab = len(Parent_directory.split('/')) - 1
 file_final = "/hinode_catalog/Hinode Flare Catalogue new.csv"
@@ -700,10 +700,11 @@ def wind_geotail_nancay_plot_classification(date, DATE, count, check_dir):
 #20190506
 #20090629以降再確認
 #20130423以降再確認
-date_in=[20120101,20141231]
+date_in=[20040903,20040912]
 factor = 0.5
 
-check_dir = 'cnn_used_data/cnn_final_others_flare_related/'
+
+check_dir = 'cnn_used_data/200409_micro_events/'
 save_dir = 'afjpgunonsimpleselect'
 # date_in[0]
 # glob.glob(Parent_directory + '/solar_burst/Nancay/plot/af_sgepss/'+yyyy+'/'+yyyy+mm+dd+'_*.png')

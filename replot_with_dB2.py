@@ -204,11 +204,11 @@ def separated_data(diff_db, diff_db_min_med, epoch, time_co, time_band, t, diff_
 
 
 
-    diff_db_plot_sep = diff_db_min_med[freq_start_idx:freq_end_idx + 1, time - time_band - time_co:time]
-    diff_db_sep = diff_db[freq_start_idx:freq_end_idx + 1, time - time_band - time_co:time]
-    diff_move_db_sep = diff_move_db[freq_start_idx:freq_end_idx + 1, time - time_band - time_co:time]
-    diff_move_RR_db_sep = diff_move_RR_db[freq_start_idx:freq_end_idx + 1, time - time_band - time_co:time]
-    diff_move_LL_db_sep = diff_move_LL_db[freq_start_idx:freq_end_idx + 1, time - time_band - time_co:time]
+    diff_db_plot_sep = diff_db_min_med[:, time - time_band - time_co:time]
+    diff_db_sep = diff_db[:, time - time_band - time_co:time]
+    diff_move_db_sep = diff_move_db[:, time - time_band - time_co:time]
+    diff_move_RR_db_sep = diff_move_RR_db[:, time - time_band - time_co:time]
+    diff_move_LL_db_sep = diff_move_LL_db[:, time - time_band - time_co:time]
     return diff_db_plot_sep, diff_db_sep, x_lims, time, Time_start, Time_end, t, diff_move_db_sep, diff_move_RR_db_sep, diff_move_LL_db_sep
     
 def threshold_array(diff_db_plot_sep, freq_start_idx, freq_end_idx, sigma_value, Frequency, threshold_frequency, duration):
@@ -253,7 +253,7 @@ def plot_array_threshold(arr_threshold, x_lims, Frequency, date_OBs, freq_start_
     figure_=plt.figure(1,figsize=(6,4))
     gs = gridspec.GridSpec(6, 4)
     axes_2 = figure_.add_subplot(gs[:, :])
-    ax2 = axes_2.imshow(arr_threshold[freq_start_idx:freq_end_idx + 1], extent = [x_lims[0], x_lims[1],  Frequency[-1], Frequency[0]], 
+    ax2 = axes_2.imshow(arr_threshold[:], extent = [x_lims[0], x_lims[1],  Frequency[-1], Frequency[0]], 
               aspect='auto',cmap='jet',vmin= 0 ,vmax = 1)
     # ax2 = axes_2.imshow(arr_threshold[freq_start_idx:freq_end_idx + 1], 
     #           aspect='auto',cmap='jet',vmin= 2 ,vmax = 12)
@@ -450,7 +450,7 @@ def cnn_detection(arr_5, event_start, event_end, freq_start, freq_end, event_tim
 
     figure_=plt.figure(1,figsize=(10,10))
     axes_2 = figure_.add_subplot(1, 1, 1)
-    axes_2.imshow(arr_5[freq_start_idx:freq_end_idx + 1], extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
+    axes_2.imshow(arr_5[:], extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
               aspect='auto',cmap='jet',vmin= vmin_1-2 ,vmax = vmax_1)
     plt.axis('off')
     
@@ -578,6 +578,12 @@ def residual_detection(Parent_directory, save_directory, factor_list, freq_list,
         save_directory_1 = save_directory
     return residual_list, save_directory_1, x_time, y_freq, time_rate_final
 
+def numerical_diff_allen(factor, velocity, t, h_start):
+    h = 1e-3
+    f_1= 9 * 10 * np.sqrt(factor * (2.99 * ((h_start + ((t+h) * velocity * 300000)/696000)**(-16)) + 1.55 * ((h_start + ((t+h) * velocity * 300000)/696000)**(-6)) + 0.036 * ((h_start + ((t+h) * velocity * 300000)/696000)**(-1.5))))
+    f_2 = 9 * 10 * np.sqrt(factor * (2.99 * ((h_start + ((t-h) * velocity * 300000)/696000)**(-16)) + 1.55 * ((h_start + ((t-h) * velocity * 300000)/696000)**(-6)) + 0.036 * ((h_start + ((t-h) * velocity * 300000)/696000)**(-1.5))))
+    return ((f_1 - f_2)/(2*h))
+
 
 import matplotlib.gridspec as gridspec
 def plot_data(diff_db_plot_sep, diff_db_sep, freq_list, time_list, arr_5, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start, event_end, freq_start, freq_end, event_time_gap, freq_gap, vmin_1, vmax_1, arr_sep_time, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot):
@@ -627,7 +633,7 @@ def plot_data(diff_db_plot_sep, diff_db_sep, freq_list, time_list, arr_5, x_time
 
 
     axes_2 = figure_.add_subplot(gs[:, 21:34])
-    ax2 = axes_2.imshow(arr_5[freq_start_idx:freq_end_idx + 1], extent = [0, 50, 30, y_lims[1]], 
+    ax2 = axes_2.imshow(arr_5[:], extent = [0, 50, 30, y_lims[1]], 
               aspect='auto',cmap='jet',vmin= vmin_1 -2 ,vmax = vmax_1)
     plt.title('Nancay: '+year+'-'+month+'-'+day + ' Start:'+ event_start +' T:'+event_time_gap + ' F:'+ freq_gap,fontsize=fontsize + 10)
     plt.xlabel('Time[sec]',fontsize=fontsize)
@@ -702,13 +708,13 @@ cnn_model_2 = load_model_flare(Parent_directory, file_name = '/solar_burst/Nanca
                         color_setting = 1, image_size = 128, fw = 3, strides = 1, fn_conv2d = 16, output_size = 2)
 import csv
 # import pandas as pd
-# burst_types = ['flare_associated_ordinary'] 
-# csv_names = ['afjpgu_LL_RR_flare_associated_ordinary_dB.csv']
-burst_types = ['storm'] 
-csv_names = ['afjpgu_LL_RR_micro_dB_1.csv']
+burst_types = ['flare_associated_ordinary'] 
+csv_names = ['shuron_LL_RR_flare_associated_ordinary_dB_cycle23_1.csv']
+# burst_types = ['storm'] 
+# csv_names = ['shuron_LL_RR_micro_dB_cycle23.csv']
 for j in range(len(burst_types)):
     with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/' + csv_names[j], 'w') as f:
-        w = csv.DictWriter(f, fieldnames=["event_date", "event_hour", "event_minite", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "peak_dB_40MHz", "peak_RR_40MHz", "peak_LL_40MHz"])
+        w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "peak_dB_40MHz", "peak_RR_40MHz", "peak_LL_40MHz", "drift_rate_40MHz"])
         w.writeheader()
         check_date_list = []
         for file in glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/afjpgusimpleselect/'+burst_types[j]+'/*/*.png'):
@@ -716,12 +722,17 @@ for j in range(len(burst_types)):
             check_date_list.append(file.split('/')[11].split('_')[0])
         check_dates = sorted(list(set(check_date_list)))
         for check_date in check_dates:
-            if int(check_date) >= 20130706:
+            if int(check_date) <= 19971231:
                 yyyy = check_date[:4]
                 mm = check_date[4:6]
+                dd = check_date[6:8]
                 file_name = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/data/'+yyyy+'/'+mm+'/*'+ check_date +'*cdf')[0].split('/')[10]
     
-                diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs, diff_move_db, diff_move_RR_db, diff_move_LL_db= read_data(Parent_directory, file_name, 3, 80, 30)
+
+                if int(yyyy) <= 1997:
+                    diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs, diff_move_db, diff_move_RR_db, diff_move_LL_db= read_data(Parent_directory, file_name, 3, 70, 30)
+                else:
+                    diff_db, diff_db_min_med, min_db, Frequency_start, Frequency_end, resolution, epoch, freq_start_idx, freq_end_idx, Frequency, Status, date_OBs, diff_move_db, diff_move_RR_db, diff_move_LL_db= read_data(Parent_directory, file_name, 3, 80, 30)
                 target_pics = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/afjpgusimpleselect/'+burst_types[j]+'/'+yyyy+'/'+check_date+'*.png')
                 Frequency_40_index = np.where(Frequency == getNearestValue(Frequency,check_freq))[0][0]
                 print(Frequency_40_index)
@@ -755,12 +766,25 @@ for j in range(len(burst_types)):
                                             date_event = str(time_event.date())[0:4] + str(time_event.date())[5:7] + str(time_event.date())[8:10]
                                             date_event_hour = str(time_event.hour)
                                             date_event_minute = str(time_event.minute)
+                                            obs_time = datetime.datetime(int(yyyy), int(mm), int(dd), int(date_event_hour), int(date_event_minute))
                                             print (time_rate_final)
                                             idx_peak = np.where(freq_list[i] ==getNearestValue(freq_list[i], 40))[0][0]
                                             RR_peak = diff_move_RR_db_sep[Frequency_40_index, time_list[i][idx_peak]]
                                             LL_peak = diff_move_LL_db_sep[Frequency_40_index, time_list[i][idx_peak]]
                                             peak_dB = diff_move_db_sep[Frequency_40_index, time_list[i][idx_peak]]
-                                            w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start_list[i],'event_end': event_end_list[i],'freq_start': freq_start_list[i],'freq_end':freq_end_list[i], 'factor':best_factor, 'peak_time_list':time_list[i], 'peak_freq_list':freq_list[i], "peak_dB_40MHz":peak_dB, "peak_RR_40MHz":RR_peak, "peak_LL_40MHz":LL_peak})
+
+                                            factor = best_factor
+                                            velocity = time_rate_final[factor-1]
+                                            freq_max = freq_start_list[i]
+                                            cube_4 = (lambda h: 9 * 10 * np.sqrt(factor * (2.99*((1+(h/69600000000))**(-16))+1.55*((1+(h/69600000000))**(-6))+0.036*((1+(h/69600000000))**(-1.5)))))
+                                            invcube_4 = inversefunc(cube_4, y_values = freq_max)
+                                            h_start = invcube_4/69600000000 + 1
+                                            # print (h_start)
+                                            cube_3 = (lambda t: 9 * 10 * np.sqrt(factor * (2.99 * ((h_start + (t * velocity * 300000)/696000)**(-16)) + 1.55 * ((h_start + (t * velocity * 300000)/696000)**(-6)) + 0.036 * ((h_start + (t * velocity * 300000)/696000)**(-1.5)))))
+                                            invcube_3 = inversefunc(cube_3, y_values=40)
+                                            
+                                            slope = numerical_diff_allen(factor, velocity, invcube_3, h_start) * -1
+                                            w.writerow({'obs_time':obs_time,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start_list[i],'event_end': event_end_list[i],'freq_start': freq_start_list[i],'freq_end':freq_end_list[i], 'factor':best_factor, 'peak_time_list':time_list[i], 'peak_freq_list':freq_list[i], "peak_dB_40MHz":peak_dB, "peak_RR_40MHz":RR_peak, "peak_LL_40MHz":LL_peak, "drift_rate_40MHz":slope})
                                             # sys.exit()
     # {'/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/afjpgusimpleselect/ordinary/2012/20120730_101946_102626_8500_8900_79_87_78.425_46.75peak.png', 
     #   '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/afjpgusimpleselect/ordinary/2012/20120720_140046_140726_21760_22160_336_344_45.0_31.175peak.png', 

@@ -1010,7 +1010,7 @@ def change_event_time_range():
 
 def change_event_freq_range():
     choice = input("Input freq range: ").lower()
-    freq_list = [float(choice.split(',')[0]),int(choice.split(',')[1])]
+    freq_list = [float(choice.split(',')[0]),float(choice.split(',')[1])]
     return freq_list
 
 def select_time():
@@ -1048,7 +1048,7 @@ def sunspots_num_check(yyyy, mm, dd):
             else:
                 return False
 
-def wind_geotail_flare(yyyy, mm, dd, WINDOW_NAME_0, WINDOW_NAME_1, WINDOW_NAME_4):        
+def wind_geotail_flare(yyyy, mm, dd, WINDOW_NAME_0, WINDOW_NAME_1, WINDOW_NAME_4):
     if os.path.isfile(Parent_directory + "/solar_burst/wind/plot_QL/" + yyyy + "/wav_summary_" + yyyy + mm + dd + ".png") == True:
         img_wind = cv2.imread(Parent_directory + "/solar_burst/wind/plot_QL/" + yyyy + "/wav_summary_" + yyyy + mm + dd + ".png", cv2.IMREAD_COLOR)
         img_wind_1 = img_wind[50:380, 20:790]
@@ -1079,11 +1079,12 @@ def wind_geotail_flare(yyyy, mm, dd, WINDOW_NAME_0, WINDOW_NAME_1, WINDOW_NAME_4
     #     image_flare = cv2.resize(img_flare_1, dsize=None, fx=1.455*efactor, fy=1.455*efactor)
     #     cv2.namedWindow(WINDOW_NAME_4, cv2.WINDOW_AUTOSIZE)
     #     cv2.imshow(WINDOW_NAME_4, image_flare)
-    #     cv2.moveWindow(WINDOW_NAME_4, 1450, 451)
+    #     # cv2.moveWindow(WINDOW_NAME_4, 1450, 451)
+    #     cv2.moveWindow(WINDOW_NAME_4, 1450, 825)
     #     # cv2.moveWindow(WINDOW_NAME_4, 1450, 825*factor)
     # else:
     #     print('No data: Flare')
-    # cv2.waitKey(1)
+    cv2.waitKey(1)
     return
 
 
@@ -1127,7 +1128,7 @@ efactor = 0.5
 
 
 def flare_check(yyyy):
-    file_final = "/hinode_catalog/Hinode Flare Catalogue new_2.csv"
+    file_final = "/hinode_catalog/Hinode Flare Catalogue new.csv"
     flare_csv = pd.read_csv(filepath_or_buffer= Parent_directory + file_final, sep=",")
     
     flare_times = []
@@ -1146,14 +1147,13 @@ def flare_check(yyyy):
     return flare_times
 
 
-
-# /Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/2012/20120607_091026_091706_4760_5160_218_399_62.85_29.95compare.png
-
 cv2.waitKey(1)
 cv2.destroyAllWindows()
 cv2.waitKey(1)
-#黒点数0以上にしている
-selected_date = '20040903'
+
+#20140708
+#黒点0以上
+selected_date = '20040909'
 yyyy = selected_date[:4]
 mm = selected_date[4:6]
 dd = selected_date[6:8]
@@ -1215,11 +1215,12 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                     cv2.destroyAllWindows()
                     cv2.waitKey(1)
                     sys.exit()
-                selected_stime = datetime.datetime.strptime(str(select).split('_')[0]+str(select).split('_')[1], '%Y%m%d%H%M%S') + datetime.timedelta(seconds=int(str(select).split('_')[5])) - datetime.timedelta(seconds=1)
+                selected_stime = datetime.datetime.strptime(str(select).split('_')[0]+str(select).split('_')[1], '%Y%m%d%H%M%S') + datetime.timedelta(seconds=int(str(select).split('_')[5]))
                 selected_time  = selected_stime.strftime("%H:%M:%S")
                 print (selected_time)
-                selected_idx_2 = np.arange(int(str(select).split('_')[3]), int(str(select).split('_')[4])+1, 1)
+                selected_idx_2 = np.arange(int(str(select).split('_')[3]), int(str(select).split('_')[4]), 1)
                 s_event_time, e_event_time = [int(str(select).split('_')[5]),int(str(select).split('_')[6])]
+                selected_time_range = int(str(select).split('_')[6]) - int(str(select).split('_')[5]) + 1
 
                 if (int(str(select).split('_')[3])/time_band).is_integer() is True:
                     t_1 = int(int(str(select).split('_')[3])/time_band)
@@ -1256,7 +1257,8 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                 # image_nancay_QL = cv2.resize(img_nancay_QL_1, dsize=None, fx=0.72, fy=0.72)
                 cv2.namedWindow(WINDOW_NAME_6, cv2.WINDOW_AUTOSIZE)
                 cv2.imshow(WINDOW_NAME_6, image_nancay_wind_QL)
-                cv2.moveWindow(WINDOW_NAME_6, 1928, 0)
+                # cv2.moveWindow(WINDOW_NAME_6, 1928, 0)
+                cv2.moveWindow(WINDOW_NAME_6, 2409, 0)
                 cv2.waitKey(1)
 
 
@@ -1318,9 +1320,7 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                                 freq_end_idx = np.where(Frequency == getNearestValue(Frequency, e_event_freq))[0][0]
                                 sep_arr_sep_time_list =  arr_sep_time_list[i][freq_start_idx:freq_end_idx + 1, selected_idx - selected_idx_2[0]]
                                 selected_Frequency = Frequency[freq_start_idx:freq_end_idx + 1]
-                                # residual_list, x_time, y_freq, time_rate_final = residual_detection(factor_list, freq_list[i], time_list[i], freq_list[i])
-                                # resi_idx = np.argmin(residual_list)
-                                # plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
+                                
                                 
                                 z = 0
                                 while z >= 0:
@@ -1340,17 +1340,63 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                                         resi_idx = np.argmin(residual_list)
                                         s_event_time, e_event_time = [(selected_idx - selected_idx_2[0])[0], (selected_idx - selected_idx_2[0])[-1]]
                                         selected_event_plot(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, date_OBs, sep_arr_sep_time_list, quartile_db_l, db_setting, s_event_time, e_event_time, selected_Frequency, resi_idx, date_event_hour, date_event_minute)
-                                        time_gap_arr = x_time[resi_idx][np.where(y_freq[resi_idx] == freq_list_new[0])[0][0]:np.where(y_freq[resi_idx] == freq_list_new[-1])[0][0] + 1] - np.array(time_list_new)
-                                        delete_idx = np.where(np.abs(time_gap_arr) >= 2 * residual_list[resi_idx])[0]
-                                        selected_idx_3 = np.where(np.abs(time_gap_arr) < 2 * residual_list[resi_idx])[0]
-                                        residual_list, x_time, y_freq, time_rate_final = residual_detection(factor_list, np.array(freq_list_new)[selected_idx_3], np.array(time_list_new)[selected_idx_3], freq_list_new)
-                                        resi_idx = np.argmin(residual_list)
-                                        selected_event_plot_2(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, delete_idx, selected_idx_3, date_event_hour, date_event_minute)
+                                        fitting = fitting_check()
+                                        if fitting == 'Yes':
+                                            z -= 100
+                                            if np.min(residual_list) > 1.35:
+                                                print ('Residual error')
+                                                file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/moved'
+                                                if not os.path.isfile(file_dir+'/'+filename):
+                                                    shutil.move(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/'+yyyy+'/'+filename, file_dir)
+                                            else:
+                                                yes_or_not = choice()
+                                                if yes_or_not == 'Yes':
+                                                    csvfiles = Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/'+filename.split('.png')[0]+'*.csv'
+                                                    csvfiles_len = glob.glob(csvfiles)
+                                                    if csvfiles_len == 0:
+                                                        filename_2 = filename.split('.png')[0]+'.csv'
+                                                    else:
+                                                        filename_2 = filename.split('.png')[0]+str(len(csvfiles_len))+'.csv'
+                                                    
+                                                    with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/' + filename_2, 'w') as f:
+                                                        obs_time = obs_time_list[selected_idx_2[0]] + datetime.timedelta(seconds = int(np.min(np.array(time_list_new))))
+                                                        w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "drift_rate_40MHz"])
+                                                        w.writeheader()
+                                                        factor = resi_idx+1
+                                                        time_rate = time_rate_final[resi_idx]
+                                                        cube_4 = (lambda h: 9 * 10 * np.sqrt(factor * (2.99*((1+(h/696000))**(-16))+1.55*((1+(h/696000))**(-6))+0.036*((1+(h/696000))**(-1.5)))))
+                                                        r = (inversefunc(cube_4, y_values = 40) + 696000)*1e+5
+                                                        r_1 = (inversefunc(cube_4, y_values = 40) + 696000)/696000
+                                                        ne = factor * 10**8 * (2.99*(r_1)**(-16)+1.55*(r_1)**(-6)+0.036*(r_1)**(-1.5))
+                                                        # print ('\n'+str(factor)+'×B-A model' + 'emission fp')
+                                                        drift_rates = (-1)*numerical_diff_df_dn(ne) * numerical_diff_allen_dn_dr(factor, r) * time_rate * light_v * 1e+5
+                                                        w.writerow({'obs_time':obs_time,'velocity':time_rate_final, 'residual':residual_list, 'event_start': np.min(np.array(time_list_new)),'event_end': np.max(np.array(time_list_new)),'freq_start': np.max(np.array(freq_list_new)),'freq_end':np.min(np.array(freq_list_new)), 'factor':resi_idx+1, 'peak_time_list':np.array(time_list_new), 'peak_freq_list':np.array(freq_list_new), 'drift_rate_40MHz':drift_rates})
+            
+                                                        file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/done'
+                                                        if not os.path.isfile(file_dir+'/'+filename):
+                                                            shutil.copy(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/'+yyyy+'/'+filename, file_dir)
+                                                elif yes_or_not == 'move':
+                                                    file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/moved'
+                                                    if not os.path.isfile(file_dir+'/'+filename):
+                                                        shutil.move(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/'+yyyy+'/'+filename, file_dir)
+                                        elif fitting == 'No':
+                                            z += 1
+                                        if z >= 0:
+                                            time_gap_arr = x_time[resi_idx][np.where(y_freq[resi_idx] == freq_list_new[0])[0][0]:np.where(y_freq[resi_idx] == freq_list_new[-1])[0][0] + 1] - np.array(time_list_new)
+                                            delete_idx = np.where(np.abs(time_gap_arr) >= 2 * residual_list[resi_idx])[0]
+                                            selected_idx_3 = np.where(np.abs(time_gap_arr) < 2 * residual_list[resi_idx])[0]
+                                            if len(np.array(freq_list_new)[selected_idx_3]) == 0:
+                                                print ('freq_time error')
+                                            else:
+                                                residual_list, x_time, y_freq, time_rate_final = residual_detection(factor_list, np.array(freq_list_new)[selected_idx_3], np.array(time_list_new)[selected_idx_3], freq_list_new)
+                                                resi_idx = np.argmin(residual_list)
+                                                selected_event_plot_2(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, delete_idx, selected_idx_3, date_event_hour, date_event_minute)
                                     elif z >= 1:
                                         change_check = change_check_formula()
                                         if change_check == 't':
                                             time_list_setting = change_event_time_range()
                                             s_event_start, e_event_end = np.array(time_list_setting) + int(str(select).split('_')[3])
+                                            selected_idx = np.arange(s_event_start, e_event_end+1, 1)
                                         elif change_check == 'f':
                                             freq_list_setting = change_event_freq_range()
                                             s_event_freq, e_event_freq = np.array(freq_list_setting)
@@ -1359,7 +1405,7 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                                             freq_list_setting = change_event_freq_range()
                                             s_event_freq, e_event_freq = np.array(freq_list_setting)
                                             s_event_start, e_event_end = np.array(time_list_setting) + int(str(select).split('_')[3])
-                                        selected_idx = np.arange(s_event_start, e_event_end+1, 1)
+                                            selected_idx = np.arange(s_event_start, e_event_end+1, 1)
                                         freq_start_idx = np.where(Frequency == getNearestValue(Frequency, s_event_freq))[0][0]
                                         freq_end_idx = np.where(Frequency == getNearestValue(Frequency, e_event_freq))[0][0]
                                         sep_arr_sep_time_list =  arr_sep_time_list[i][freq_start_idx:freq_end_idx + 1, selected_idx - selected_idx_2[0]]
@@ -1385,46 +1431,47 @@ if sunspots_num_check(yyyy, mm, dd) == True:
                                         residual_list, x_time, y_freq, time_rate_final = residual_detection(factor_list, np.array(freq_list_new)[selected_idx_3], np.array(time_list_new)[selected_idx_3], freq_list_new)
                                         resi_idx = np.argmin(residual_list)
                                         selected_event_plot_2(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, delete_idx, selected_idx_3, date_event_hour, date_event_minute)
-                                    fitting = fitting_check()
-                                    if fitting == 'Yes':
-                                        z -= 100
-                                        if np.min(residual_list) > 1.35:
-                                            print ('Residual error')
-                                            file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/moved'
-                                            if not os.path.isfile(file_dir+'/'+filename):
-                                                shutil.move(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/'+yyyy+'/'+filename, file_dir)
-                                        else:
-                                            yes_or_not = choice()
-                                            if yes_or_not == 'Yes':
-                                                csvfiles = Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/'+filename.split('.png')[0]+'*.csv'
-                                                csvfiles_len = glob.glob(csvfiles)
-                                                if csvfiles_len == 0:
-                                                    filename_2 = filename.split('.png')[0]+'.csv'
-                                                else:
-                                                    filename_2 = filename.split('.png')[0]+str(len(csvfiles_len))+'.csv'
-                                                
-                                                with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/' + filename_2, 'w') as f:
-                                                    obs_time = obs_time_list[selected_idx_2[0]] + datetime.timedelta(seconds = int(np.min(np.array(time_list_new)[selected_idx_3])))
-                                                    w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "drift_rate_40MHz"])
-                                                    w.writeheader()
-                                                    factor = resi_idx+1
-                                                    time_rate = time_rate_final[resi_idx]
-                                                    cube_4 = (lambda h: 9 * 10 * np.sqrt(factor * (2.99*((1+(h/696000))**(-16))+1.55*((1+(h/696000))**(-6))+0.036*((1+(h/696000))**(-1.5)))))
-                                                    r = (inversefunc(cube_4, y_values = 40) + 696000)*1e+5
-                                                    r_1 = (inversefunc(cube_4, y_values = 40) + 696000)/696000
-                                                    ne = factor * 10**8 * (2.99*(r_1)**(-16)+1.55*(r_1)**(-6)+0.036*(r_1)**(-1.5))
-                                                    # print ('\n'+str(factor)+'×B-A model' + 'emission fp')
-                                                    drift_rates = (-1)*numerical_diff_df_dn(ne) * numerical_diff_allen_dn_dr(factor, r) * time_rate * light_v * 1e+5
-                                                    w.writerow({'obs_time':obs_time,'velocity':time_rate_final, 'residual':residual_list, 'event_start': np.min(np.array(time_list_new)[selected_idx_3]),'event_end': np.max(np.array(time_list_new)[selected_idx_3]),'freq_start': np.max(np.array(freq_list_new)[selected_idx_3]),'freq_end':np.min(np.array(freq_list_new)[selected_idx_3]), 'factor':resi_idx+1, 'peak_time_list':np.array(time_list_new)[selected_idx_3], 'peak_freq_list':np.array(freq_list_new)[selected_idx_3], 'drift_rate_40MHz':drift_rates})
-        
-                                                    file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/done'
-                                                    if not os.path.isfile(file_dir+'/'+filename):
-                                                        shutil.copy(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/'+yyyy+'/'+filename, file_dir)
-                                            elif yes_or_not == 'move':
+                                    if z >= 0:
+                                        fitting = fitting_check()
+                                        if fitting == 'Yes':
+                                            z -= 100
+                                            if np.min(residual_list) > 1.35:
+                                                print ('Residual error')
                                                 file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/moved'
                                                 if not os.path.isfile(file_dir+'/'+filename):
                                                     shutil.move(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/'+yyyy+'/'+filename, file_dir)
-                                    elif fitting == 'No':
-                                        z += 1
+                                            else:
+                                                yes_or_not = choice()
+                                                if yes_or_not == 'Yes':
+                                                    csvfiles = Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/'+filename.split('.png')[0]+'*.csv'
+                                                    csvfiles_len = glob.glob(csvfiles)
+                                                    if csvfiles_len == 0:
+                                                        filename_2 = filename.split('.png')[0]+'.csv'
+                                                    else:
+                                                        filename_2 = filename.split('.png')[0]+str(len(csvfiles_len))+'.csv'
+                                                    
+                                                    with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/' + filename_2, 'w') as f:
+                                                        obs_time = obs_time_list[selected_idx_2[0]] + datetime.timedelta(seconds = int(np.min(np.array(time_list_new)[selected_idx_3])))
+                                                        w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "drift_rate_40MHz"])
+                                                        w.writeheader()
+                                                        factor = resi_idx+1
+                                                        time_rate = time_rate_final[resi_idx]
+                                                        cube_4 = (lambda h: 9 * 10 * np.sqrt(factor * (2.99*((1+(h/696000))**(-16))+1.55*((1+(h/696000))**(-6))+0.036*((1+(h/696000))**(-1.5)))))
+                                                        r = (inversefunc(cube_4, y_values = 40) + 696000)*1e+5
+                                                        r_1 = (inversefunc(cube_4, y_values = 40) + 696000)/696000
+                                                        ne = factor * 10**8 * (2.99*(r_1)**(-16)+1.55*(r_1)**(-6)+0.036*(r_1)**(-1.5))
+                                                        # print ('\n'+str(factor)+'×B-A model' + 'emission fp')
+                                                        drift_rates = (-1)*numerical_diff_df_dn(ne) * numerical_diff_allen_dn_dr(factor, r) * time_rate * light_v * 1e+5
+                                                        w.writerow({'obs_time':obs_time,'velocity':time_rate_final, 'residual':residual_list, 'event_start': np.min(np.array(time_list_new)[selected_idx_3]),'event_end': np.max(np.array(time_list_new)[selected_idx_3]),'freq_start': np.max(np.array(freq_list_new)[selected_idx_3]),'freq_end':np.min(np.array(freq_list_new)[selected_idx_3]), 'factor':resi_idx+1, 'peak_time_list':np.array(time_list_new)[selected_idx_3], 'peak_freq_list':np.array(freq_list_new)[selected_idx_3], 'drift_rate_40MHz':drift_rates})
+            
+                                                        file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/done'
+                                                        if not os.path.isfile(file_dir+'/'+filename):
+                                                            shutil.copy(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/'+yyyy+'/'+filename, file_dir)
+                                                elif yes_or_not == 'move':
+                                                    file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/moved'
+                                                    if not os.path.isfile(file_dir+'/'+filename):
+                                                        shutil.move(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/micro/'+yyyy+'/'+filename, file_dir)
+                                        elif fitting == 'No':
+                                            z += 1
 
 

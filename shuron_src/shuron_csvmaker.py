@@ -136,10 +136,7 @@ csv_input_ordinary = pd.read_csv(filepath_or_buffer= Parent_directory + file_fin
 for i in range(len(csv_input_ordinary)):
     obs_time = datetime.datetime(int(str(csv_input_ordinary['event_date'][i])[:4]), int(str(csv_input_ordinary['event_date'][i])[4:6]), int(str(csv_input_ordinary['event_date'][i])[6:8]), csv_input_ordinary['event_hour'][i], csv_input_ordinary['event_minite'][i])
 
-    if obs_time <= datetime.datetime(2010,1,1):
-        freq_40 = 40
-    else:
-        freq_40 = 39.925
+    freq_40 = 40
     # if (csv_input_ordinary['freq_start'][i] >= freq_40) & (csv_input_ordinary['freq_end'][i] <= freq_40):
     if (obs_time <= datetime_start_end[1]) & (obs_time >= datetime_start_end[0]):
         bursts_obs_times_od.append(obs_time)
@@ -206,10 +203,7 @@ csv_input_micro = pd.read_csv(filepath_or_buffer= Parent_directory + file_final,
 for i in range(len(csv_input_micro)):
     obs_time = datetime.datetime(int(str(csv_input_micro['event_date'][i])[:4]), int(str(csv_input_micro['event_date'][i])[4:6]), int(str(csv_input_micro['event_date'][i])[6:8]), csv_input_micro['event_hour'][i], csv_input_micro['event_minite'][i])
 
-    if obs_time <= datetime.datetime(2010,1,1):
-        freq_micro = 40
-    else:
-        freq_micro = 39.925
+    freq_micro = 40
 
     if (obs_time <= datetime_start_end[1]) & (obs_time >= datetime_start_end[0]):
         bursts_obs_times_micro.append(obs_time)
@@ -331,10 +325,10 @@ fontsize_labelsize = 20
 # burst_types = ["Micro type III burst", "Ordinary type III burst"]
 
 
-with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_ordinary_LL_RR.csv', 'w') as f:
+with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_micro_LL_RR.csv', 'w') as f:
     w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "peak_RR_40MHz", "peak_LL_40MHz", "peak_intensity_calibrated", "BG_RR_40MHz", "BG_LL_40MHz", "sunspots_num", "Gain_RR_40MHz", "Gain_LL_40MHz", "Trx_RR_40MHz", "Trx_LL_40MHz", "Polarization", "cos", "Fixed_gain", "40MHz", "drift_rate_40MHz"])
     w.writeheader()
-    burst_types = ["Ordinary type III burst"]
+    burst_types = ["Micro type III burst"]
     # fig = plt.figure(figsize=(36.0, 36.0))
     # gs = gridspec.GridSpec(315, 4)
     for burst_type in burst_types:
@@ -396,10 +390,7 @@ with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_a
         for i in range(len(obs_times)):
     
             if np.abs(getNearestValue(BG_obs_times, obs_times[i])-obs_times[i]) <= datetime.timedelta(seconds=60*90):
-                if obs_times[i] <= datetime.datetime(2010,1,1):
-                    freq_40 = 40
-                else:
-                    freq_40 = 39.925
+                freq_40 = 40
                 if (freq_start[i] >= freq_40) & (freq_end[i] <= freq_40):
                     BG_idx = np.where(BG_obs_times == getNearestValue(BG_obs_times, obs_times[i]))
                     obs_time_list.append(obs_times[i])
@@ -462,10 +453,7 @@ with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_a
             else:
                 sunidx = np.where(sunspot_obs_times == datetime.datetime(obs_times[i].year, obs_times[i].month, obs_times[i].day))[0][0]
                 sunspots_num = sunspot_num_list[sunidx]
-                if obs_times[i] <= datetime.datetime(2010,1,1):
-                    freq_40 = 40
-                else:
-                    freq_40 = 39.925
+                freq_40 = 40
                 if (freq_start[i] >= freq_40) & (freq_end[i] <= freq_40):
                     w.writerow({'obs_time':obs_times[i], 'velocity': velocity_list[i], 'residual':residual_list[i], 'event_start':event_start[i], 'event_end':event_end[i], 'freq_start':freq_start[i], 'freq_end':freq_end[i], 'factor':best_factor[i], 'peak_time_list':peak_time[i], 'peak_freq_list':peak_freq[i], 'peak_RR_40MHz':peak_RR[i], 'peak_LL_40MHz':peak_LL[i], 'peak_intensity_calibrated':np.nan, 'BG_RR_40MHz':np.nan, 'BG_LL_40MHz':np.nan, 'sunspots_num':sunspots_num, 'Gain_RR_40MHz':np.nan, 'Gain_LL_40MHz':np.nan, 'Trx_RR_40MHz':np.nan, 'Trx_LL_40MHz':np.nan, 'Polarization':np.nan, 'cos':cos_val[i], 'Fixed_gain':np.nan, '40MHz':freq_check_40[i], 'drift_rate_40MHz':freq_drift_40[i]})
                 else:

@@ -235,11 +235,11 @@ def numerical_diff_allen_dn_dr(factor, r):
     ne_2 = factor * 10**8 * (2.99*((r-h)/69600000000)**(-16)+1.55*((r-h)/69600000000)**(-6)+0.036*((r-h)/69600000000)**(-1.5))
     return ((ne_1 - ne_2)/(2*h))
 
-with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/ordinary/solarmaxtotal2.csv', 'w') as f:
+with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/ordinary/solarmintotal2.csv', 'w') as f:
     w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "drift_rate_40MHz"])
     w.writeheader()
 
-    file_final = '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/ordinary/solarmaxtotal.csv'
+    file_final = '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/ordinary/solarmintotal.csv'
     csv_input_final = pd.read_csv(filepath_or_buffer= file_final, sep=",")
 
     
