@@ -151,93 +151,97 @@ factor_list_5 = [1,2,3,4,5]
 Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
-# with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/eventstudy_200409.csv', 'w') as f:
-#     w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "drift_rate_40MHz"])
-#     w.writeheader()
+with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/solarmaxtotal2.csv', 'w') as f:
+    w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "drift_rate_40MHz"])
+    w.writeheader()
     
-#     files = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/200409/*compare*.csv')
-#     for file_final in files:
-#         csv_input_final = pd.read_csv(filepath_or_buffer= file_final, sep=",")
+    files = glob.glob('/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/solarmax/all/*compare*.csv')
+    for file_final in files:
+        csv_input_final = pd.read_csv(filepath_or_buffer= file_final, sep=",")
         
 
-#         for j in range(len(csv_input_final)):
-#             obs_time = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]), int(csv_input_final['obs_time'][j].split(' ')[1][:2]), int(csv_input_final['obs_time'][j].split(':')[1]), int(csv_input_final['obs_time'][j].split(':')[2][:2]))
-#             freq_start = csv_input_final["freq_start"][j]
-#             freq_end = csv_input_final["freq_end"][j]
-#             time_start = csv_input_final["event_start"][j]
-#             time_end = csv_input_final["event_end"][j]
-#             drift_rates = csv_input_final["drift_rate_40MHz"][j]
-#             driftrates_list.append(drift_rates)
-#             # duration_list.append(csv_input_final["event_end"][j]-csv_input_final["event_start"][j]+1)
-#             # freq_drift_final.append(csv_input_final["drift_rate_40MHz"][j])
-#             factor_list = csv_input_final["factor"][j]
-#             peak_time_list = [int(k) for k in csv_input_final["peak_time_list"][j].split('[')[1].split(']')[0].replace('\n', '').split(' ') if k != '']
-#             peak_freq_list = [float(k) for k in csv_input_final["peak_freq_list"][j][1:-1].replace('\n', '').split(' ') if k != '']
-#             resi_idx = np.argmin([float(k) for k in csv_input_final["residual"][j].split('[')[1].split(']')[0].split(',')])
-#             resi_list= [float(k) for k in csv_input_final["residual"][j].split('[')[1].split(']')[0].split(',')]
-#             velocity_list=[float(k) for k in csv_input_final["velocity"][j].split('[')[1].split(']')[0].split(',')]
-#             w.writerow({'obs_time':obs_time,'velocity':velocity_list, 'residual':resi_list, 'event_start': time_start,'event_end':time_end,'freq_start': freq_start,'freq_end':freq_end, 'factor':resi_idx+1, 'peak_time_list':peak_time_list, 'peak_freq_list':peak_freq_list, 'drift_rate_40MHz': drift_rates})
+        for j in range(len(csv_input_final)):
+            obs_time = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]), int(csv_input_final['obs_time'][j].split(' ')[1][:2]), int(csv_input_final['obs_time'][j].split(':')[1]), int(csv_input_final['obs_time'][j].split(':')[2][:2]))
+            freq_start = csv_input_final["freq_start"][j]
+            freq_end = csv_input_final["freq_end"][j]
+            time_start = csv_input_final["event_start"][j]
+            time_end = csv_input_final["event_end"][j]
+            drift_rates = csv_input_final["drift_rate_40MHz"][j]
+            driftrates_list.append(drift_rates)
+            # duration_list.append(csv_input_final["event_end"][j]-csv_input_final["event_start"][j]+1)
+            # freq_drift_final.append(csv_input_final["drift_rate_40MHz"][j])
+            factor_list = csv_input_final["factor"][j]
+            peak_time_list = [int(k) for k in csv_input_final["peak_time_list"][j].split('[')[1].split(']')[0].replace('\n', '').split(' ') if k != '']
+            peak_freq_list = [float(k) for k in csv_input_final["peak_freq_list"][j][1:-1].replace('\n', '').split(' ') if k != '']
+            resi_idx = np.argmin([float(k) for k in csv_input_final["residual"][j].split('[')[1].split(']')[0].split(',')])
+            resi_list= [float(k) for k in csv_input_final["residual"][j].split('[')[1].split(']')[0].split(',')]
+            velocity_list=[float(k) for k in csv_input_final["velocity"][j].split('[')[1].split(']')[0].split(',')]
+            w.writerow({'obs_time':obs_time,'velocity':velocity_list, 'residual':resi_list, 'event_start': time_start,'event_end':time_end,'freq_start': freq_start,'freq_end':freq_end, 'factor':resi_idx+1, 'peak_time_list':peak_time_list, 'peak_freq_list':peak_freq_list, 'drift_rate_40MHz': drift_rates})
 
 
-driftrates_list = []
-obs_time_list = []
-# file_final = Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/solarmaxtotal.csv'
-file_final = Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/eventstudy_200409.csv'
-csv_input_final = pd.read_csv(filepath_or_buffer= file_final, sep=",")
-
-for j in range(len(csv_input_final)):
-    obs_time = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]), int(csv_input_final['obs_time'][j].split(' ')[1][:2]), int(csv_input_final['obs_time'][j].split(':')[1]), int(csv_input_final['obs_time'][j].split(':')[2][:2]))
-    if csv_input_final['obs_time'][j][8:10] == '07':
-        obs_time_list.append(obs_time)
-        freq_start = csv_input_final["freq_start"][j]
-        freq_end = csv_input_final["freq_end"][j]
-        time_start = csv_input_final["event_start"][j]
-        time_end = csv_input_final["event_end"][j]
-        drift_rates = csv_input_final["drift_rate_40MHz"][j]
-        driftrates_list.append(drift_rates)
-        # duration_list.append(csv_input_final["event_end"][j]-csv_input_final["event_start"][j]+1)
-        # freq_drift_final.append(csv_input_final["drift_rate_40MHz"][j])
-        factor_list = csv_input_final["factor"][j]
-        peak_time_list = [int(k) for k in csv_input_final["peak_time_list"][j].split('[')[1].split(']')[0].split(',') if k != '']
-        peak_freq_list = [float(k) for k in csv_input_final["peak_freq_list"][j][1:-1].split(',') if k != '']
-        resi_idx = np.argmin([float(k) for k in csv_input_final["residual"][j].split('[')[1].split(']')[0].split(',')])
-        resi_list= [float(k) for k in csv_input_final["residual"][j].split('[')[1].split(']')[0].split(',')][resi_idx]
-        velocity_list=[float(k) for k in csv_input_final["velocity"][j].split('[')[1].split(']')[0].split(',')]
 
 
-figure_=plt.figure(1,figsize=(8,6))
-plt.plot(obs_time_list,driftrates_list , '.')
-plt.xticks(rotation=20)
-plt.ylim(1.3,16.2)
-plt.show()
 
-max_val = 15.606127
 
-min_val = 1.303744
+# driftrates_list = []
+# obs_time_list = []
+# # file_final = Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/solarmaxtotal.csv'
+# file_final = Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/eventstudy_200409.csv'
+# csv_input_final = pd.read_csv(filepath_or_buffer= file_final, sep=",")
 
-bin_size = 8
+# for j in range(len(csv_input_final)):
+#     obs_time = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]), int(csv_input_final['obs_time'][j].split(' ')[1][:2]), int(csv_input_final['obs_time'][j].split(':')[1]), int(csv_input_final['obs_time'][j].split(':')[2][:2]))
+#     if csv_input_final['obs_time'][j][8:10] == '07':
+#         obs_time_list.append(obs_time)
+#         freq_start = csv_input_final["freq_start"][j]
+#         freq_end = csv_input_final["freq_end"][j]
+#         time_start = csv_input_final["event_start"][j]
+#         time_end = csv_input_final["event_end"][j]
+#         drift_rates = csv_input_final["drift_rate_40MHz"][j]
+#         driftrates_list.append(drift_rates)
+#         # duration_list.append(csv_input_final["event_end"][j]-csv_input_final["event_start"][j]+1)
+#         # freq_drift_final.append(csv_input_final["drift_rate_40MHz"][j])
+#         factor_list = csv_input_final["factor"][j]
+#         peak_time_list = [int(k) for k in csv_input_final["peak_time_list"][j].split('[')[1].split(']')[0].split(',') if k != '']
+#         peak_freq_list = [float(k) for k in csv_input_final["peak_freq_list"][j][1:-1].split(',') if k != '']
+#         resi_idx = np.argmin([float(k) for k in csv_input_final["residual"][j].split('[')[1].split(']')[0].split(',')])
+#         resi_list= [float(k) for k in csv_input_final["residual"][j].split('[')[1].split(']')[0].split(',')][resi_idx]
+#         velocity_list=[float(k) for k in csv_input_final["velocity"][j].split('[')[1].split(']')[0].split(',')]
 
-color_2 = "r"
 
-x_hist_1 = (plt.hist(driftrates_list, bins = bin_size, range = (min_val-1,max_val+1), density= None)[1])
-y_hist_1 = (plt.hist(driftrates_list, bins = bin_size, range = (min_val-1,max_val+1), density= None)[0]/len(driftrates_list))
+# figure_=plt.figure(1,figsize=(8,6))
+# plt.plot(obs_time_list,driftrates_list , '.')
+# plt.xticks(rotation=20)
+# plt.ylim(1.3,16.2)
+# plt.show()
 
-plt.close()
-width = x_hist_1[1]-x_hist_1[0]
-for i in range(len(y_hist_1)):
-    if i == 0:
+# max_val = 15.606127
+
+# min_val = 1.303744
+
+# bin_size = 8
+
+# color_2 = "r"
+
+# x_hist_1 = (plt.hist(driftrates_list, bins = bin_size, range = (min_val-1,max_val+1), density= None)[1])
+# y_hist_1 = (plt.hist(driftrates_list, bins = bin_size, range = (min_val-1,max_val+1), density= None)[0]/len(driftrates_list))
+
+# plt.close()
+# width = x_hist_1[1]-x_hist_1[0]
+# for i in range(len(y_hist_1)):
+#     if i == 0:
         
-        plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Micro-type Ⅲ burst\n'+ str(len(driftrates_list)) + ' events')
-    else:
-        plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
-    plt.title('Frequency drift rates @ 40[MH/z]')
-# plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
-    plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
-    plt.xlabel('Frequency drift rates[MHz/s]',fontsize=15)
-    plt.ylabel('Occurrence rate',fontsize=15)
-    # plt.xticks([0,5,10,15], ['0 - 1','5 - 6','10 - 11', '15 - 16']) 
-    plt.xticks(rotation = 20)
-plt.show()
-plt.close()
+#         plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Micro-type Ⅲ burst\n'+ str(len(driftrates_list)) + ' events')
+#     else:
+#         plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
+#     plt.title('Frequency drift rates @ 40[MH/z]')
+# # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
+#     plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
+#     plt.xlabel('Frequency drift rates[MHz/s]',fontsize=15)
+#     plt.ylabel('Occurrence rate',fontsize=15)
+#     # plt.xticks([0,5,10,15], ['0 - 1','5 - 6','10 - 11', '15 - 16']) 
+#     plt.xticks(rotation = 20)
+# plt.show()
+# plt.close()
 
-print ('平均値: ' + str(round(np.mean(driftrates_list),1)) + '\n標準偏差: ' + str(round(np.std(driftrates_list),2))+ '\n最小値: ' + str(round(np.min(driftrates_list),1))+ '\n最大値: ' + str(round(np.max(driftrates_list),1)))
+# print ('平均値: ' + str(round(np.mean(driftrates_list),1)) + '\n標準偏差: ' + str(round(np.std(driftrates_list),2))+ '\n最小値: ' + str(round(np.min(driftrates_list),1))+ '\n最大値: ' + str(round(np.max(driftrates_list),1)))

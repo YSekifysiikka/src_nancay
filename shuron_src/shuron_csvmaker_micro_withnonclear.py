@@ -110,10 +110,37 @@ sunspot_obs_num_list = np.array(sunspot_obs_num_list)
 
 # burst_types = ['storm'] 
 # csv_names = ['shuron_LL_RR_micro_dB_cycle23.csv']
-with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_data/shuron_ordinary_withnonclear.csv', 'w') as f:
+with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_data/shuron_micro_withnonclear.csv', 'w') as f:
     w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "peak_RR_40MHz", "peak_LL_40MHz", "drift_rate_40MHz", "sunspots_num"])
     w.writeheader()
-    file_final = "/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/ordinary/solarmintotal2.csv"
+    # file_final = "/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/ordinary/solarmintotal2.csv"
+    # csv_input_final = pd.read_csv(filepath_or_buffer= Parent_directory + file_final, sep=",")
+
+    # for j in range(len(csv_input_final)):
+    #     obs_time = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]), int(csv_input_final['obs_time'][j].split(' ')[1][:2]), int(csv_input_final['obs_time'][j].split(':')[1]), int(csv_input_final['obs_time'][j].split(':')[2][:2]))
+    #     obs_sunspots = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]))
+    #     freq_start = csv_input_final["freq_start"][j]
+    #     freq_end = csv_input_final["freq_end"][j]
+    #     event_start = csv_input_final["event_start"][j]
+    #     event_end = csv_input_final["event_end"][j]
+
+    #     if (freq_start >= 40) & (freq_end <= 40):
+    #         slope = csv_input_final["drift_rate_40MHz"][j]
+    #     else:
+    #         slope = np.nan
+    #     sunspots_idx = np.where(sunspot_obs_times == obs_sunspots)[0][0]
+        
+    #     sunspots_num = sunspot_obs_num_list[sunspots_idx]
+    #     time_rate_final = csv_input_final["velocity"][j]
+    #     residual_list = csv_input_final["residual"][j]
+    #     best_factor = csv_input_final["factor"][j]
+    #     time_list = csv_input_final["peak_time_list"][j]
+    #     freq_list = csv_input_final["peak_freq_list"][j]
+    #     freq_list = csv_input_final["peak_freq_list"][j]
+    #     w.writerow({'obs_time':obs_time,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start,'event_end': event_end,'freq_start': freq_start,'freq_end':freq_end, 'factor':best_factor, 'peak_time_list':time_list, 'peak_freq_list':freq_list, "drift_rate_40MHz":slope, "sunspots_num":sunspots_num})
+
+
+    file_final = "/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/micro/solarmaxtotal2.csv"
     csv_input_final = pd.read_csv(filepath_or_buffer= Parent_directory + file_final, sep=",")
 
     for j in range(len(csv_input_final)):
@@ -123,7 +150,6 @@ with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_a
         freq_end = csv_input_final["freq_end"][j]
         event_start = csv_input_final["event_start"][j]
         event_end = csv_input_final["event_end"][j]
-
         if (freq_start >= 40) & (freq_end <= 40):
             slope = csv_input_final["drift_rate_40MHz"][j]
         else:
@@ -139,33 +165,7 @@ with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_a
         freq_list = csv_input_final["peak_freq_list"][j]
         w.writerow({'obs_time':obs_time,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start,'event_end': event_end,'freq_start': freq_start,'freq_end':freq_end, 'factor':best_factor, 'peak_time_list':time_list, 'peak_freq_list':freq_list, "drift_rate_40MHz":slope, "sunspots_num":sunspots_num})
 
-
-    file_final = "/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/ordinary/solarmaxtotal2.csv"
-    csv_input_final = pd.read_csv(filepath_or_buffer= Parent_directory + file_final, sep=",")
-
-    for j in range(len(csv_input_final)):
-        obs_time = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]), int(csv_input_final['obs_time'][j].split(' ')[1][:2]), int(csv_input_final['obs_time'][j].split(':')[1]), int(csv_input_final['obs_time'][j].split(':')[2][:2]))
-        obs_sunspots = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]))
-        freq_start = csv_input_final["freq_start"][j]
-        freq_end = csv_input_final["freq_end"][j]
-        event_start = csv_input_final["event_start"][j]
-        event_end = csv_input_final["event_end"][j]
-        if (freq_start >= 40) & (freq_end <= 40):
-            slope = csv_input_final["drift_rate_40MHz"][j]
-        else:
-            slope = np.nan
-        sunspots_idx = np.where(sunspot_obs_times == obs_sunspots)[0][0]
-        
-        sunspots_num = sunspot_obs_num_list[sunspots_idx]
-        time_rate_final = csv_input_final["velocity"][j]
-        residual_list = csv_input_final["residual"][j]
-        best_factor = csv_input_final["factor"][j]
-        time_list = csv_input_final["peak_time_list"][j]
-        freq_list = csv_input_final["peak_freq_list"][j]
-        freq_list = csv_input_final["peak_freq_list"][j]
-        w.writerow({'obs_time':obs_time,'velocity':time_rate_final, 'residual':residual_list, 'event_start': event_start,'event_end': event_end,'freq_start': freq_start,'freq_end':freq_end, 'factor':best_factor, 'peak_time_list':time_list, 'peak_freq_list':freq_list, "drift_rate_40MHz":slope, "sunspots_num":sunspots_num})
-
-    file_final = "/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/sgepss_ordinary_LL_RR.csv"
+    file_final = "/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_data/shuron_micro_LL_RR.csv"
     csv_input_final = pd.read_csv(filepath_or_buffer= Parent_directory + file_final, sep=",")
     for j in range(len(csv_input_final)):
         obs_time = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]), int(csv_input_final['obs_time'][j].split(' ')[1][:2]), int(csv_input_final['obs_time'][j].split(':')[1]), int(csv_input_final['obs_time'][j].split(':')[2][:2]))
