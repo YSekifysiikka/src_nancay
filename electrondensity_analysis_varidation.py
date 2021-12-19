@@ -15,7 +15,8 @@ fontsize = 20
 factor_velocity = 1
 color_list = ['#ff7f00', '#377eb8','#ff7f00', '#377eb8', '#377eb8']
 color_list_1 = ['r', 'b','k', 'y', 'm']
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
 
