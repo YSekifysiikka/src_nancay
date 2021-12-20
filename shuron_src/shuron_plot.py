@@ -6,8 +6,8 @@ Created on Wed Nov 24 14:46:17 2021
 @author: yuichiro
 """
 import glob
-# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
-Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
 
@@ -515,6 +515,39 @@ def cnn_detection(arr_5, event_start, event_end, freq_start, freq_end, event_tim
       shutil.move(Parent_directory + '/solar_burst/Nancay/plot/'+ save_place +'/all/'+year+month+day+'_'+Time_start[0:2]+Time_start[3:5]+Time_start[6:8]+'_'+Time_end[0:2]+Time_end[3:5]+Time_end[6:8]  + '_' + str(time - time_band - time_co) + '_' + str(time) + '_' +event_start+'_'+event_end+'_'+freq_start+'_'+freq_end +'compare.png', save_directory + '/simple/')
 
     return save_directory
+
+
+def cnn_detection2(arr_5, event_start, event_end, freq_start, freq_end, event_time_gap, freq_gap, vmin_1, vmax_1, date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, model, save_place, Frequency, x_lims, date_event_hour, date_event_minute):
+    year = date_OBs[0:4]
+    month = date_OBs[4:6]
+    day = date_OBs[6:8]
+    y_lims = [Frequency[-1], Frequency[0]]
+    plt.close(1)
+
+    figure_=plt.figure(1,figsize=(10,10))
+    axes_2 = figure_.add_subplot(1, 1, 1)
+    axes_2.imshow(arr_5, extent = [x_lims[0], x_lims[1],  y_lims[0], y_lims[1]], 
+              aspect='auto',cmap='jet',vmin= vmin_1-2 ,vmax = vmax_1)
+    # plt.axis('off')
+
+    axes_2.xaxis_date()
+    date_format = mdates.DateFormatter('%H:%M:%S')
+    axes_2.xaxis.set_major_formatter(date_format)
+    plt.title('Nancay: '+year+'-'+month+'-'+day+ ' @ '+date_event_hour+':'+date_event_minute,fontsize=24)
+    plt.xlabel('Time (UT)',fontsize=18)
+    plt.ylabel('Frequency [MHz]',fontsize=18)
+    axes_2.tick_params(labelsize=15)
+    figure_.autofmt_xdate()
+    # extent = axes_2.get_window_extent().transformed(figure_.dpi_scale_trans.inverted())
+    # if not os.path.isdir(Parent_directory + '/solar_burst/Nancay/plot/'+ save_place +'/all'):
+        # os.makedirs(Parent_directory + '/solar_burst/Nancay/plot/'+ save_place +'/all')
+    # filename = Parent_directory + '/solar_burst/Nancay/plot/'+ save_place +'/all/'+year+month+day+'_'+Time_start[0:2]+Time_start[3:5]+Time_start[6:8]+'_'+Time_end[0:2]+Time_end[3:5]+Time_end[6:8]  + '_' + str(time - time_band - time_co) + '_' + str(time) + '_' +event_start+'_'+event_end+'_'+freq_start+'_'+freq_end +'compare.png'
+    # if os.path.isfile(filename):
+      # os.remove(filename)
+    # plt.savefig(filename, bbox_inches=extent)
+    plt.show()
+    plt.close()
+    return
 
 from pynverse import inversefunc
 def allen_model(factor_num, time_list, freq_list):
@@ -1133,8 +1166,9 @@ db_setting = 40
 import csv
 import pandas as pd
 
-
-selecteddata =  '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare/simple/20130111_091926_092606_4760_5160_294_325_69.15_29.95compare.png'
+# /Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/20120424_132426_133106_20060_20460_152_159_79.825_29.95compare.png
+#/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/20120314_082927_083607_1700_2100_101_134_65.475_29.95compare.png
+selecteddata =  '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/20120214_090827_091506_3740_4140_383_390_78.775_29.95compare.png'
 if len(selecteddata.split('/')) > 1:
     selecteddata = selecteddata.split('/')[-1]
 selecteddata_stime = int(selecteddata.split('_')[5])
@@ -1207,6 +1241,7 @@ for file_name in file_names:
                         if int(event_start_list[i]) == int(selecteddata.split('_')[5]):
                             print (i)
                             save_directory = cnn_detection(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model, save_place, Frequency, x_lims)
+                            
                             # if save_directory.split('/')[-1] == 'flare':
                             residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, freq_list[i], time_list[i], save_place, residual_threshold, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], Frequency)
                             print (residual_list)
@@ -1220,6 +1255,7 @@ for file_name in file_names:
                                 # plot_data(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot)
 
                                 plot_data_non_clear(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, date_event_hour, date_event_minute, best_factor)
+                                cnn_detection2(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model, save_place, Frequency, x_lims, date_event_hour, date_event_minute)
                                 print (time_rate_final)
                                 sys.exit()
                                 # s_event_time, e_event_time = [90,99]

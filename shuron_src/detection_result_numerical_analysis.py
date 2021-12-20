@@ -12,8 +12,8 @@ import numpy as np
 from dateutil.relativedelta import relativedelta
 import sys
 import matplotlib.pyplot as plt
-# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
-Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 
 cnn_all_files = [Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare/simple/*.png',
                  Parent_directory + '/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/*.png',

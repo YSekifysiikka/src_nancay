@@ -12,8 +12,46 @@ import numpy as np
 from dateutil.relativedelta import relativedelta
 import sys
 import matplotlib.pyplot as plt
-# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
-Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+
+
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+
+
+file_gain =Parent_directory + '/hinode_catalog/SN_d_tot_V2.0.csv'
+
+sunspot_obs_times = []
+sunspot_obs_num_list = []
+print (file_gain)
+csv_input = pd.read_csv(filepath_or_buffer= file_gain, sep=";")
+# print(csv_input['Time_list'])
+for i in range(len(csv_input)):
+    BG_obs_time_event = datetime.datetime(csv_input['Year'][i], csv_input['Month'][i], csv_input['Day'][i])
+    # if (BG_obs_time_event >= datetime.datetime(2008, 12, 1)) & (BG_obs_time_event <= datetime.datetime(2019, 12, 31)):
+    if (BG_obs_time_event >= datetime.datetime(1995, 1, 1)) & (BG_obs_time_event <= datetime.datetime(2021, 1, 1)):
+        sunspot_num = csv_input['sunspot_number'][i]
+        if not sunspot_num == -1:
+            sunspot_obs_times.append(BG_obs_time_event)
+            # Frequency_list = csv_input['Frequency'][i]
+            sunspot_obs_num_list.append(sunspot_num)
+        else:
+            print (BG_obs_time_event)
+
+sunspot_obs_times = np.array(sunspot_obs_times)
+sunspot_obs_num_list = np.array(sunspot_obs_num_list)
+
+sunspots_min_idx = np.where(((sunspot_obs_times >= datetime.datetime(2017,1,1)) & (sunspot_obs_times <= datetime.datetime(2020,12,31))))[0]
+sunspots_max_idx = np.where(((sunspot_obs_times >= datetime.datetime(2012,1,1)) & (sunspot_obs_times <= datetime.datetime(2014,12,31))))[0]
+
+
+
+
+
+
+
+
+
+
 event_date_list = []
 event_time_list = []
 event_month_list = []
@@ -95,14 +133,35 @@ while DATE <= edate:
         print('Plot error: ',DATE)
     DATE += relativedelta(months=1)
 
-figure_=plt.figure(1,figsize=(10,8))
+figure_=plt.figure(1,figsize=(10,16))
 labels = ['2012', '2013', '2014', '2017', '2018', '2019', '2020']
 event_num_time2 = np.arange(0,len(event_num),1)
-plt.bar(event_num_time2, event_num, width=1, color='white', edgecolor='k')
+ax1 = figure_.add_subplot(212)
+ax1.bar(event_num_time2, event_num, width=1, color='white', edgecolor='k')
+plt.xlabel('Year', fontsize = 30)
+plt.ylabel('Number of events', fontsize = 30)
 plt.xticks([0,12,24,60, 72, 84, 96], labels)
-plt.xlabel('Year', fontsize = 18)
-plt.ylabel('Number of events', fontsize = 18)
+plt.xticks(fontsize= 20)
+plt.yticks(fontsize= 20)
+
+ax2 = figure_.add_subplot(211)
+
+ax2.plot((np.arange(0,len(sunspot_obs_times[sunspots_min_idx]),1)/len(sunspot_obs_times[sunspots_min_idx])*48)+60, sunspot_obs_num_list[sunspots_min_idx], '.')
+ax2.plot((np.arange(0,len(sunspot_obs_times[sunspots_max_idx]),1)/len(sunspot_obs_times[sunspots_max_idx])*36), sunspot_obs_num_list[sunspots_max_idx], '.')
+ax1.set_ylim(0, 250)
+ax2.set_ylim(0, 250)
+
+plt.xticks([0,12,24,60, 72, 84, 96], labels)
+plt.xlabel('Year', fontsize = 30)
+plt.ylabel('Sunspot Number', fontsize = 30)
+plt.xticks(fontsize= 20)
+plt.yticks(fontsize= 20)
+
+
 plt.show()
+
+print (np.sum(event_num))
+
 
 
 event_num = []
@@ -125,6 +184,18 @@ plt.ylabel('Events/Hour', fontsize = 18)
 plt.xlim(6,17)
 plt.show()
 
+figure_=plt.figure(1,figsize=(10,8))
+# labels = ['2012', '2013', '2014', '2017', '2018', '2019', '2020']
+event_num_time2 = np.arange(0,108,1)
+plt.bar(event_num_times, hour_list, width=1, color='white', edgecolor='k')
+# plt.xticks([0,12,24,60, 72, 84, 96], labels)
+plt.xlabel('UT(Hour)', fontsize = 18)
+plt.ylabel('Hour', fontsize = 18)
+plt.xlim(6,17)
+plt.show()
+
+
+print (hour_list)
 
 
 event_num = []
