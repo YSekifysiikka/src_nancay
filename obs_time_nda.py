@@ -12,12 +12,12 @@ import cdflib
 import csv
 import pandas as pd
 
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
-
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
 
-date_in=[20170101, 20201231]
+date_in=[19950101, 19971231]
 
 
 start_day, end_day=date_in
@@ -27,44 +27,37 @@ edate=pd.to_datetime(end_day,format='%Y%m%d')
 DATE=sdate
 
 
-# with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/nda_obs_'+str(date_in[0])+'_'+str(date_in[-1])+'.csv', 'w') as f:
-#     w = csv.DictWriter(f, fieldnames=["obs_start", "obs_end", "freq_start", "freq_end"])
-#     w.writeheader()
-while DATE <= edate:
-    date=DATE.strftime(format='%Y%m%d')
-    # print(date)
-    yyyy = date[:4]
-    mm = date[4:6]
-    path=Parent_directory + '/solar_burst/Nancay/data/' + yyyy + '/'+mm+'/*'+date+'*'+'.cdf'
-    Files=sorted(glob.glob(path, recursive=True))
-    if len(Files)>1:
-        print(Files)
-        print('Yes')
-        #print(File)
-        # File1=len(File)
-        #        print (File1)
-        # for file in Files:
-
-        #     file_name =file.split('/')[-1]
-        #     print (file_name)
-        #     Date_start = file_name.split('_')[5]
-        #     date_OBs=str(Date_start)
-        #     year=date_OBs[0:4]
-        #     month=date_OBs[4:6]
+with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/nda_obs_'+str(date_in[0])+'_'+str(date_in[-1])+'.csv', 'w') as f:
+    w = csv.DictWriter(f, fieldnames=["obs_start", "obs_end", "freq_start", "freq_end"])
+    w.writeheader()
+    while DATE <= edate:
+        date=DATE.strftime(format='%Y%m%d')
+        # print(date)
+        yyyy = date[:4]
+        mm = date[4:6]
+        path=Parent_directory + '/solar_burst/Nancay/data/' + yyyy + '/'+mm+'/*'+date+'*'+'.cdf'
+        Files=sorted(glob.glob(path, recursive=True))
+        for file in Files:
+            file_name =file.split('/')[-1]
+            print (file_name)
+            Date_start = file_name.split('_')[5]
+            date_OBs=str(Date_start)
+            year=date_OBs[0:4]
+            month=date_OBs[4:6]
         
-        #     file = Parent_directory + '/solar_burst/Nancay/data/'+year+'/'+month+'/'+file_name
-        #     cdf_file = cdflib.CDF(file)
-        #     epoch = cdf_file['Epoch'] 
-        #     epoch = cdflib.epochs.CDFepoch.breakdown_tt2000(epoch)
-        #     start = epoch[0]
-        #     obs_start = datetime.datetime(start[0], start[1], start[2], start[3], start[4], start[5], start[6])
-        #     end = epoch[-1]
-        #     obs_end = datetime.datetime(end[0], end[1], end[2], end[3], end[4], end[5], end[6])
-        #     Frequency = cdf_file['Frequency']
-        #     freq_start = Frequency[-1]
-        #     freq_end = Frequency[0]
-        #     w.writerow({'obs_start':obs_start, 'obs_end':obs_end, 'freq_start':freq_start,'freq_end':freq_end})
-    DATE+=pd.to_timedelta(1,unit='day')
+            file = Parent_directory + '/solar_burst/Nancay/data/'+year+'/'+month+'/'+file_name
+            cdf_file = cdflib.CDF(file)
+            epoch = cdf_file['Epoch'] 
+            epoch = cdflib.epochs.CDFepoch.breakdown_tt2000(epoch)
+            start = epoch[0]
+            obs_start = datetime.datetime(start[0], start[1], start[2], start[3], start[4], start[5], start[6])
+            end = epoch[-1]
+            obs_end = datetime.datetime(end[0], end[1], end[2], end[3], end[4], end[5], end[6])
+            Frequency = cdf_file['Frequency']
+            freq_start = Frequency[-1]
+            freq_end = Frequency[0]
+            w.writerow({'obs_start':obs_start, 'obs_end':obs_end, 'freq_start':freq_start,'freq_end':freq_end})
+        DATE+=pd.to_timedelta(1,unit='day')
         
         
         
