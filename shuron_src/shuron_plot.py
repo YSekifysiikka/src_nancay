@@ -1168,7 +1168,7 @@ import pandas as pd
 
 # /Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/20120424_132426_133106_20060_20460_152_159_79.825_29.95compare.png
 #/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/20120314_082927_083607_1700_2100_101_134_65.475_29.95compare.png
-selecteddata =  '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/20120214_090827_091506_3740_4140_383_390_78.775_29.95compare.png'
+selecteddata =  '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/afjpgusimpleselect/flare_associated_ordinary/2014/20140411_112826_113506_12920_13320_85_109_58.825_31.525peak.png'
 if len(selecteddata.split('/')) > 1:
     selecteddata = selecteddata.split('/')[-1]
 selecteddata_stime = int(selecteddata.split('_')[5])

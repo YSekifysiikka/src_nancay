@@ -150,6 +150,7 @@ for factor in factor_list:
     ln1 = ax1.plot(h2_1, x2_1, label = 'Wang model\nAround the solar minimum', color = "b")
 
     h2_1 = np.arange(1.5, 4, 0.1)
+    h2_1 = 1.2
     wang_max = -4.42158e+06/h2_1 + 5.41656e+07/(h2_1)**2 - 1.86150e+08 /(h2_1)**3 + 2.13102e+08/(h2_1)**4
     x2_1 = wang_max
     ln1 = ax1.plot(h2_1, x2_1, label = 'Wang model\nAround the solar maximum', color = "r")

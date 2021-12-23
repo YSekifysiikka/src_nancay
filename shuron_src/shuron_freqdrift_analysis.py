@@ -358,8 +358,10 @@ velocity_2fp_list_factor3_ordinary = []
 velocity_fp_list_micro = []
 velocity_2fp_list_micro = []
 
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 
-file_final = '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_data/shuron_micro_LL_RR.csv'
+
+file_final = Parent_directory  + '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_data/shuron_micro_LL_RR.csv'
 csv_input_final = pd.read_csv(filepath_or_buffer= file_final, sep=",")
 
 
@@ -377,7 +379,7 @@ for j in range(len(csv_input_final)):
         if sunspots_num <= 36:
             if ((freq_start >= 40) & (freq_end <= 40)):
                 csv_input_analysis_micro_solarmin()
-file_final = '/Volumes/GoogleDrive/マイドライブ/lab/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_data/shuron_ordinary_withnonclear.csv'
+file_final = Parent_directory  + '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_data/shuron_ordinary_withnonclear.csv'
 csv_input_final = pd.read_csv(filepath_or_buffer= file_final, sep=",")
 for j in range(len(csv_input_final)):
     obs_time = datetime.datetime(int(csv_input_final['obs_time'][j].split('-')[0]), int(csv_input_final['obs_time'][j].split('-')[1]), int(csv_input_final['obs_time'][j].split(' ')[0][-2:]), int(csv_input_final['obs_time'][j].split(' ')[1][:2]), int(csv_input_final['obs_time'][j].split(':')[1]), int(csv_input_final['obs_time'][j].split(':')[2][:2]))

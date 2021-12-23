@@ -6,8 +6,8 @@ Created on Wed Nov 24 14:46:17 2021
 @author: yuichiro
 """
 import glob
-# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
-Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
 
@@ -242,7 +242,7 @@ def plot_array_threshold(arr_threshold, x_lims, Frequency, date_OBs, freq_start_
     date_format = mdates.DateFormatter('%H:%M:%S')
     axes_2.xaxis.set_major_formatter(date_format)
     plt.title('Nancay: '+year+'-'+month+'-'+day, fontsize = 20)
-    plt.xlabel('Time',fontsize=20)
+    plt.xlabel('Time [UT]',fontsize=20)
     plt.ylabel('Frequency [MHz]',fontsize=20)
     cbar = plt.colorbar(ax2)
     cbar.ax.tick_params(labelsize=18)
@@ -266,14 +266,14 @@ def plot_array_threshold_2(arr_threshold, x_lims, Frequency, date_OBs, freq_star
     gs = gridspec.GridSpec(6, 4)
     axes_2 = figure_.add_subplot(gs[:, :])
     ax2 = axes_2.imshow(arr_threshold, extent = [x_lims[0], x_lims[1],  Frequency[-1], Frequency[0]], 
-              aspect='auto',cmap='jet',vmin= -5 + min_db[db_standard],vmax = quartile_db_l[db_standard] + min_db[db_standard] + 10)
+              aspect='auto',cmap='jet',vmin= -5 + min_db[db_standard],vmax = quartile_db_l[db_standard] + min_db[db_standard] + 20)
     # ax2 = axes_2.imshow(arr_threshold ,
     #           aspect='auto',cmap='jet',vmin= 2 ,vmax = 12)
     axes_2.xaxis_date()
     date_format = mdates.DateFormatter('%H:%M:%S')
     axes_2.xaxis.set_major_formatter(date_format)
     plt.title('Nancay: '+year+'-'+month+'-'+day, fontsize = 20)
-    plt.xlabel('Time',fontsize=20)
+    plt.xlabel('Time [UT]',fontsize=20)
     plt.ylabel('Frequency [MHz]',fontsize=20)
     cbar = plt.colorbar(ax2)
     cbar.ax.tick_params(labelsize=18)
@@ -855,7 +855,7 @@ def selected_event_plot(freq_list, time_list, x_time, y_freq, time_rate_final, d
     axes_2.plot(time_list, freq_list, "wo", label = 'Peak data', markersize=4)
     y_cmap = selected_Frequency
     x_cmap = np.arange(s_event_time, e_event_time + 1, 1)
-    cs = axes_2.contourf(x_cmap, y_cmap, arr_sep_time, levels= 30, extend='both', vmin= 0,vmax = quartile_db_l[db_standard] + 10)
+    cs = axes_2.contourf(x_cmap, y_cmap, arr_sep_time, levels= 30, extend='both', vmin= 5,vmax = quartile_db_l[db_standard] + 20)
     cs.cmap.set_over('red')
     cs.cmap.set_under('blue')
     cycle = 0
@@ -877,10 +877,13 @@ def selected_event_plot(freq_list, time_list, x_time, y_freq, time_rate_final, d
             axes_2.plot(x_time[cycle], y_freq[cycle], '-', label = str(factor) + '×B-A model/v=' + str(time_rate_final[cycle]) + 'c', linewidth = 6.0, color = color_setting)
             
         cycle += 1
+    x = [252, 262, 272, 282, 292]
+    values = ['0', '10', '20', '30','40']
     plt.title('Nancay: '+year+'-'+month+'-'+day+ ' @ '+date_event_hour+':'+date_event_minute,fontsize=20)
     plt.xlabel('Time[sec]',fontsize=20)
     plt.ylabel('Frequency [MHz]',fontsize=20)
     plt.tick_params(labelsize=18)
+    plt.xticks(x,values)
     plt.legend(fontsize=18)
     plt.ylim(selected_Frequency[-1], selected_Frequency[0])
     plt.xlim(s_event_time, e_event_time)
@@ -914,7 +917,7 @@ def selected_event_plot_2(freq_list, time_list, x_time, y_freq, time_rate_final,
     axes_2.plot(np.array(time_list)[delete_idx], np.array(freq_list)[delete_idx], "ko", label = 'Peak data(deleted)', markersize=4)
     y_cmap = selected_Frequency
     x_cmap = np.arange(s_event_time, e_event_time + 1, 1)
-    cs = axes_2.contourf(x_cmap, y_cmap, arr_sep_time, levels= 30, extend='both', vmin= 0,vmax = quartile_db_l[db_standard] + 10)
+    cs = axes_2.contourf(x_cmap, y_cmap, arr_sep_time, levels= 30, extend='both', vmin= 5,vmax = quartile_db_l[db_standard] + 20)
     cs.cmap.set_over('red')
     cs.cmap.set_under('blue')
     cycle = 0
@@ -947,13 +950,17 @@ def selected_event_plot_2(freq_list, time_list, x_time, y_freq, time_rate_final,
                 
             # plt.xticks(x,values)
         cycle += 1
+    x = [252, 262, 272, 282, 292]
+    values = ['0', '10', '20', '30','40']
     plt.title('Nancay: '+year+'-'+month+'-'+day+ ' @ '+date_event_hour+':'+date_event_minute,fontsize=20)
     plt.xlabel('Time[sec]',fontsize=20)
     plt.ylabel('Frequency [MHz]',fontsize=20)
     plt.tick_params(labelsize=18)
     plt.legend(fontsize=18)
+    plt.xticks(x,values)
     plt.ylim(selected_Frequency[-1], selected_Frequency[0])
     plt.xlim(s_event_time, e_event_time)
+
     if not os.path.isdir(Parent_directory + '/solar_burst/Nancay/plot/'+after_plot+'/'+burst_type+'/'+year):
         os.makedirs(Parent_directory + '/solar_burst/Nancay/plot/'+after_plot+'/'+burst_type+'/'+year)
     filename = Parent_directory + '/solar_burst/Nancay/plot/'+after_plot+'/'+burst_type+'/'+year+'/'+year+month+day+'_'+Time_start[0:2]+Time_start[3:5]+Time_start[6:8]+'_'+Time_end[0:2]+Time_end[3:5]+Time_end[6:8]+ '_' + str(time - time_band - time_co) + '_' + str(time) +'_' + str(np.min(np.array(time_list)[selected_idx]))+'_'+str(np.max(np.array(time_list)[selected_idx]))+'_'+str(np.max(np.array(freq_list)[selected_idx]))+'_'+str(np.min(np.array(freq_list)[selected_idx]))+ 'peak.png'
@@ -1035,7 +1042,7 @@ def select_time():
             return str(choice)
 
 def sunspots_num_check(yyyy, mm, dd):
-    file_gain = '/Users/yuichiro/Downloads/SN_d_tot_V2.0.csv'
+    file_gain = Parent_directory + '/hinode_catalog/SN_d_tot_V2.0.csv'
     print (file_gain)
     csv_input = pd.read_csv(filepath_or_buffer= file_gain, sep=";")
     # print(csv_input['Time_list'])
@@ -1043,7 +1050,7 @@ def sunspots_num_check(yyyy, mm, dd):
         BG_obs_time_event = datetime.datetime(csv_input['Year'][i], csv_input['Month'][i], csv_input['Day'][i])
         if ((BG_obs_time_event >= datetime.datetime(int(yyyy), int(mm), int(dd))) & (BG_obs_time_event <= datetime.datetime(int(yyyy), int(mm), int(dd)) + datetime.timedelta(days=1))):
             sunspot_num = csv_input['sunspot_number'][i]
-            if sunspot_num <= 36:
+            if sunspot_num >= 36:
                 return True
             else:
                 return False
@@ -1152,7 +1159,7 @@ cv2.destroyAllWindows()
 cv2.waitKey(1)
 
 #20140708
-#黒点36以下
+#黒点36以上
 
     
 t = 0
@@ -1199,7 +1206,7 @@ while t == 0:
     dd = selected_date[6:8]
     
     wind_geotail_flare(yyyy, mm, dd, WINDOW_NAME_0, WINDOW_NAME_1, WINDOW_NAME_4)
-    nancay_wind_QL_list = sorted(glob.glob(Parent_directory + '/solar_burst/Nancaywind2/' + yyyy + '/' + mm + '/' + selected_date + '*'))
+    nancay_wind_QL_list = sorted(glob.glob(Parent_directory + '/solar_burst/Nancaywind/' + yyyy + '/' + mm + '/' + selected_date + '*'))
     
     if sunspots_num_check(yyyy, mm, dd) == False:
         print ('Sunspots error')
@@ -1251,8 +1258,8 @@ while t == 0:
                     stime_list = []
                     for NWQL in Nancay_wind_QL:
                         stime_list.append(int(NWQL.split('.')[0].split('_')[2]))
-                    plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind2/' + yyyy + '/' + mm + '/' + selected_date +  '_*' + str(min(stime_list)) +'_*')[0]
-                    # plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind/' + yyyy + '/' + mm + '/' + str_date +  '_*' + str(min(stime_list)) +'_*')[0]
+                    # plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind2/' + yyyy + '/' + mm + '/' + selected_date +  '_*' + str(min(stime_list)) +'_*')[0]
+                    plot_nancay_wind_QL = glob.glob(Parent_directory + '/solar_burst/Nancaywind/' + yyyy + '/' + mm + '/' + str_date +  '_*' + str(min(stime_list)) +'_*')[0]
                 img_nancay_wind_QL = cv2.imread(plot_nancay_wind_QL, cv2.IMREAD_COLOR)
                 img_nancay_wind_QL_1 = img_nancay_wind_QL[100:800, 50:800]
                 image_nancay_wind_QL = cv2.resize(img_nancay_wind_QL_1, dsize=None, fx=1.75*efactor, fy=1.75*efactor)
@@ -1323,8 +1330,20 @@ while t == 0:
                                 freq_end_idx = np.where(Frequency == getNearestValue(Frequency, e_event_freq))[0][0]
                                 sep_arr_sep_time_list =  arr_sep_time_list[i][freq_start_idx:freq_end_idx + 1, selected_idx - selected_idx_2[0]]
                                 selected_Frequency = Frequency[freq_start_idx:freq_end_idx + 1]
-                                
-                                
+
+# freq_list_new_r = []
+# time_list_new_r = []
+# for k in range(r.shape[0]):
+#     if max(r[k]) > -10:
+#         if (len([l for l in r[k] if l == max(r[k])])) == 1:
+#             freq_list_new_r.append(selected_Frequency[k])
+#             time_list_new_r.append(np.argmax(r[k]))
+# # plt.plot(time_list_new_l,freq_list_new_l, '.')
+# # plt.plot(time_list_new_r,freq_list_new_r, '.')  
+# plt.plot(time_list_new,freq_list_new, '.')      
+# plt.plot(x_time[0], y_freq[0])
+# plt.show()
+
                                 z = 0
                                 while z >= 0:
                                     if z == 0:

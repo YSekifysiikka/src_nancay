@@ -8,6 +8,7 @@ Created on Wed Dec 11 01:41:09 2019
 
 import glob
 Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
 def file_generator(file):
