@@ -14,15 +14,20 @@ plt.style.use(astropy_mpl_style)
 from astropy.utils.data import get_pkg_data_filename
 from astropy.io import fits
 import glob
+import csv
 
 CR = '2020'
-xlim = [80, 110]
-ylim = [-20, 0]
+xlim = [0, 361]
+ylim = [-90, 90]
 
+
+
+
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 
 
 # check_radius = [1.15,1.5]
-check_radius = [1.3,1.65]
+# check_radius = [1.3,1.65]
 # check_radius = [1.3,1.5,1.95]
 # check_radius = [1.5]
 file_name = glob.glob('/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/new_result/'+CR+'/bss_'+CR+'.fits')[0]
@@ -52,14 +57,22 @@ angle_ave = []
 angle_std = []
 
 
+# with open(Parent_directory+ '/solar_burst/magnet/analysis/'+CR+'/'+CR+'.csv', 'w') as f:
+#     w = csv.DictWriter(f, fieldnames=["radius", "start", "end", "xmin", "xmax", "ymin", "ymax", "angle_ave_mean", "angle_ave_std", "angle_max_mean", "angle_max_std", "angle_ave_list", "angle_max_list"])
+#     w.writeheader()
+
+
 #磁力線のradialからの平均ずれ角
 file_names = glob.glob('/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/new_result/'+CR+'/amn_'+CR+'*.fits')
 for file_name in file_names:
     start = int(file_name.split('.fits')[0].split('_')[-1].split('-')[0])
     end = int(file_name.split('.fits')[0].split('_')[-1].split('-')[1])
-    # if (((start+end)/20 == check_radius[0]) | ((start+end)/20 == check_radius[1]) | ((start+end)/20 == check_radius[2])):
-    if (((start+end)/20 == check_radius[0]) | ((start+end)/20 == check_radius[1])):
-    # if (((start+end)/20 == check_radius[0])):
+    print (start, end)
+    # if (((start == 11) & (end == 12)) | ((start == 14) & (end == 16))):
+    if (((start == 12) & (end == 14)) | ((start == 16) & (end == 17))):
+        # if (((start+end)/20 == check_radius[0]) | ((start+end)/20 == check_radius[1]) | ((start+end)/20 == check_radius[2])):
+        # if (((start+end)/20 == check_radius[0]) | ((start+end)/20 == check_radius[1])):
+        # if (((start+end)/20 == check_radius[0])):
         print ((start+end)/20, start, end)
         file_name = glob.glob('/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/new_result/'+CR+'/amn_'+CR+'_' + str(start) + '-' + str(end) + '.fits')[0]
         amn_image_file = get_pkg_data_filename(file_name)
@@ -168,12 +181,13 @@ for file_name in file_names:
         
         
         
-
+    
         
         
         latitude_list_ave = []
         longitude_list_ave = []
         power_list_ave = []
+        power_list_max = []
         
         for i in range(amn_image_data.shape[0]):
             for j in range(amn_image_data.shape[1]):
@@ -184,6 +198,7 @@ for file_name in file_names:
                         latitude_list_ave.append(yth_image_data[i,j])
                         longitude_list_ave.append(xph_image_data[i,j])
                         power_list_ave.append(amn_image_data[i][j])
+                        power_list_max.append(amx_image_data[i][j])
         figure_=plt.figure(1,figsize=(8,5))
         SC=plt.scatter(longitude_list_ave, latitude_list_ave, c=power_list_ave, cmap='jet', s = 5)
         # plt.scatter(x, y, s=100, c=value, cmap='Blues') 
@@ -209,5 +224,6 @@ for file_name in file_names:
         plt.hist(power_list_ave, label = 'AVE: ' + str(np.mean(power_list_ave)) + '\n' + 'SD: ' + str(np.std(power_list_ave)))
         plt.legend()
         plt.show()
+        # w.writerow({'radius':(start+end)/20, 'start':start/10, 'end':end/10,'xmin':xlim[0], 'xmax':xlim[1], 'ymin': ylim[0],'ymax':ylim[1],'angle_ave_mean': np.mean(power_list_ave),'angle_ave_std': np.std(power_list_ave),'angle_max_mean':np.mean(power_list_max),'angle_max_std':np.std(power_list_max), 'angle_ave_list':power_list_ave, 'angle_max_list':power_list_max})
     # print ()
         # print (np.mean(power_list_ave))
