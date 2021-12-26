@@ -36,6 +36,19 @@ def final_txt_make(Parent_directory, Parent_lab, year, start, end):
     i.close()
     return start, end
 
+def numerical_diff_df_dn(ne):
+    h = 1e-5
+    f_1 = 9*np.sqrt(ne+h)/1e+3
+    f_2 = 9*np.sqrt(ne-h)/1e+3
+    return ((f_1 - f_2)/(2*h))
+
+def numerical_diff_allen_dn_dr(factor, r):
+    h = 1e-1
+    ne_1 = factor * 10**8 * (2.99*((r+h)/69600000000)**(-16)+1.55*((r+h)/69600000000)**(-6)+0.036*((r+h)/69600000000)**(-1.5))
+    ne_2 = factor * 10**8 * (2.99*((r-h)/69600000000)**(-16)+1.55*((r-h)/69600000000)**(-6)+0.036*((r-h)/69600000000)**(-1.5))
+    return ((ne_1 - ne_2)/(2*h))
+
+
 # start_date, end_date = final_txt_make(Parent_directory, Parent_lab, 2013, 401, 401)
 
 
@@ -282,6 +295,9 @@ def plot_array_threshold_2(arr_threshold, x_lims, Frequency, date_OBs, freq_star
     plt.show()
     plt.close()
     return
+
+
+
 
 
 
@@ -1144,6 +1160,72 @@ def selected_event_plot_2(freq_list, time_list, x_time, y_freq, time_rate_final,
 
     return
 
+def selected_event_plot3(freq_list, time_list, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start, event_end, freq_start, freq_end, event_time_gap, freq_gap, vmin_1, vmax_1, arr_sep_time, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, date_event_hour, date_event_minute, drift_rates):
+    year = date_OBs[0:4]
+    month = date_OBs[4:6]
+    day = date_OBs[6:8]
+    db_standard = np.where(Frequency == getNearestValue(Frequency,db_setting))
+    plt.close()
+    figure_=plt.figure(1,figsize=(8,8))
+    gs = gridspec.GridSpec(140, 50)
+    axes_2 = figure_.add_subplot(gs[:,:])
+    axes_2.plot(time_list, freq_list, "wo", label = 'Peak data', markersize=4)
+    y_cmap = selected_Frequency
+    x_cmap = np.arange(s_event_time, e_event_time + 1, 1)
+    cs = axes_2.contourf(x_cmap, y_cmap, arr_sep_time, levels= 30, extend='both', vmin= 0,vmax = quartile_db_l[db_standard] + 15)
+    cs.cmap.set_over('red')
+    cs.cmap.set_under('blue')
+    cycle = 0
+    for factor in factor_list:
+        if factor == 1:
+            color_setting = '#1f77b4'
+        elif factor == 2:
+            color_setting = '#ff7f0e'
+        elif factor == 3:
+            color_setting = '#2ca02c'
+        elif factor == 4:
+            color_setting = '#d62728'
+        elif factor == 5:
+            color_setting = '#9467bd'
+        else:
+            pass
+        
+        if factor == resi_idx+1:
+            axes_2.plot(x_time[cycle], y_freq[cycle], '-', label = str(factor) + '×B-A model/v=' + str(time_rate_final[cycle]) + 'c', linewidth = 6.0, color = color_setting)
+            test_x = np.array(x_time[cycle])
+            test_y = np.array(y_freq[cycle])
+            drift_idx = np.where(test_y == 39.925)[0][0]
+            x_list = np.arange(np.min(x_time[cycle])-5, np.max(x_time[cycle]) + 5, 1)
+            y_list = drift_rates*(x_list-test_x[drift_idx]) + 40
+            plt.plot(x_list, y_list, color = 'k', linewidth = 4, label = 'Frequency drift rates @ 40MHz')
+    #     
+    #                                                                                axes_2.plot(yy_1, xx_2, 'k', label = 'freq_drift(linear)')
+            # plt.xlim(min(time_list) - 10, max(time_list) + 10)
+            # plt.xlim(np.median(time_list)-20, np.median(time_list)+30)
+            # plt.xlim(np.median(time_list)-10, np.median(time_list)+40)
+            # figure_.autofmt_xdate()
+        
+            # values =np.arange(0,50,5)
+            # x = np.arange(np.median(time_list)-10, np.median(time_list)+40, 5)
+                
+            # plt.xticks(x,values)
+        cycle += 1
+    x = [143, 148, 153]
+    values = ['0', '5', '10']
+    plt.title('Nancay: '+year+'-'+month+'-'+day+ ' @ '+date_event_hour+':'+date_event_minute,fontsize=20)
+    plt.xlabel('Time[sec]',fontsize=20)
+    plt.ylabel('Frequency [MHz]',fontsize=20)
+    plt.tick_params(labelsize=18)
+    plt.legend(fontsize=18)
+    plt.ylim(selected_Frequency[-1], selected_Frequency[0])
+    plt.xlim(s_event_time, e_event_time)
+    plt.xticks(x,values)
+    plt.show()
+    plt.close()
+
+    return
+
+
 
 sigma_value = 2
 after_plot = str('nonclearevent_analysis')
@@ -1160,7 +1242,7 @@ img_rows, img_cols = image_size, image_size
 factor_list = [1,2,3,4,5]
 residual_threshold = 100
 db_setting = 40
-
+light_v = 300000 #[km/s]
 
 
 import csv
@@ -1168,7 +1250,7 @@ import pandas as pd
 
 # /Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/20120424_132426_133106_20060_20460_152_159_79.825_29.95compare.png
 #/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/cnn_used_data/cnn_shuron/flare_clear/simple/20120314_082927_083607_1700_2100_101_134_65.475_29.95compare.png
-selecteddata =  '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/afjpgusimpleselect/flare_associated_ordinary/2014/20140411_112826_113506_12920_13320_85_109_58.825_31.525peak.png'
+selecteddata =  '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/Nancay/plot/afjpgusimpleselect/flare_associated_ordinary/2013/20131203_131046_131726_19720_20120_143_155_61.45_29.95peak.png'
 if len(selecteddata.split('/')) > 1:
     selecteddata = selecteddata.split('/')[-1]
 selecteddata_stime = int(selecteddata.split('_')[5])
@@ -1257,38 +1339,50 @@ for file_name in file_names:
                                 plot_data_non_clear(diff_db_plot_sep, diff_db_sep, freq_list[i], time_list[i], arr_5_list[i], x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], arr_sep_time_list[i], quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, date_event_hour, date_event_minute, best_factor)
                                 cnn_detection2(arr_5_list[i], event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], date_OBs, Time_start, Time_end, color_setting, image_size, img_rows, img_cols, cnn_model, save_place, Frequency, x_lims, date_event_hour, date_event_minute)
                                 print (time_rate_final)
-                                sys.exit()
-                                # s_event_time, e_event_time = [90,99]
-                                # s_event_time, e_event_time = [345, 355]
-                                # s_event_time, e_event_time = [282,289]
-#                                 s_event_time, e_event_time = [selecteddata_stime, selecteddata_etime]
-#                                 # s_event_freq, e_event_freq = [52, 33]
-#                                 # s_event_time, e_event_time = [366, 372]
-#                                 # s_event_freq, e_event_freq = [int(np.max(y_freq)), 33]
-#                                 # s_event_time, e_event_time = [int(np.min(x_time) - 10), int(np.max(x_time) + 10)]
-#                                 s_event_freq, e_event_freq = [int(np.max(y_freq)), int(np.min(y_freq))]
-#                                 freq_start_idx = np.where(Frequency == getNearestValue(Frequency, s_event_freq))[0][0]
-#                                 freq_end_idx = np.where(Frequency == getNearestValue(Frequency, e_event_freq))[0][0]
-#                                 selected_Frequency = Frequency[freq_start_idx:freq_end_idx + 1]
-#                                 sep_arr_sep_time_list =  arr_sep_time_list[i][freq_start_idx:freq_end_idx + 1, s_event_time:e_event_time+1]
-#                                 freq_list_new = []
-#                                 time_list_new = []
-#                                 for k in range(sep_arr_sep_time_list.shape[0]):
-#                                     if max(sep_arr_sep_time_list[k]) > -10:
-#                                         if (len([l for l in sep_arr_sep_time_list[k] if l == max(sep_arr_sep_time_list[k])])) == 1:
-#                                             freq_list_new.append(selected_Frequency[k])
-#                                             time_list_new.append(np.argmax(sep_arr_sep_time_list[k]) + s_event_time)
-#                                 residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, freq_list_new, time_list_new, save_place, residual_threshold, date_OBs, Time_start, Time_end, s_event_time, e_event_time, s_event_freq, e_event_freq, freq_list_new)
-#                                 resi_idx = np.argmin(residual_list)
-#                                 selected_event_plot(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, date_event_hour, date_event_minute)
-#                                 time_gap_arr = x_time[resi_idx][np.where(y_freq[resi_idx] == freq_list_new[0])[0][0]:np.where(y_freq[resi_idx] == freq_list_new[-1])[0][0] + 1] - np.array(time_list_new)
-#                                 delete_idx = np.where(np.abs(time_gap_arr) >= 2 * residual_list[resi_idx])[0]
-#                                 selected_idx = np.where(np.abs(time_gap_arr) < 2 * residual_list[resi_idx])[0]
+                                # sys.exit()
+                                s_event_time, e_event_time = [90,99]
+                                s_event_time, e_event_time = [345, 355]
+                                s_event_time, e_event_time = [282,289]
+                                s_event_time, e_event_time = [selecteddata_stime, selecteddata_etime]
+                                # s_event_freq, e_event_freq = [52, 33]
+                                # s_event_time, e_event_time = [366, 372]
+                                # s_event_freq, e_event_freq = [int(np.max(y_freq)), 33]
+                                # s_event_time, e_event_time = [int(np.min(x_time) - 10), int(np.max(x_time) + 10)]
+                                s_event_freq, e_event_freq = [int(np.max(y_freq)), int(np.min(y_freq))]
+                                freq_start_idx = np.where(Frequency == getNearestValue(Frequency, s_event_freq))[0][0]
+                                freq_end_idx = np.where(Frequency == getNearestValue(Frequency, e_event_freq))[0][0]
+                                selected_Frequency = Frequency[freq_start_idx:freq_end_idx + 1]
+                                sep_arr_sep_time_list =  arr_sep_time_list[i][freq_start_idx:freq_end_idx + 1, s_event_time:e_event_time+1]
+                                freq_list_new = []
+                                time_list_new = []
+                                for k in range(sep_arr_sep_time_list.shape[0]):
+                                    if max(sep_arr_sep_time_list[k]) > -10:
+                                        if (len([l for l in sep_arr_sep_time_list[k] if l == max(sep_arr_sep_time_list[k])])) == 1:
+                                            freq_list_new.append(selected_Frequency[k])
+                                            time_list_new.append(np.argmax(sep_arr_sep_time_list[k]) + s_event_time)
+                                residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, freq_list_new, time_list_new, save_place, residual_threshold, date_OBs, Time_start, Time_end, s_event_time, e_event_time, s_event_freq, e_event_freq, freq_list_new)
+                                resi_idx = np.argmin(residual_list)
+                                selected_event_plot(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, date_event_hour, date_event_minute)
 
-#                                 residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, np.array(freq_list_new)[selected_idx], np.array(time_list_new)[selected_idx], save_place, residual_threshold, date_OBs, Time_start, Time_end, s_event_time, e_event_time, s_event_freq, e_event_freq, Frequency)
-#                                 resi_idx = np.argmin(residual_list)
-#                                 selected_event_plot_2(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, delete_idx, selected_idx, date_event_hour, date_event_minute)
-#                                     # w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': np.nan,'event_end': np.nan,'freq_start': freq_list_new[0],'freq_end':freq_list_new[-1], 'factor':resi_idx+1, 'peak_time_list':time_list_new, 'peak_freq_list':freq_list_new})
+                                factor = resi_idx+1
+                                time_rate = time_rate_final[resi_idx]
+                                cube_4 = (lambda h: 9 * 10 * np.sqrt(factor * (2.99*((1+(h/696000))**(-16))+1.55*((1+(h/696000))**(-6))+0.036*((1+(h/696000))**(-1.5)))))
+                                r = (inversefunc(cube_4, y_values = 40) + 696000)*1e+5
+                                r_1 = (inversefunc(cube_4, y_values = 40) + 696000)/696000
+                                ne = factor * 10**8 * (2.99*(r_1)**(-16)+1.55*(r_1)**(-6)+0.036*(r_1)**(-1.5))
+                                # print ('\n'+str(factor)+'×B-A model' + 'emission fp')
+                                drift_rates = (-1)*numerical_diff_df_dn(ne) * numerical_diff_allen_dn_dr(factor, r) * time_rate * light_v * 1e+5
+                                selected_event_plot3(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, date_event_hour, date_event_minute, drift_rates*(-1))
+
+
+                                # time_gap_arr = x_time[resi_idx][np.where(y_freq[resi_idx] == freq_list_new[0])[0][0]:np.where(y_freq[resi_idx] == freq_list_new[-1])[0][0] + 1] - np.array(time_list_new)
+                                # delete_idx = np.where(np.abs(time_gap_arr) >= 2 * residual_list[resi_idx])[0]
+                                # selected_idx = np.where(np.abs(time_gap_arr) < 2 * residual_list[resi_idx])[0]
+
+                                # residual_list, save_directory_1, x_time, y_freq, time_rate_final = residual_detection(Parent_directory, save_directory, factor_list, np.array(freq_list_new)[selected_idx], np.array(time_list_new)[selected_idx], save_place, residual_threshold, date_OBs, Time_start, Time_end, s_event_time, e_event_time, s_event_freq, e_event_freq, Frequency)
+                                # resi_idx = np.argmin(residual_list)
+                                # selected_event_plot_2(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, delete_idx, selected_idx, date_event_hour, date_event_minute)
+                                    # w.writerow({'event_date':date_event, 'event_hour':date_event_hour, 'event_minite':date_event_minute,'velocity':time_rate_final, 'residual':residual_list, 'event_start': np.nan,'event_end': np.nan,'freq_start': freq_list_new[0],'freq_end':freq_list_new[-1], 'factor':resi_idx+1, 'peak_time_list':time_list_new, 'peak_freq_list':freq_list_new})
                                 
 #         else:
 #             print (time)

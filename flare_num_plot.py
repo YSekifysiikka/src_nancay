@@ -35,7 +35,8 @@ def getNearestValue(list, num):
     # リスト要素と対象値の差分を計算し最小値のインデックスを取得
     idx = np.abs(np.asarray(list) - num).argmin()
     return list[idx]
-Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+
+Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
 Parent_lab = len(Parent_directory.split('/')) - 1
 
 
@@ -96,15 +97,19 @@ while DATE <= edate:
     DATE+=relativedelta.relativedelta(years=1)
 
 
-figure_=plt.figure(1,figsize=(6,6))
+figure_=plt.figure(1,figsize=(10,6))
 plt.bar(year_list, x_class_num, align="center", color = 'brown')
 plt.ylabel('X class flare', fontsize = 20)
+plt.xlim(2006.5,2021)
+# plt.ylim(0,225)
 plt.show()
 plt.close()
-figure_=plt.figure(1,figsize=(6,6))
+figure_=plt.figure(1,figsize=(10,6))
 plt.bar(year_list, m_class_num, align="center")
 plt.ylabel('M class flare', fontsize = 20)
 plt.tick_params(labelsize=12)
+plt.xlim(2006.5,2021)
+# plt.ylim(0,225)
 plt.show()
 plt.close()
 

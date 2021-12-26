@@ -34,7 +34,7 @@ csv_input = pd.read_csv(filepath_or_buffer= file_gain, sep=";")
 # print(csv_input['Time_list'])
 for i in range(len(csv_input)):
     BG_obs_time_event = datetime.datetime(csv_input['Year'][i], csv_input['Month'][i], csv_input['Day'][i])
-    if (BG_obs_time_event >= datetime.datetime(1995, 1, 1)) & (BG_obs_time_event <= datetime.datetime(2021, 1, 1)):
+    if (BG_obs_time_event >= datetime.datetime(1991, 1, 1)) & (BG_obs_time_event <= datetime.datetime(2021, 1, 1)):
         sunspot_num = csv_input['sunspot_number'][i]
         if not sunspot_num == -1:
             sunspot_obs_times.append(BG_obs_time_event)
@@ -65,7 +65,7 @@ bottomidx = np.where(sunspot_num_list <= 36)[0]
 plt.plot(sunspot_obs_times[bottomidx], sunspot_num_list[bottomidx], '.', color = 'k')
 idx = np.where((sunspot_num_list > np.percentile(sunspot_num_list, bottom)) & (sunspot_num_list < np.percentile(sunspot_num_list, top)))[0]
 plt.plot(sunspot_obs_times[idx], sunspot_num_list[idx], '.', color = 'k')
-plt.axhline(36, ls = "-.", color = "r", label = 'Median value')
+# plt.axhline(36, ls = "-.", color = "r", label = 'Median value')
 print ('filelen top: ' + str(len(sunspot_obs_times[topidx])), 'bottom: ' + str(len(sunspot_obs_times[bottomidx])))
 print ('filerate top: ' + str(len(sunspot_obs_times[topidx])/len(sunspot_obs_times)), 'bottom: ' + str(len(sunspot_obs_times[bottomidx])/len(sunspot_obs_times)))
 # plt.plot(sunspot_obs_times[solar_min_idx], sunspot_num_list[solar_min_idx], '.', color = 'b', label = 'Around the solar minimum')
@@ -74,10 +74,10 @@ print ('filerate top: ' + str(len(sunspot_obs_times[topidx])/len(sunspot_obs_tim
 # plt.axvline(datetime.datetime(2012,1,1), ls = "--", color = "navy")
 # plt.axvline(datetime.datetime(2015,1,1), ls = "--", color = "navy")
 # plt.axvline(datetime.datetime(2010,1,1), ls = "--", color = "navy")
-plt.xlim(datetime.datetime(1995, 1, 1), datetime.datetime(2021, 1, 1))
+plt.xlim(datetime.datetime(1991, 1, 1), datetime.datetime(2021, 1, 1))
 plt.ylabel('Sunspot number '+' $S_n$', fontsize = 20)
 plt.ylim(0,400)
-plt.legend(fontsize = 20)
+# plt.legend(fontsize = 20)
 plt.tick_params(labelsize=18)
 plt.show()
 plt.close()

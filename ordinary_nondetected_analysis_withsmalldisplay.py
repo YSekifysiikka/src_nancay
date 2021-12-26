@@ -970,6 +970,77 @@ def selected_event_plot_2(freq_list, time_list, x_time, y_freq, time_rate_final,
 
     return
 
+def selected_event_plot_3(freq_list, time_list, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start, event_end, freq_start, freq_end, event_time_gap, freq_gap, vmin_1, vmax_1, arr_sep_time, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, delete_idx, selected_idx, date_event_hour, date_event_minute, drift_rates):
+    year = date_OBs[0:4]
+    month = date_OBs[4:6]
+    day = date_OBs[6:8]
+    db_standard = np.where(Frequency == getNearestValue(Frequency,db_setting))
+    plt.close()
+    figure_=plt.figure(1,figsize=(8,8))
+    gs = gridspec.GridSpec(140, 50)
+    axes_2 = figure_.add_subplot(gs[:,:])
+    axes_2.plot(np.array(time_list)[selected_idx], np.array(freq_list)[selected_idx], "wo", label = 'Peak data(selected)', markersize=4)
+    axes_2.plot(np.array(time_list)[delete_idx], np.array(freq_list)[delete_idx], "ko", label = 'Peak data(deleted)', markersize=4)
+    y_cmap = selected_Frequency
+    x_cmap = np.arange(s_event_time, e_event_time + 1, 1)
+    cs = axes_2.contourf(x_cmap, y_cmap, arr_sep_time, levels= 30, extend='both', vmin= 5,vmax = quartile_db_l[db_standard] + 20)
+    cs.cmap.set_over('red')
+    cs.cmap.set_under('blue')
+    cycle = 0
+    for factor in factor_list:
+        if factor == 1:
+            color_setting = '#1f77b4'
+        elif factor == 2:
+            color_setting = '#ff7f0e'
+        elif factor == 3:
+            color_setting = '#2ca02c'
+        elif factor == 4:
+            color_setting = '#d62728'
+        elif factor == 5:
+            color_setting = '#9467bd'
+        else:
+            pass
+        
+        if factor == resi_idx+1:
+            axes_2.plot(x_time[cycle], y_freq[cycle], '-', label = str(factor) + '×B-A model/v=' + str(time_rate_final[cycle]) + 'c', linewidth = 6.0, color = color_setting)
+            test_x = np.array(x_time[cycle])
+            test_y = np.array(y_freq[cycle])
+            drift_idx = np.where(test_y == 39.925)[0][0]
+            x_list = np.arange(np.min(x_time[cycle])-5, np.max(x_time[cycle]) + 5, 1)
+            y_list = drift_rates*(x_list-test_x[drift_idx]) + 40
+            plt.plot(x_list, y_list, color = 'k', linewidth = 4, label = 'Frequency drift rates @ 40MHz')
+    #                                                                                axes_2.plot(yy_1, xx_2, 'k', label = 'freq_drift(linear)')
+            # plt.xlim(min(time_list) - 10, max(time_list) + 10)
+            # plt.xlim(np.median(time_list)-20, np.median(time_list)+30)
+            # plt.xlim(np.median(time_list)-10, np.median(time_list)+40)
+
+            # figure_.autofmt_xdate()
+        
+            # values =np.arange(0,50,5)
+            # x = np.arange(np.median(time_list)-10, np.median(time_list)+40, 5)
+                
+            # plt.xticks(x,values)
+        cycle += 1
+    x = [252, 262, 272, 282, 292]
+    values = ['0', '10', '20', '30','40']
+    plt.title('Nancay: '+year+'-'+month+'-'+day+ ' @ '+date_event_hour+':'+date_event_minute,fontsize=20)
+    plt.xlabel('Time[sec]',fontsize=20)
+    plt.ylabel('Frequency [MHz]',fontsize=20)
+    plt.tick_params(labelsize=18)
+    plt.legend(fontsize=18)
+    plt.xticks(x,values)
+    plt.ylim(selected_Frequency[-1], selected_Frequency[0])
+    plt.xlim(s_event_time, e_event_time)
+
+    if not os.path.isdir(Parent_directory + '/solar_burst/Nancay/plot/'+after_plot+'/'+burst_type+'/'+year):
+        os.makedirs(Parent_directory + '/solar_burst/Nancay/plot/'+after_plot+'/'+burst_type+'/'+year)
+    filename = Parent_directory + '/solar_burst/Nancay/plot/'+after_plot+'/'+burst_type+'/'+year+'/'+year+month+day+'_'+Time_start[0:2]+Time_start[3:5]+Time_start[6:8]+'_'+Time_end[0:2]+Time_end[3:5]+Time_end[6:8]+ '_' + str(time - time_band - time_co) + '_' + str(time) +'_' + str(np.min(np.array(time_list)[selected_idx]))+'_'+str(np.max(np.array(time_list)[selected_idx]))+'_'+str(np.max(np.array(freq_list)[selected_idx]))+'_'+str(np.min(np.array(freq_list)[selected_idx]))+ 'peak.png'
+    plt.savefig(filename)
+    plt.show()
+    plt.close()
+
+    return
+
 def choice():
     i = 0
     while i < 1:
@@ -1430,23 +1501,24 @@ while t == 0:
                                                     else:
                                                         filename_2 = filename.split('.png')[0]+str(len(csvfiles_len))+'.csv'
                                                     
-                                                    with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/ordinary/' + filename_2, 'w') as f:
-                                                        obs_time = obs_time_list[selected_idx_2[0]] + datetime.timedelta(seconds = int(np.min(np.array(time_list_new)[selected_idx_3])))
-                                                        w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "drift_rate_40MHz"])
-                                                        w.writeheader()
-                                                        factor = resi_idx+1
-                                                        time_rate = time_rate_final[resi_idx]
-                                                        cube_4 = (lambda h: 9 * 10 * np.sqrt(factor * (2.99*((1+(h/696000))**(-16))+1.55*((1+(h/696000))**(-6))+0.036*((1+(h/696000))**(-1.5)))))
-                                                        r = (inversefunc(cube_4, y_values = 40) + 696000)*1e+5
-                                                        r_1 = (inversefunc(cube_4, y_values = 40) + 696000)/696000
-                                                        ne = factor * 10**8 * (2.99*(r_1)**(-16)+1.55*(r_1)**(-6)+0.036*(r_1)**(-1.5))
-                                                        # print ('\n'+str(factor)+'×B-A model' + 'emission fp')
-                                                        drift_rates = (-1)*numerical_diff_df_dn(ne) * numerical_diff_allen_dn_dr(factor, r) * time_rate * light_v * 1e+5
-                                                        w.writerow({'obs_time':obs_time,'velocity':time_rate_final, 'residual':residual_list, 'event_start': np.min(np.array(time_list_new)[selected_idx_3]),'event_end': np.max(np.array(time_list_new)[selected_idx_3]),'freq_start': np.max(np.array(freq_list_new)[selected_idx_3]),'freq_end':np.min(np.array(freq_list_new)[selected_idx_3]), 'factor':resi_idx+1, 'peak_time_list':np.array(time_list_new)[selected_idx_3], 'peak_freq_list':np.array(freq_list_new)[selected_idx_3], 'drift_rate_40MHz':drift_rates})
+                                                    # with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis_nonclear/ordinary/' + filename_2, 'w') as f:
+                                                    obs_time = obs_time_list[selected_idx_2[0]] + datetime.timedelta(seconds = int(np.min(np.array(time_list_new)[selected_idx_3])))
+                                                    # w = csv.DictWriter(f, fieldnames=["obs_time", "velocity", "residual", "event_start", "event_end", "freq_start", "freq_end", "factor", "peak_time_list", "peak_freq_list", "drift_rate_40MHz"])
+                                                    # w.writeheader()
+                                                    factor = resi_idx+1
+                                                    time_rate = time_rate_final[resi_idx]
+                                                    cube_4 = (lambda h: 9 * 10 * np.sqrt(factor * (2.99*((1+(h/696000))**(-16))+1.55*((1+(h/696000))**(-6))+0.036*((1+(h/696000))**(-1.5)))))
+                                                    r = (inversefunc(cube_4, y_values = 40) + 696000)*1e+5
+                                                    r_1 = (inversefunc(cube_4, y_values = 40) + 696000)/696000
+                                                    ne = factor * 10**8 * (2.99*(r_1)**(-16)+1.55*(r_1)**(-6)+0.036*(r_1)**(-1.5))
+                                                    # print ('\n'+str(factor)+'×B-A model' + 'emission fp')
+                                                    drift_rates = (-1)*numerical_diff_df_dn(ne) * numerical_diff_allen_dn_dr(factor, r) * time_rate * light_v * 1e+5
+                                                    selected_event_plot_3(freq_list_new, time_list_new, x_time, y_freq, time_rate_final, save_place, date_OBs, Time_start, Time_end, event_start_list[i], event_end_list[i], freq_start_list[i], freq_end_list[i], event_time_gap_list[i], freq_gap_list[i], vmin_1_list[i], vmax_1_list[i], sep_arr_sep_time_list, quartile_db_l, min_db, Frequency, freq_start_idx, freq_end_idx, db_setting, after_plot, s_event_time, e_event_time, s_event_freq, e_event_freq, selected_Frequency, resi_idx, delete_idx, selected_idx_3, date_event_hour, date_event_minute, drift_rates*(-1))
+                                                        # w.writerow({'obs_time':obs_time,'velocity':time_rate_final, 'residual':residual_list, 'event_start': np.min(np.array(time_list_new)[selected_idx_3]),'event_end': np.max(np.array(time_list_new)[selected_idx_3]),'freq_start': np.max(np.array(freq_list_new)[selected_idx_3]),'freq_end':np.min(np.array(freq_list_new)[selected_idx_3]), 'factor':resi_idx+1, 'peak_time_list':np.array(time_list_new)[selected_idx_3], 'peak_freq_list':np.array(freq_list_new)[selected_idx_3], 'drift_rate_40MHz':drift_rates})
             
-                                                        file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/flare_associated_ordinary/done'
-                                                        if not os.path.isfile(file_dir+'/'+filename):
-                                                            shutil.copy(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/flare_associated_ordinary/'+yyyy+'/'+filename, file_dir)
+                                                        # file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/flare_associated_ordinary/done'
+                                                        # if not os.path.isfile(file_dir+'/'+filename):
+                                                        #     shutil.copy(Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/flare_associated_ordinary/'+yyyy+'/'+filename, file_dir)
                                                 elif yes_or_not == 'move':
                                                     file_dir = Parent_directory + '/solar_burst/Nancay/plot/afjpgunonsimpleselect/flare_associated_ordinary/moved'
                                                     if not os.path.isfile(file_dir+'/'+filename):
