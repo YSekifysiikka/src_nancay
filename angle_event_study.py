@@ -13,9 +13,9 @@ import numpy as np
 import math
 from pynverse import inversefunc
 
-CR_list = [2216, 2020, 2125, 2134, 2147, 2126, 2200]
-DR_ave_list = [7.0, 4.9, 7.2, 8.4, 6.6, 7.4, 4.8]
-DR_std_list = [3.18, 0.94, 1.27, 3.43, 1.94, 3.12, 0]
+CR_list = [2216, 2020, 2125, 2126, 2134, 2147, 2200]
+DR_ave_list = [7.0, 4.9, 7.2, 7.4, 8.4, 6.6, 4.8]
+DR_std_list = [3.18, 0.94, 1.27, 3.12, 3.43, 1.94, 0]
 x_list = np.arange(0,7,1)
 
 

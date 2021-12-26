@@ -17,8 +17,9 @@ import glob
 import csv
 
 CR = '2020'
-xlim = [0, 361]
-ylim = [-90, 90]
+xlim = [80, 110]
+ylim = [-20, 0]
+
 
 
 
