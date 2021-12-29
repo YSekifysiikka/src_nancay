@@ -184,7 +184,8 @@ def driftrates_ci_plot(driftrates_ci_median, driftrates_ci_se):
     plt.plot([1, 17],[4.5, 4.5], color = "k", linewidth = 1.0, alpha = 1)
     plt.plot([1, 17],[2.5, 2.5], color = "k", linewidth = 1.0, alpha = 1)
     
-    plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
+    plt.plot([5.3, 5.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
+    plt.plot([7.3, 7.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed")
     
     plt.xlabel('Frequency drift rates [MHz/s]', fontsize=18)
     plt.ylabel('Type of bursts', fontsize=18)
@@ -228,7 +229,7 @@ def driftrates_sd_plot(driftrates_ci_median, SD_list):
     plt.plot([1, 17],[4.5, 4.5], color = "k", linewidth = 1.0, alpha = 1)
     plt.plot([1, 17],[2.5, 2.5], color = "k", linewidth = 1.0, alpha = 1)
     
-    plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
+    # plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
     
     plt.xlabel('Frequency drift rates [MHz/s]', fontsize=18)
     plt.ylabel('Type of bursts', fontsize=18)
@@ -236,8 +237,8 @@ def driftrates_sd_plot(driftrates_ci_median, SD_list):
     plt.ylim(0.5, 12)
     plt.yticks([8.5,5.5,3.5,1.5], ['Ordinary type III burst\nAround the solar maximum', 'Ordinary type III burst\nAround the solar minimum', 'Micro type III burst\nAround the solar maximum', 'Micro type III burst\nAround the solar minimum'])
     plt.xticks(fontsize=16)
-    plt.legend()
-    plt.title('Average ± 2σ')
+    # plt.legend()
+    plt.title('Average ± 1σ')
     ax = plt.gca()
     # ax.axes.xaxis.set_visible(False)
     # ax.axes.yaxis.set_visible(False)
@@ -261,10 +262,10 @@ def velocity_ci_plot(velocity_ci_median, velocity_ci_se):
     plt.errorbar(x, y, xerr = x_err, capsize=5, fmt='o', markersize=5, ecolor='r', markeredgecolor = "r", color='r')
     plt.errorbar(x_1, y_1, xerr = x_err_1, capsize=5, fmt='o', markersize=5, ecolor='black', markeredgecolor = "black", color='w')
     
-    plt.scatter(0.13,4, color = "k", marker="*", s = 300) 
+    # plt.scatter(0.13,4, color = "k", marker="*", s = 300) 
     
-    plt.plot([0.04, 0.04],[4.5, 11], color = "k", linewidth = 5.0, alpha = 1, linestyle = "dashed")
-    plt.plot([0.60, 0.60],[4.5, 11], color = "k", linewidth = 5.0, alpha = 1, linestyle = "dashed")
+    # plt.plot([0.04, 0.04],[4.5, 11], color = "k", linewidth = 5.0, alpha = 1, linestyle = "dashed")
+    # plt.plot([0.60, 0.60],[4.5, 11], color = "k", linewidth = 5.0, alpha = 1, linestyle = "dashed")
     
     plt.plot([0, 1],[10, 10], color = "orange", linewidth = 35.0, alpha = 0.1)
     plt.plot([0, 1],[8, 8], color = "orange", linewidth = 35.0, alpha = 0.1)
@@ -293,13 +294,76 @@ def velocity_ci_plot(velocity_ci_median, velocity_ci_se):
     plt.xlabel('Radial velocity [c]', fontsize=20)
     plt.ylabel('y', fontsize=20)
     plt.title('95% CI')
-    plt.xlim(0.0, 0.65)
+    plt.xlim(0.0, 1)
     plt.ylim(0.5, 12)
     plt.xticks(fontsize=16)
     ax = plt.gca()
     # ax.axes.xaxis.set_visible(False)
     ax.axes.yaxis.set_visible(False)
     plt.show()
+
+
+def velocity_sd_plot():
+    x = [velocity_ci_median[0], velocity_ci_median[2], velocity_ci_median[4],velocity_ci_median[6],velocity_ci_median[8]] # 変数を初期化
+    y = [10,8,6,4,2]
+    x_err = [np.std(velocity_fp_list_factor1_ordinary[ordinary_solar_max_idx]), np.std(velocity_fp_list_factor3_ordinary), np.std(velocity_fp_list_factor1_ordinary[ordinary_solar_min_idx]),np.std(velocity_fp_list_micro[micro_solar_max_idx]),np.std(velocity_fp_list_micro[micro_solar_min_idx])]
+
+
+
+    # x_1 = [0.33, 0.28, 0.54, 0.33, 0.18, 0.22] # 変数を初期化
+    x_1 = [velocity_ci_median[1],velocity_ci_median[3],velocity_ci_median[5],velocity_ci_median[7],velocity_ci_median[9]]
+    y_1 = [9,7,5,3,1]
+    x_err_1 = [np.std(velocity_2fp_list_factor1_ordinary[ordinary_solar_max_idx]),np.std(velocity_2fp_list_factor3_ordinary),np.std(velocity_2fp_list_factor1_ordinary[ordinary_solar_min_idx]),np.std(velocity_2fp_list_micro[micro_solar_max_idx]),np.std(velocity_2fp_list_micro[micro_solar_min_idx])]
+    
+    plt.figure(figsize=(6,7))
+    
+    plt.errorbar(x, y, xerr = x_err, capsize=5, fmt='o', markersize=5, ecolor='r', markeredgecolor = "r", color='r')
+    plt.errorbar(x_1, y_1, xerr = x_err_1, capsize=5, fmt='o', markersize=5, ecolor='black', markeredgecolor = "black", color='w')
+    
+    # plt.scatter(0.13,4, color = "k", marker="*", s = 300) 
+    
+    # plt.plot([0.04, 0.04],[4.5, 11], color = "k", linewidth = 5.0, alpha = 1, linestyle = "dashed")
+    # plt.plot([0.60, 0.60],[4.5, 11], color = "k", linewidth = 5.0, alpha = 1, linestyle = "dashed")
+    
+    plt.plot([0, 1],[10, 10], color = "orange", linewidth = 35.0, alpha = 0.1)
+    plt.plot([0, 1],[8, 8], color = "orange", linewidth = 35.0, alpha = 0.1)
+    plt.plot([0, 1],[6, 6], color = "deepskyblue", linewidth = 35.0, alpha = 0.1)
+    
+    plt.plot([0, 1],[9, 9], color = "orange", linewidth = 35.0, alpha = 0.1)
+    plt.plot([0, 1],[7, 7], color = "orange", linewidth = 35.0, alpha = 0.1)
+    plt.plot([0, 1],[5, 5], color = "deepskyblue", linewidth = 35.0, alpha = 0.1)
+    plt.plot([0, 1],[4, 4], color = "r", linewidth = 35.0, alpha = 0.1)
+    plt.plot([0, 1],[3, 3], color = "r", linewidth = 35.0, alpha = 0.1)
+    plt.plot([0, 1],[2, 2], color = "b", linewidth = 35.0, alpha = 0.1)
+    plt.plot([0, 1],[1, 1], color = "b", linewidth = 35.0, alpha = 0.1)
+    
+    
+    plt.plot([0, 1],[9.5, 9.5], color = "k", linewidth = 1.0, alpha = 1)
+    plt.plot([0, 1],[8.5, 8.5], color = "k", linewidth = 1.0, alpha = 1)
+    plt.plot([0, 1],[7.5, 7.5], color = "k", linewidth = 1.0, alpha = 1)
+    plt.plot([0, 1],[6.5, 6.5], color = "k", linewidth = 1.0, alpha = 1)
+    plt.plot([0, 1],[5.5, 5.5], color = "k", linewidth = 1.0, alpha = 1)
+    plt.plot([0, 1],[4.5, 4.5], color = "k", linewidth = 1.0, alpha = 1)
+    plt.plot([0, 1],[3.5, 3.5], color = "k", linewidth = 1.0, alpha = 1)
+    plt.plot([0, 1],[2.5, 2.5], color = "k", linewidth = 1.0, alpha = 1)
+    plt.plot([0, 1],[1.5, 1.5], color = "k", linewidth = 1.0, alpha = 1)
+    # plt.plot([0, 1],[0.5, 0.5], color = "k", linewidth = 1.0, alpha = 1)
+    
+    plt.xlabel('Radial velocity [c]', fontsize=20)
+    plt.ylabel('y', fontsize=20)
+    plt.title('Average ± 1σ')
+    plt.xlim(0.0, 1)
+    plt.ylim(0.5, 12)
+    plt.xticks(fontsize=16)
+    ax = plt.gca()
+    # ax.axes.xaxis.set_visible(False)
+    ax.axes.yaxis.set_visible(False)
+    plt.show()
+
+
+
+
+
 
 
 def box_plot():
@@ -325,7 +389,7 @@ def box_plot():
 def printresults():
     print ('\nOrdinary type III burst ~極大期~')
     print ('イベント数:' + str(len(freq_drift_ordinary[ordinary_solar_max_idx])))
-    print ('DR 平均値:' + str(round(np.nanmean(freq_drift_ordinary[ordinary_solar_max_idx]),1)))
+    print ('DR 平均値:' + str(round(np.nanmean(freq_drift_ordinary[ordinary_solar_max_idx]),2)))
     print ('DR 標準偏差(SD):' + str(round(np.nanstd(freq_drift_ordinary[ordinary_solar_max_idx]),2)))
     print ('DR 標準偏差(SE):' + str(round(driftrates_ci_se[0],2)))
     print ('RV(fp) F = 1 平均値:' + str(round(velocity_ci_median[0],2)))
@@ -345,7 +409,7 @@ def printresults():
     
     print ('\nOrdinary type III burst ~極小期~')
     print ('イベント数:' + str(len(freq_drift_ordinary[ordinary_solar_min_idx])))
-    print ('平均値:' + str(round(np.nanmean(freq_drift_ordinary[ordinary_solar_min_idx]),1)))
+    print ('平均値:' + str(round(np.nanmean(freq_drift_ordinary[ordinary_solar_min_idx]),2)))
     print ('DR 標準偏差(SD):' + str(round(np.nanstd(freq_drift_ordinary[ordinary_solar_min_idx]),2)))
     print ('DR 標準偏差(SE):' + str(round(driftrates_ci_se[1],2)))
     print ('RV(fp) F = 1 平均値:' + str(round(velocity_ci_median[4],2)))
@@ -359,7 +423,7 @@ def printresults():
     
     print ('\nMicro type III burst ~極大期~')
     print ('イベント数:' + str(len(freq_drift_micro[micro_solar_max_idx])))
-    print ('平均値:' + str(round(np.nanmean(freq_drift_micro[micro_solar_max_idx]),1)))
+    print ('平均値:' + str(round(np.nanmean(freq_drift_micro[micro_solar_max_idx]),2)))
     print ('DR 標準偏差(SD):' + str(round(np.nanstd(freq_drift_micro[micro_solar_max_idx]),2)))
     print ('DR 標準偏差(SE):' + str(round(driftrates_ci_se[2],2)))
     print ('RV(fp) F = 1 平均値:' + str(round(velocity_ci_median[6],2)))
@@ -373,7 +437,7 @@ def printresults():
     
     print ('\nMicro type III burst ~極小期~')
     print ('イベント数:' + str(len(freq_drift_micro[micro_solar_min_idx])))
-    print ('平均値:' + str(round(np.nanmean(freq_drift_micro[micro_solar_min_idx]),1)))
+    print ('平均値:' + str(round(np.nanmean(freq_drift_micro[micro_solar_min_idx]),2)))
     print ('DR 標準偏差(SD):' + str(round(np.nanstd(freq_drift_micro[micro_solar_min_idx]),2)))
     print ('DR 標準偏差(SE):' + str(round(driftrates_ci_se[3],2)))
     print ('RV(fp) F = 1 平均値:' + str(round(velocity_ci_median[8],2)))
@@ -722,7 +786,7 @@ SD_list = [np.nanstd(freq_drift_ordinary[ordinary_solar_max_idx]), np.nanstd(fre
 driftrates_ci_plot(driftrates_ci_median, driftrates_ci_se)
 driftrates_sd_plot(driftrates_ci_median, SD_list)
 velocity_ci_plot(velocity_ci_median, velocity_ci_se)
-
+velocity_sd_plot()
 
 printresults()
 
