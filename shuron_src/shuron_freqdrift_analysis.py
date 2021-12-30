@@ -405,8 +405,8 @@ def printresults():
     print ('RV(2fp) F = 3 標準偏差(SD):' + str(round(np.std(velocity_2fp_list_factor3_ordinary),3)))
     print ('RV(2fp) F = 3 標準偏差(SE):' + str(round(velocity_ci_se[3],2)))
     print ('最小値:' + str(round(np.nanmin(freq_drift_ordinary[ordinary_solar_max_idx]),1)))
-    print ('最大値:' + str(round(np.nanmax(freq_drift_ordinary[ordinary_solar_max_idx]),1)))
-    
+    print ('最大値:' + str(round(np.nanmax(freq_drift_ordinary[ordinary_solar_max_idx]),1)))    
+
     print ('\nOrdinary type III burst ~極小期~')
     print ('イベント数:' + str(len(freq_drift_ordinary[ordinary_solar_min_idx])))
     print ('平均値:' + str(round(np.nanmean(freq_drift_ordinary[ordinary_solar_min_idx]),2)))
