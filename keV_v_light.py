@@ -12,7 +12,7 @@ keV = 1.602176565e-16
 c = 299792458
 #[m/s]
 
-num = 30
+num = 12
 v2 = 2*num * keV / m
 v = np.sqrt(v2)/c
 print (v)

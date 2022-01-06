@@ -16,9 +16,11 @@ from astropy.io import fits
 import glob
 import csv
 
-CR = '2020'
-xlim = [0, 361]
-ylim = [-90, 90]
+CR = '2125'
+xlim = [256, 266]
+ylim = [-22, -12]
+
+
 
 
 
@@ -37,13 +39,15 @@ bss_image_data = np.flipud(bss_image_data)
 plt.figure(figsize=(8,5))
 plt.imshow(bss_image_data,cmap='jet',aspect='auto')
 plt.colorbar()
-bss_neutral_line = np.where((bss_image_data <= 0.0012) & (bss_image_data >= -0.0012))
+bss_neutral_line = np.where((bss_image_data <= 0.003) & (bss_image_data >= -0.003))
 plt.scatter(bss_neutral_line[1], bss_neutral_line[0], color = 'k', marker= '.')
 
 plt.xlabel('Carrington Longitude')
 plt.ylabel('Latitude')
 y = [0, 30, 60, 90, 120, 150, 179]
 plt.yticks(y, ['90', '60', '30', '0','-30', '-60', '-90',])
+# plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
+plt.title('CR: ' + CR)
 save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
 plt.savefig(save_name)
 plt.show()
@@ -69,7 +73,8 @@ for file_name in file_names:
     end = int(file_name.split('.fits')[0].split('_')[-1].split('-')[1])
     print (start, end)
     # if (((start == 11) & (end == 12)) | ((start == 14) & (end == 16))):
-    if (((start == 12) & (end == 14)) | ((start == 16) & (end == 17))):
+    # if (((start == 12) & (end == 14)) | ((start == 16) & (end == 17))):
+    if (((start == 15) & (end == 17)) | ((start == 19) & (end == 23)) | ((start == 19) & (end == 20))):
         # if (((start+end)/20 == check_radius[0]) | ((start+end)/20 == check_radius[1]) | ((start+end)/20 == check_radius[2])):
         # if (((start+end)/20 == check_radius[0]) | ((start+end)/20 == check_radius[1])):
         # if (((start+end)/20 == check_radius[0])):
@@ -81,7 +86,7 @@ for file_name in file_names:
         plt.figure(figsize=(8,5))
         plt.imshow(amn_image_data,cmap='jet',aspect='auto')
         c = plt.colorbar()
-        plt.clim(0, 45) 
+        # plt.clim(0, 45) 
         # amn_neutral_line = np.where((amn_image_data <= 0.0012) & (amn_image_data >= -0.0012))
         # plt.scatter(amn_neutral_line[1], amn_neutral_line[0], color = 'k', marker= '.')
         
@@ -89,6 +94,8 @@ for file_name in file_names:
         plt.ylabel('Latitude')
         y = [0, 30, 60, 90, 120, 150, 179]
         plt.yticks(y, ['90', '60', '30', '0','-30', '-60', '-90',])
+        # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
+        plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
         save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
         plt.savefig(save_name)
         plt.show()
@@ -110,6 +117,8 @@ for file_name in file_names:
         plt.ylabel('Latitude')
         y = [0, 30, 60, 90, 120, 150, 179]
         plt.yticks(y, ['90', '60', '30', '0','-30', '-60', '-90',])
+        # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
+        plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
         save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
         plt.savefig(save_name)
         plt.show()
@@ -143,11 +152,26 @@ for file_name in file_names:
         # plt.scatter(x, y, s=100, c=value, cmap='Blues') 
         c = plt.colorbar(SC)  
         c.set_label('angle[deg]', size=15)
+        # plt.axhline(y=ylim[0], xmin=xlim[0], xmax=xlim[1], linewidth=3, color='k', linestyle='--', label = 'Analyzed area')
+        # plt.axvline(x=xlim[0], ymin=ylim[0], ymax=ylim[1], linewidth=3, color='k', linestyle='--')
+        # plt.axhline(y=ylim[1], xmin=xlim[0], xmax=xlim[1], linewidth=3, color='k', linestyle='--')
+        # plt.axvline(x=xlim[1], ymin=ylim[0], ymax=ylim[1], linewidth=3, color='k', linestyle='--')
+        plt.plot([xlim[0],xlim[0]], [ylim[0], ylim[1]], linestyle = '--', color = 'k', label = 'Analyzed area')
+        plt.plot([xlim[1],xlim[1]], [ylim[0], ylim[1]], linestyle = '--', color = 'k')
+        plt.plot([xlim[0],xlim[1]], [ylim[0], ylim[0]], linestyle = '--', color = 'k')
+        plt.plot([xlim[0],xlim[1]], [ylim[1], ylim[1]], linestyle = '--', color = 'k')
+
+
+        # plt.scatter([261], [-17], s=100, marker="*", color = 'k', label='Flare site')
+        
         plt.xlabel('Carrington Longitude')
         plt.ylabel('Latitude')
         # plt.clim(0, 50)              
         plt.xlim(0,360)
         plt.ylim(-90,90)
+        # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
+        plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
+        plt.legend()
         save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
         plt.savefig(save_name)
         plt.show()
@@ -174,6 +198,9 @@ for file_name in file_names:
         plt.clim(0, 50)              
         plt.xlim(0,360)
         plt.ylim(-90,90)
+        plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
+        # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
+
         save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
         plt.savefig(save_name)
         plt.show()
@@ -201,14 +228,18 @@ for file_name in file_names:
                         power_list_max.append(amx_image_data[i][j])
         figure_=plt.figure(1,figsize=(8,5))
         SC=plt.scatter(longitude_list_ave, latitude_list_ave, c=power_list_ave, cmap='jet', s = 5)
-        # plt.scatter(x, y, s=100, c=value, cmap='Blues') 
         c = plt.colorbar(SC)  
         c.set_label('angle[deg]', size=15)
         plt.xlabel('Carrington Longitude')
         plt.ylabel('Latitude')
-        # plt.clim(0, 50)              
+        # plt.clim(0, 50)
+        plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
+        # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
+        # plt.axvline(x=275)
+        # plt.axhline(y=10)
         plt.xlim(0,360)
         plt.ylim(-90,90)
+        # plt.legend()
         # save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
         # plt.savefig(save_name)
         plt.show()
@@ -220,7 +251,8 @@ for file_name in file_names:
         end_list.append(end/10)
         angle_ave.append(np.mean(power_list_ave))
         angle_std.append(np.std(power_list_ave))
-        plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
+        plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
+        # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
         plt.hist(power_list_ave, label = 'AVE: ' + str(np.mean(power_list_ave)) + '\n' + 'SD: ' + str(np.std(power_list_ave)))
         plt.legend()
         plt.show()

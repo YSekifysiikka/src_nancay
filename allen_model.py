@@ -47,18 +47,18 @@ for factor in factor_list:
     freq=9*np.sqrt(newkirk)/10**3
     ax2=ax1.twinx()
 
-    if factor == 3:
-        ln1 = ax2.plot(h2_1,freq, color = 'r')
-    elif factor == 1:
-        ln1 = ax2.plot(h2_1,freq, color = 'b')
+    # if factor == 3:
+    #     ln1 = ax2.plot(h2_1,freq, color = 'r')
+    # elif factor == 1:
+    #     ln1 = ax2.plot(h2_1,freq, color = 'b')
 
-    allen_model = factor * 10**8 * (2.99*(h2_1)**(-16)+1.55*(h2_1)**(-6)+0.036*(h2_1)**(-1.5))
-    x2_1 = allen_model
-    if factor == 3:
-        ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×B-A model',linestyle =  '--', color = 'r')
-    elif factor == 1:
-        ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×B-A model',linestyle =  '--', color = 'b')
-    ax2.set_yscale('log')
+    # allen_model = factor * 10**8 * (2.99*(h2_1)**(-16)+1.55*(h2_1)**(-6)+0.036*(h2_1)**(-1.5))
+    # x2_1 = allen_model
+    # if factor == 3:
+    #     ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×B-A model',linestyle =  '--', color = 'r')
+    # elif factor == 1:
+    #     ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×B-A model',linestyle =  '--', color = 'b')
+    # ax2.set_yscale('log')
     
     # h2_1 = np.arange(1, 4.2, 0.1)
 
@@ -103,7 +103,7 @@ plt.title("Coronal electron density model",fontsize=16)
 ax1.legend(loc='upper right')
 # ax2.legend(loc='upper right')
 ax1.set_xlabel("Heliocentric distance [Rs]",fontsize=16)
-ax2.set_ylabel("Frequency [MHz]",fontsize=16)
+ax2.set_ylabel("Plasma frequency [MHz]",fontsize=16)
 ax1.set_ylabel("Density [$/cc$]",fontsize=16)
 plt.grid(which='both')
 # plt.xlim(1,4)

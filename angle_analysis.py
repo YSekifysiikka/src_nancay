@@ -13,10 +13,13 @@ import numpy as np
 import math
 from pynverse import inversefunc
 
-CR_list = [2216, 2020, 2125, 2134, 2147, 2126, 2200]
-DR_ave_list = [7.0, 4.9, 7.2, 8.4, 6.6, 7.4, 4.8]
-DR_std_list = [3.18, 0.94, 1.27, 3.43, 1.94, 3.12, 0]
-x_list = np.arange(0,7,1)
+# CR_list = [2125, 2126, 2134, 2147, 2200, 2020, 2216]
+# DR_ave_list = [7.2, 7.4, 8.4, 6.6, 4.8, 4.9, 7.0]
+# DR_std_list = [1.27, 3.12, 3.43, 1.94, 0, 0.94, 3.18]
+
+CR_list = [2125, 2126, 2134, 2147, 2020]
+DR_ave_list = [7.2, 7.4, 8.4, 6.6, 4.9]
+DR_std_list = [1.27, 3.12, 3.43, 1.94, 0.94]
 
 velocity_fp = []
 velocity_2fp = []
@@ -335,10 +338,11 @@ plt.show()
 
 
 
+x_list = np.arange(0,len(DR_ave_list),1)
 
 
 event_names = []
-for i in range(len(burst_type_list)):
+for i in range(len(DR_ave_list)):
     event_names.append('CR: ' + (str(CR_list[i]) + '\n' + burst_type_list[i] + '\n' + period_list[i]))
 
 
