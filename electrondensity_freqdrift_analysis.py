@@ -763,7 +763,7 @@ if __name__=='__main__':
     except:
         print('DL error')
 
-with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/electrondensity_anaysis_shuron2.csv', 'w') as f:
+with open(Parent_directory+ '/solar_burst/Nancay/af_sgepss_analysis_data/electrondensity_anaysis_shuron3.csv', 'w') as f:
     w = csv.DictWriter(f, fieldnames=["obs_time", "burst_type", "event_start", "event_end", "freq_start", "freq_end", "peak_time_list", "peak_freq_list", "sunspots_num", "allen_fp_dfdt_list", "allen_fp_residual", "allen_fp_velocity", "allen_2fp_dfdt_list", "allen_2fp_residual", "allen_2fp_velocity", "newkirk_fp_dfdt_list", "newkirk_fp_residual", "newkirk_fp_velocity", "newkirk_2fp_dfdt_list", "newkirk_2fp_residual", "newkirk_2fp_velocity", "wangmax_fp_dfdt_list", "wangmax_fp_residual", "wangmax_fp_velocity", "wangmax_2fp_dfdt_list", "wangmax_2fp_residual", "wangmax_2fp_velocity", "wangmin_fp_dfdt_list", "wangmin_fp_residual", "wangmin_fp_velocity", "wangmin_2fp_dfdt_list", "wangmin_2fp_residual", "wangmin_2fp_velocity"])
     w.writeheader()
 

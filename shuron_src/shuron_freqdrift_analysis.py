@@ -184,7 +184,9 @@ def driftrates_ci_plot(driftrates_ci_median, driftrates_ci_se):
     plt.plot([1, 17],[4.5, 4.5], color = "k", linewidth = 1.0, alpha = 1)
     plt.plot([1, 17],[2.5, 2.5], color = "k", linewidth = 1.0, alpha = 1)
     
-    plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
+    # plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
+    plt.plot([7.34, 7.34],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'Zhang et al., 2018')
+    plt.plot([5.29, 5.29],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed")
     
     plt.xlabel('Frequency drift rates [MHz/s]', fontsize=18)
     plt.ylabel('Type of bursts', fontsize=18)
@@ -228,7 +230,9 @@ def driftrates_sd_plot(driftrates_ci_median, SD_list):
     plt.plot([1, 17],[4.5, 4.5], color = "k", linewidth = 1.0, alpha = 1)
     plt.plot([1, 17],[2.5, 2.5], color = "k", linewidth = 1.0, alpha = 1)
     
-    plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
+    # plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'Zhang et al., 2018')
+    plt.plot([7.34, 7.34],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'Zhang et al., 2018')
+    plt.plot([5.29, 5.29],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed")
     
     plt.xlabel('Frequency drift rates [MHz/s]', fontsize=18)
     plt.ylabel('Type of bursts', fontsize=18)
@@ -404,12 +408,12 @@ velocity_2fp_list_factor3_ordinary = []
 velocity_fp_list_micro = []
 velocity_2fp_list_micro = []
 
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 
 
 file_final = Parent_directory  + '/solar_burst/Nancay/af_sgepss_analysis_data/burst_analysis/shuron_data/shuron_micro_LL_RR.csv'
 csv_input_final = pd.read_csv(filepath_or_buffer= file_final, sep=",")
-
 
 
 for j in range(len(csv_input_final)):
