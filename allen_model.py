@@ -150,7 +150,6 @@ for factor in factor_list:
     ln1 = ax1.plot(h2_1, x2_1, label = 'Wang model\nAround the solar minimum', color = "b")
 
     h2_1 = np.arange(1.5, 4, 0.1)
-    h2_1 = 1.2
     wang_max = -4.42158e+06/h2_1 + 5.41656e+07/(h2_1)**2 - 1.86150e+08 /(h2_1)**3 + 2.13102e+08/(h2_1)**4
     x2_1 = wang_max
     ln1 = ax1.plot(h2_1, x2_1, label = 'Wang model\nAround the solar maximum', color = "r")
@@ -165,11 +164,20 @@ for factor in factor_list:
     x2_1 = wang_max_1
     ln1 = ax1.plot(h2_1, x2_1, ls = '--', color = "r")
     
-    h2_1 = np.arange(1, 4, 0.1)
-    Leblanc = 3.3e+05/(h2_1)**2 + 4.1e+06 /(h2_1)**4 + 8.0e+07/(h2_1)**6
-    x2_1 = Leblanc
-    ln1 = ax1.plot(h2_1, x2_1, label = 'Leblanc', color = "k")
+    # h2_1 = np.arange(1, 4, 0.1)
+    # Leblanc = 3.3e+05/(h2_1)**2 + 4.1e+06 /(h2_1)**4 + 8.0e+07/(h2_1)**6
+    # x2_1 = Leblanc
+    # ln1 = ax1.plot(h2_1, x2_1, label = 'Leblanc', color = "k")
 
+    h2_1 = np.arange(1, 4, 0.1)
+    Gibson =  (77.1/(h2_1) ** (31.4) + 0.954/(h2_1) ** (8.30) + 0.550/(h2_1) ** (4.63)) * 1e+8
+    x2_1 = Gibson
+    ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson1', color = "k")
+
+    h2_1 = np.arange(1, 4, 0.1)
+    Gibson =  (3.60/(h2_1) ** (15.3) + 0.990/(h2_1) ** (7.34) + 0.365/(h2_1) ** (4.31)) * 1e+8
+    x2_1 = Gibson
+    ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson2', color = "k")
 
     ax1.set_yscale('log')
     ax1.set_ylim(np.min(wang_min)*0.8 ,np.max(newkirk)*1.2)
@@ -188,6 +196,91 @@ plt.xlim(1,3.7)
 plt.show()
 plt.close()
 
+
+
+
+
+factor_list = np.array([1])
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+
+
+
+
+factor = 3
+h2_1 = np.arange(1, 4, 0.1)
+newkirk = factor * 4.2 * 10 ** (4+4.32/h2_1)
+x2_1 = newkirk
+# ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×Newkirk model', color = "orange")
+
+factor = 1
+h2_1 = np.arange(1, 4, 0.1)
+newkirk = factor * 4.2 * 10 ** (4+4.32/h2_1)
+x2_1 = newkirk
+# ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×Newkirk model', color = "deepskyblue")
+# plt.grid(which='both')
+freq=9*np.sqrt(newkirk)/10**3
+ax2=ax1.twinx()
+# ln3=ax2.plot(h2_1,freq, color = "deepskyblue")
+ax2.set_yscale('log')
+
+
+
+
+
+
+
+h2_1 = np.arange(1.5, 4, 0.1)
+wang_min = 353766/h2_1 + 1.03359e+07/(h2_1)**2 - 5.46541e+07/(h2_1)**3 + 8.24791e+07/(h2_1)**4
+x2_1 = wang_min 
+ln1 = ax1.plot(h2_1, x2_1, label = 'Wang model\nAround the solar minimum', color = "b")
+
+h2_1 = np.arange(1.5, 4, 0.1)
+wang_max = -4.42158e+06/h2_1 + 5.41656e+07/(h2_1)**2 - 1.86150e+08 /(h2_1)**3 + 2.13102e+08/(h2_1)**4
+x2_1 = wang_max
+ln1 = ax1.plot(h2_1, x2_1, label = 'Wang model\nAround the solar maximum', color = "r")
+
+h2_1 = np.arange(1, 1.6, 0.05)
+wang_min_1 = 353766/h2_1 + 1.03359e+07/(h2_1)**2 - 5.46541e+07/(h2_1)**3 + 8.24791e+07/(h2_1)**4
+x2_1 = wang_min_1
+ln1 = ax1.plot(h2_1, x2_1, ls = '--', color = "b")
+
+h2_1 = np.arange(1, 1.6, 0.05)
+wang_max_1 = -4.42158e+06/h2_1 + 5.41656e+07/(h2_1)**2 - 1.86150e+08 /(h2_1)**3 + 2.13102e+08/(h2_1)**4
+x2_1 = wang_max_1
+ln1 = ax1.plot(h2_1, x2_1, ls = '--', color = "r")
+
+# h2_1 = np.arange(1, 4, 0.1)
+# Leblanc = 3.3e+05/(h2_1)**2 + 4.1e+06 /(h2_1)**4 + 8.0e+07/(h2_1)**6
+# x2_1 = Leblanc
+# ln1 = ax1.plot(h2_1, x2_1, label = 'Leblanc', color = "k")
+
+# h2_1 = np.arange(1, 4, 0.1)
+# Gibson =  (77.1/(h2_1) ** (31.4) + 0.954/(h2_1) ** (8.30) + 0.550/(h2_1) ** (4.63)) * 1e+8
+# x2_1 = Gibson
+# ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson1', color = "k")
+
+h2_1 = np.arange(1, 4, 0.1)
+Gibson =  (3.60/(h2_1) ** (15.3) + 0.990/(h2_1) ** (7.34) + 0.365/(h2_1) ** (4.31)) * 1e+8
+x2_1 = Gibson
+ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson2', color = "k")
+
+ax1.set_yscale('log')
+ax1.set_ylim(np.min(wang_min)*0.8 ,np.max(newkirk)*1.2)
+ax2.set_ylim(9*np.sqrt(np.min(wang_min)*0.8)/10**3, 9*np.sqrt(np.max(newkirk)*1.2)/10**3)
+ax1.axhline(19753086.419753086, ls = "--", color = "darkred", label = '40MHz', linewidth=5, alpha = 0.4)
+ax1.axhline(4938271.604938271, ls = "--", color = "tan", label = '20MHz', linewidth=5, alpha = 0.7)
+    
+plt.title("Coronal electron density model",fontsize=16)
+ax1.legend(loc='upper right', fontsize = 8)
+# ax2.legend(loc='upper right')
+ax1.set_xlabel("Heliocentric distance [Rs]",fontsize=16)
+ax2.set_ylabel("Frequency [MHz]",fontsize=16)
+ax1.set_ylabel("Density [$/cc$]",fontsize=16)
+plt.grid(which='both')
+plt.xlim(1.2,2.8)
+plt.show()
+plt.close()
 
 
 

@@ -155,6 +155,14 @@ freq_drift_fp_ordinary = []
 freq_drift_2fp_ordinary = []
 
 
+residual_allen_micro = []
+residual_allen_ordinary = []
+residual_fp_micro = []
+residual_2fp_micro = []
+residual_fp_ordinary = []
+residual_2fp_ordinary = []
+
+
 file_final = Parent_directory  + '/solar_burst/Nancay/af_sgepss_analysis_data/electrondensity_anaysis_shuron3.csv'
 csv_input_final = pd.read_csv(filepath_or_buffer= file_final, sep=",")
 
@@ -212,6 +220,9 @@ for j in range(len(csv_input_final)):
                     freq_drift_allen_ordinary.append(drift_rates_allen*-1)
                     freq_drift_fp_ordinary.append(drift_rates_fp*-1)
                     freq_drift_2fp_ordinary.append(drift_rates_2fp*-1)
+                    residual_allen_ordinary.append(min(allen_fp_residual_list))
+                    residual_fp_ordinary.append(min(newkirk_fp_residual_list))
+                    residual_2fp_ordinary.append(min(newkirk_2fp_residual_list))
 
         if (((obs_time >= datetime.datetime(2007,1,1)) & (obs_time <= datetime.datetime(2009,12,31,23))) | ((obs_time >= datetime.datetime(2017,1,1)) & (obs_time <= datetime.datetime(2020,12,31,23))) | ((obs_time >= datetime.datetime(1995,1,1)) & (obs_time <= datetime.datetime(1997,12,31,23)))):
             if sunspots_num <= 36:
@@ -259,6 +270,9 @@ for j in range(len(csv_input_final)):
                     freq_drift_allen_ordinary.append(drift_rates_allen*-1)
                     freq_drift_fp_ordinary.append(drift_rates_fp*-1)
                     freq_drift_2fp_ordinary.append(drift_rates_2fp*-1)
+                    residual_allen_ordinary.append(min(allen_fp_residual_list))
+                    residual_fp_ordinary.append(min(newkirk_fp_residual_list))
+                    residual_2fp_ordinary.append(min(newkirk_2fp_residual_list))
 
     else:
         if ((obs_time >= datetime.datetime(2012,1,1)) & (obs_time <= datetime.datetime(2014,12,31,23))):
@@ -309,6 +323,9 @@ for j in range(len(csv_input_final)):
                     freq_drift_allen_micro.append(drift_rates_allen*-1)
                     freq_drift_fp_micro.append(drift_rates_fp*-1)
                     freq_drift_2fp_micro.append(drift_rates_2fp*-1)
+                    residual_allen_micro.append(min(allen_fp_residual_list))
+                    residual_fp_micro.append(wangmax_fp_residual_list[0])
+                    residual_2fp_micro.append(wangmax_2fp_residual_list[0])
                     
         if (((obs_time >= datetime.datetime(2007,1,1)) & (obs_time <= datetime.datetime(2009,12,31,23))) | ((obs_time >= datetime.datetime(2017,1,1)) & (obs_time <= datetime.datetime(2020,12,31,23)))):
             if sunspots_num <= 36:
@@ -359,6 +376,9 @@ for j in range(len(csv_input_final)):
                     freq_drift_allen_micro.append(drift_rates_allen*-1)
                     freq_drift_fp_micro.append(drift_rates_fp*-1)
                     freq_drift_2fp_micro.append(drift_rates_2fp*-1)
+                    residual_allen_micro.append(min(allen_fp_residual_list))
+                    residual_fp_micro.append(wangmin_fp_residual_list[0])
+                    residual_2fp_micro.append(wangmin_2fp_residual_list[0])
 
 freq_drift_fp_micro = np.array(freq_drift_fp_micro)
 freq_drift_2fp_micro = np.array(freq_drift_2fp_micro)
@@ -410,10 +430,63 @@ for i in range(3):
         driftrates_ci_median.append(np.mean(data))
         driftrates_ci_se.append(np.std(data)/np.sqrt(len(data))*coef)
 
-    
+
     SD_list = [np.nanstd(freq_drift_ordinary[ordinary_solar_max_idx]), np.nanstd(freq_drift_ordinary[ordinary_solar_min_idx]), np.nanstd(freq_drift_micro[micro_solar_max_idx]), np.nanstd(freq_drift_micro[micro_solar_min_idx])]
     driftrates_ci_plot(driftrates_ci_median, driftrates_ci_se)
     driftrates_sd_plot(driftrates_ci_median, SD_list)
+    print('\n')
+    print ('Ordinary solar maximum\nAve' + str(round(driftrates_ci_median[0],2))+'\nSD'+str(round(SD_list[0],2))+'\n95%CI'+ str(round((driftrates_ci_median[0]-driftrates_ci_se[0]),2)) + ' - ' + str(round((driftrates_ci_median[0]+driftrates_ci_se[0]),2)))
+    print ('Ordinary solar minimum\nAve' + str(round(driftrates_ci_median[1],2))+'\nSD'+str(round(SD_list[1],2))+'\n95%CI'+ str(round((driftrates_ci_median[1]-driftrates_ci_se[1]),2)) + ' - ' + str(round((driftrates_ci_median[1]+driftrates_ci_se[1]),2)))
+    print ('Micro solar maximum\nAve' + str(round(driftrates_ci_median[2],2))+'\nSD'+str(round(SD_list[2],2))+'\n95%CI'+ str(round((driftrates_ci_median[2]-driftrates_ci_se[2]),2)) + ' - ' + str(round((driftrates_ci_median[2]+driftrates_ci_se[2]),2)))
+    print ('Micro solar minimum\nAve' + str(round(driftrates_ci_median[3],2))+'\nSD'+str(round(SD_list[3],2))+'\n95%CI'+ str(round((driftrates_ci_median[3]-driftrates_ci_se[3]),2)) + ' - ' + str(round((driftrates_ci_median[3]+driftrates_ci_se[3]),2)))
 # velocity_ci_plot(velocity_ci_median, velocity_ci_se)
 
 
+# residual_allen_micro = []
+# residual_allen_ordinary = []
+# residual_fp_micro = []
+# residual_2fp_micro = []
+# residual_fp_ordinary = []
+# residual_2fp_ordinary = []
+
+plt.hist(residual_allen_micro, range=(0, 1.5))
+plt.title('Micro type III burst\n(Baumbach-Allen model  &  fp)')
+plt.xlabel('Standard deviation [s]', fontsize = 12)
+plt.ylabel('Number of events', fontsize = 12)
+plt.show()
+plt.close()
+
+plt.hist(residual_fp_micro, range=(0, 1.5))
+plt.title('Micro type III burst\n(Wang model  &  fp)')
+plt.xlabel('Standard deviation [s]', fontsize = 12)
+plt.ylabel('Number of events', fontsize = 12)
+plt.show()
+plt.close()
+
+plt.hist(residual_2fp_micro, range=(0, 1.5))
+plt.title('Micro type III burst\n(Wang model  &  f = 2fp)')
+plt.xlabel('Standard deviation [s]', fontsize = 12)
+plt.ylabel('Number of events', fontsize = 12)
+plt.show()
+plt.close()
+
+plt.hist(residual_allen_ordinary, range=(0, 1.5))
+plt.title('Ordinary type III burst\n(Baumbach-Allen model  &  fp)')
+plt.xlabel('Standard deviation [s]', fontsize = 12)
+plt.ylabel('Number of events', fontsize = 12)
+plt.show()
+plt.close()
+
+plt.hist(residual_fp_ordinary, range=(0, 1.5))
+plt.title('Ordinary type III burst\n(Newkirk model  &  fp)')
+plt.xlabel('Standard deviation [s]', fontsize = 12)
+plt.ylabel('Number of events', fontsize = 12)
+plt.show()
+plt.close()
+
+plt.hist(residual_2fp_ordinary, range=(0, 1.5))
+plt.title('Ordinary type III burst\n(Newkirk model  &  2fp)')
+plt.xlabel('Standard deviation [s]', fontsize = 12)
+plt.ylabel('Number of events', fontsize = 12)
+plt.show()
+plt.close()

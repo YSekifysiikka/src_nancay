@@ -14,8 +14,8 @@ import sys
 import matplotlib.pyplot as plt
 
 
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
-# Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 
 
 file_gain =Parent_directory + '/hinode_catalog/SN_d_tot_V2.0.csv'
