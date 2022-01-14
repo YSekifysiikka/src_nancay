@@ -102,11 +102,12 @@ for factor in factor_list:
 plt.title("Coronal electron density model",fontsize=16)
 ax1.legend(loc='upper right')
 # ax2.legend(loc='upper right')
-ax1.set_xlabel("Heliocentric distance [Rs]",fontsize=16)
+ax1.set_xlabel("Heliocentric distance [R⊙]",fontsize=16)
 ax2.set_ylabel("Plasma frequency [MHz]",fontsize=16)
 ax1.set_ylabel("Density [$/cc$]",fontsize=16)
 plt.grid(which='both')
 # plt.xlim(1,4)
+ax1.tick_params(axis='x', labelsize=14)
 plt.show()
 plt.close()
 
@@ -126,6 +127,12 @@ for factor in factor_list:
     newkirk = factor * 4.2 * 10 ** (4+4.32/h2_1)
     x2_1 = newkirk
     ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×Newkirk model', color = "orange")
+
+    # factor = 4
+    # h2_1 = np.arange(1, 4, 0.1)
+    # allen_model = factor * 10**8 * (2.99*(h2_1)**(-16)+1.55*(h2_1)**(-6)+0.036*(h2_1)**(-1.5))
+    # x2_1 = allen_model
+    # ln1 = ax1.plot(h2_1, x2_1, label = str(factor) + '×B-A model', color = "k")
 
     factor = 1
     h2_1 = np.arange(1, 4, 0.1)
@@ -169,15 +176,15 @@ for factor in factor_list:
     # x2_1 = Leblanc
     # ln1 = ax1.plot(h2_1, x2_1, label = 'Leblanc', color = "k")
 
-    h2_1 = np.arange(1, 4, 0.1)
-    Gibson =  (77.1/(h2_1) ** (31.4) + 0.954/(h2_1) ** (8.30) + 0.550/(h2_1) ** (4.63)) * 1e+8
-    x2_1 = Gibson
-    ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson1', color = "k")
+    # h2_1 = np.arange(1, 4, 0.1)
+    # Gibson =  (77.1/(h2_1) ** (31.4) + 0.954/(h2_1) ** (8.30) + 0.550/(h2_1) ** (4.63)) * 1e+8
+    # x2_1 = Gibson
+    # ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson1', color = "k")
 
-    h2_1 = np.arange(1, 4, 0.1)
-    Gibson =  (3.60/(h2_1) ** (15.3) + 0.990/(h2_1) ** (7.34) + 0.365/(h2_1) ** (4.31)) * 1e+8
-    x2_1 = Gibson
-    ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson2', color = "k")
+    # h2_1 = np.arange(1, 4, 0.1)
+    # Gibson =  (3.60/(h2_1) ** (15.3) + 0.990/(h2_1) ** (7.34) + 0.365/(h2_1) ** (4.31)) * 1e+8
+    # x2_1 = Gibson
+    # ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson2', color = "k")
 
     ax1.set_yscale('log')
     ax1.set_ylim(np.min(wang_min)*0.8 ,np.max(newkirk)*1.2)
@@ -188,9 +195,10 @@ for factor in factor_list:
 plt.title("Coronal electron density model",fontsize=16)
 ax1.legend(loc='upper right', fontsize = 8)
 # ax2.legend(loc='upper right')
-ax1.set_xlabel("Heliocentric distance [Rs]",fontsize=16)
+ax1.set_xlabel("Heliocentric distance [R⊙]",fontsize=16)
 ax2.set_ylabel("Frequency [MHz]",fontsize=16)
 ax1.set_ylabel("Density [$/cc$]",fontsize=16)
+ax1.tick_params(axis='x', labelsize=14)
 plt.grid(which='both')
 plt.xlim(1,3.7)
 plt.show()
@@ -260,10 +268,16 @@ ln1 = ax1.plot(h2_1, x2_1, ls = '--', color = "r")
 # x2_1 = Gibson
 # ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson1', color = "k")
 
-h2_1 = np.arange(1, 4, 0.1)
+h2_1 = np.arange(1.2, 4, 0.1)
 Gibson =  (3.60/(h2_1) ** (15.3) + 0.990/(h2_1) ** (7.34) + 0.365/(h2_1) ** (4.31)) * 1e+8
 x2_1 = Gibson
-ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson2', color = "k")
+ln1 = ax1.plot(h2_1, x2_1, label = 'Gibson model', color = "k")
+
+h2_1 = np.arange(1, 1.3, 0.05)
+Gibson =  (3.60/(h2_1) ** (15.3) + 0.990/(h2_1) ** (7.34) + 0.365/(h2_1) ** (4.31)) * 1e+8
+x2_1 = Gibson
+ln1 = ax1.plot(h2_1, x2_1, ls = '--', color = "k")
+
 
 ax1.set_yscale('log')
 ax1.set_ylim(np.min(wang_min)*0.8 ,np.max(newkirk)*1.2)
@@ -274,11 +288,12 @@ ax1.axhline(4938271.604938271, ls = "--", color = "tan", label = '20MHz', linewi
 plt.title("Coronal electron density model",fontsize=16)
 ax1.legend(loc='upper right', fontsize = 8)
 # ax2.legend(loc='upper right')
-ax1.set_xlabel("Heliocentric distance [Rs]",fontsize=16)
+ax1.set_xlabel("Heliocentric distance [R⊙]",fontsize=16)
 ax2.set_ylabel("Frequency [MHz]",fontsize=16)
 ax1.set_ylabel("Density [$/cc$]",fontsize=16)
+ax1.tick_params(axis='x', labelsize=14)
 plt.grid(which='both')
-plt.xlim(1.2,2.8)
+plt.xlim(1,2.8)
 plt.show()
 plt.close()
 

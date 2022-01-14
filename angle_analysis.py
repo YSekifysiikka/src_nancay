@@ -44,7 +44,8 @@ angle_2fp_ave = []
 angle_v2_fp_ave = []
 angle_v2_2fp_ave = []
 
-Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+# Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 
 # files = glob.glob(Parent_directory  + '/solar_burst/magnet/analysis/*/*.csv')
 # for file in files:

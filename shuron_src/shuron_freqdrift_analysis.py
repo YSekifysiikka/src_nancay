@@ -26,6 +26,15 @@ def numerical_diff_newkirk_velocity_fp(factor, r):
     ne_2 = np.log(factor * 4.2 * 10 ** (4+4.32/((r-h)/69600000000)))
     return ((ne_1 - ne_2)/(2*h))
 
+def numerical_diff_allen_velocity_fp(factor, r):
+    h = 1e-2
+    ne_1 = np.log(factor * 10**8 * (2.99*(((r+h)/69600000000))**(-16)+1.55*(((r+h)/69600000000))**(-6)+0.036*(((r+h)/69600000000))**(-1.5)))
+    ne_2 = np.log(factor * 10**8 * (2.99*(((r-h)/69600000000))**(-16)+1.55*(((r-h)/69600000000))**(-6)+0.036*(((r-h)/69600000000))**(-1.5)))
+
+    return ((ne_1 - ne_2)/(2*h))
+
+
+
 def csv_input_analysis_micro_solarmax():
     obs_time_micro.append(obs_time)
     freq_start = csv_input_final["freq_start"][j]
@@ -110,12 +119,20 @@ def csv_input_analysis_ordinary_solarmax():
     fp_cube = (lambda h: 9 * 1e-3 * np.sqrt(factor_velocity * 4.2 * 10 ** (4+4.32/(1+(h/69600000000)))))
     h_radio = inversefunc(fp_cube, y_values = freq) + 69600000000
     velocity_fp_list_factor1_ordinary.append(2/numerical_diff_newkirk_velocity_fp(factor_velocity, h_radio)/freq*csv_input_final["drift_rate_40MHz"][j]/29979245800 * -1)
-    
+
     s_freq = (freq + csv_input_final["drift_rate_40MHz"][j]*0.01)/2
     e_freq = (freq - csv_input_final["drift_rate_40MHz"][j]*0.01)/2
     s_radio = inversefunc(fp_cube, y_values = s_freq) + 69600000000
     e_radio = inversefunc(fp_cube, y_values = e_freq) + 69600000000
     velocity_2fp_list_factor1_ordinary.append((e_radio-s_radio)/0.02/29979245800)
+
+
+    factor_velocity = 4
+    freq = 40
+    fp_cube = (lambda h: 9 * 1e-3 * np.sqrt(factor_velocity * 10**8 * (2.99*((1+(h/69600000000)))**(-16)+1.55*((1+(h/69600000000)))**(-6)+0.036*((1+(h/69600000000)))**(-1.5))))
+    h_radio = inversefunc(fp_cube, y_values = freq) + 69600000000
+    allen_velocity_fp_list_factor4_ordinary.append(2/numerical_diff_allen_velocity_fp(factor_velocity, h_radio)/freq*csv_input_final["drift_rate_40MHz"][j]/29979245800 * -1)
+    
 
     factor_velocity = 3
     freq = 40
@@ -156,6 +173,13 @@ def csv_input_analysis_ordinary_solarmin():
     s_radio = inversefunc(fp_cube, y_values = s_freq) + 69600000000
     e_radio = inversefunc(fp_cube, y_values = e_freq) + 69600000000
     velocity_2fp_list_factor1_ordinary.append((e_radio-s_radio)/0.02/29979245800)
+
+    factor_velocity = 4
+    freq = 40
+    fp_cube = (lambda h: 9 * 1e-3 * np.sqrt(factor_velocity * 10**8 * (2.99*((1+(h/69600000000)))**(-16)+1.55*((1+(h/69600000000)))**(-6)+0.036*((1+(h/69600000000)))**(-1.5))))
+    h_radio = inversefunc(fp_cube, y_values = freq) + 69600000000
+    allen_velocity_fp_list_factor4_ordinary.append(2/numerical_diff_allen_velocity_fp(factor_velocity, h_radio)/freq*csv_input_final["drift_rate_40MHz"][j]/29979245800 * -1)
+
     return
 
 def driftrates_ci_plot(driftrates_ci_median, driftrates_ci_se):
@@ -184,14 +208,13 @@ def driftrates_ci_plot(driftrates_ci_median, driftrates_ci_se):
     plt.plot([1, 17],[4.5, 4.5], color = "k", linewidth = 1.0, alpha = 1)
     plt.plot([1, 17],[2.5, 2.5], color = "k", linewidth = 1.0, alpha = 1)
     
-<<<<<<< HEAD
     # plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
     plt.plot([7.34, 7.34],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'Zhang et al., 2018')
     plt.plot([5.29, 5.29],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed")
-=======
-    plt.plot([5.3, 5.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
-    plt.plot([7.3, 7.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed")
->>>>>>> fd56880c7fc0f3aa5cf32c224c503225762deb96
+
+    # plt.plot([5.3, 5.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'Zhang et al., 2018')
+    # plt.plot([7.3, 7.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed")
+
     
     plt.xlabel('Frequency drift rates [MHz/s]', fontsize=18)
     plt.ylabel('Type of bursts', fontsize=18)
@@ -235,13 +258,13 @@ def driftrates_sd_plot(driftrates_ci_median, SD_list):
     plt.plot([1, 17],[4.5, 4.5], color = "k", linewidth = 1.0, alpha = 1)
     plt.plot([1, 17],[2.5, 2.5], color = "k", linewidth = 1.0, alpha = 1)
     
-<<<<<<< HEAD
+
     # plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'Zhang et al., 2018')
     plt.plot([7.34, 7.34],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'Zhang et al., 2018')
     plt.plot([5.29, 5.29],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed")
-=======
+
     # plt.plot([6.3, 6.3],[0, 10.5], color = "k", linewidth = 2.0, alpha = 1, linestyle = "dashed", label = 'P. J. Zhang et al., 2018')
->>>>>>> fd56880c7fc0f3aa5cf32c224c503225762deb96
+
     
     plt.xlabel('Frequency drift rates [MHz/s]', fontsize=18)
     plt.ylabel('Type of bursts', fontsize=18)
@@ -249,7 +272,7 @@ def driftrates_sd_plot(driftrates_ci_median, SD_list):
     plt.ylim(0.5, 12)
     plt.yticks([8.5,5.5,3.5,1.5], ['Ordinary type III burst\nAround the solar maximum', 'Ordinary type III burst\nAround the solar minimum', 'Micro type III burst\nAround the solar maximum', 'Micro type III burst\nAround the solar minimum'])
     plt.xticks(fontsize=16)
-    # plt.legend()
+    plt.legend()
     plt.title('Average ± 1σ')
     ax = plt.gca()
     # ax.axes.xaxis.set_visible(False)
@@ -477,6 +500,9 @@ velocity_fp_list_factor1_ordinary = []
 velocity_2fp_list_factor1_ordinary = []
 velocity_fp_list_factor3_ordinary = []
 velocity_2fp_list_factor3_ordinary = []
+
+allen_velocity_fp_list_factor4_ordinary = []
+
 velocity_fp_list_micro = []
 velocity_2fp_list_micro = []
 
@@ -532,12 +558,33 @@ velocity_fp_list_factor3_ordinary = np.array(velocity_fp_list_factor3_ordinary)
 velocity_2fp_list_factor3_ordinary = np.array(velocity_2fp_list_factor3_ordinary)
 velocity_fp_list_micro = np.array(velocity_fp_list_micro)
 velocity_2fp_list_micro = np.array(velocity_2fp_list_micro)
+allen_velocity_fp_list_factor4_ordinary = np.array(allen_velocity_fp_list_factor4_ordinary)
 
 
 
 
 ordinary_solar_max_idx = np.where((obs_time_ordinary >= datetime.datetime(2012,1,1)) & (obs_time_ordinary <= datetime.datetime(2014,12,31,23)))[0]
 ordinary_solar_min_idx = np.where(((obs_time_ordinary >= datetime.datetime(2007,1,1)) & (obs_time_ordinary <= datetime.datetime(2009,12,31,23))) | ((obs_time_ordinary >= datetime.datetime(2017,1,1)) & (obs_time_ordinary <= datetime.datetime(2020,12,31,23))) | ((obs_time_ordinary >= datetime.datetime(1995,1,1)) & (obs_time_ordinary <= datetime.datetime(1997,12,31,23))))[0]
+
+test = []
+test_1 = []
+test_2 = []
+for data in [allen_velocity_fp_list_factor4_ordinary[ordinary_solar_max_idx], allen_velocity_fp_list_factor4_ordinary[ordinary_solar_min_idx]]:
+    if (len(data) >= 50 & len(data) <= 90):
+        coef = 2
+    elif (len(data) > 90 & len(data) <= 150):
+        coef = 1.98
+    elif (len(data) > 150):
+        coef = 1.96
+    else:
+        print ('Event num error')
+        sys.exit()
+    test.append(np.mean(data))
+    test_1.append(np.std(data)/np.sqrt(len(data))*coef)
+    test_2.append(np.std(data))
+print ('Solar maximum\n AVE: ' + str(test[0]) + '  SD: ' + str(test_2[0]) + '  95%CI: ' + str(test[0]-test_1[0]) + ' - ' + str(test[0]+test_1[0]))
+print ('Solar minimum\n AVE: ' + str(test[1]) + '  SD: ' + str(test_2[1]) + '  95%CI: ' + str(test[1]-test_1[1]) + ' - ' + str(test[1]+test_1[1]))
+
 
 freq_check = 40
 
@@ -582,7 +629,7 @@ for burst in bursts:
             else:
                 plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
                 plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
-        plt.title('Frequency drift rates @ ' + str(freq_check) + '[MH/z]' + '\n' + burst + text)
+        plt.title('Frequency drift rates @ ' + str(freq_check) + '[MHz]' + '\n' + burst + text)
     # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
         plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
         plt.xlabel('Frequency drift rates[MHz/s]',fontsize=15)
@@ -642,7 +689,7 @@ for burst in bursts:
             else:
                 plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
                 plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
-        plt.title('Frequency drift rates @ ' + str(freq_check) + '[MH/z]' + '\n' + burst)
+        plt.title('Frequency drift rates @ ' + str(freq_check) + '[MHz]' + '\n' + burst)
     # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
         plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
         plt.xlabel('Frequency drift rates[MHz/s]',fontsize=15)
@@ -693,7 +740,7 @@ for period in period_list:
             else:
                 plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
                 plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
-        plt.title('Frequency drift rates @ ' + str(freq_check) + '[MH/z]' + '\n' + period + text)
+        plt.title('Frequency drift rates @ ' + str(freq_check) + '[MHz]' + '\n' + period + text)
     # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
         plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
         plt.xlabel('Frequency drift rates[MHz/s]',fontsize=15)
@@ -744,7 +791,7 @@ for period in period_list:
                 plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
                 plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
 
-        plt.title('Frequency drift rates @ ' + str(freq_check) + '[MH/z]' + '\n' + period + text)
+        plt.title('Frequency drift rates @ ' + str(freq_check) + '[MHz]' + '\n' + period + text)
     # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
         plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
         plt.xlabel('Frequency drift rates[MHz/s]',fontsize=15)
@@ -758,6 +805,292 @@ for period in period_list:
 
 
 
+####################################
+bursts = ['Ordinary type Ⅲ burst', 'Micro type Ⅲ burst']
+for burst in bursts:
+    if burst == 'Micro type Ⅲ burst':
+    
+        text = ''
+        freq_drift_solar_maximum = velocity_2fp_list_micro[micro_solar_max_idx]
+        color_1 = "r"
+        freq_drift_solar_minimum = velocity_2fp_list_micro[micro_solar_min_idx]
+        color_2 = "b"
+        
+        
+        # if max(freq_drift_solar_minimum) >= max(freq_drift_solar_maximum):
+        #     max_val = max(freq_drift_solar_minimum)
+        # else:
+        #     max_val = max(freq_drift_solar_maximum)
+        
+        # if min(freq_drift_solar_minimum) <= min(freq_drift_solar_maximum):
+        #     min_val = min(freq_drift_solar_minimum)
+        # else:
+        #     min_val = min(freq_drift_solar_maximum)
+
+        max_val = 2.4
+        min_val = 0
+        bin_size = 48
+        
+        x_hist = (plt.hist(freq_drift_solar_maximum, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist = (plt.hist(freq_drift_solar_maximum, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_maximum))
+        x_hist_1 = (plt.hist(freq_drift_solar_minimum, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist_1 = (plt.hist(freq_drift_solar_minimum, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_minimum))
+        plt.close()
+        width = x_hist[1]-x_hist[0]
+        for i in range(len(y_hist)):
+            if i == 0:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3, label =  'Around the solar maximum\n'+ str(len(freq_drift_solar_maximum)) + ' events')
+                # plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Around the solar minimum\n'+ str(len(freq_drift_solar_minimum)) + ' events')
+            else:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
+                # plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
+        plt.title('Radial velocity @ ' + str(freq_check) + '[MHz]' + '\n' + burst + text)
+    # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
+        plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
+        plt.xlabel('Radial velocity [c]',fontsize=15)
+        plt.ylabel('Occurrence rate',fontsize=15)
+        # plt.xticks([0,5,10,15], ['0 - 1','5 - 6','10 - 11', '15 - 16']) 
+        plt.xticks(rotation = 20)
+        plt.ylim(0,0.5)
+        plt.xlim(min_val-0.1, max_val+0.1)
+        plt.show()
+        plt.close()
+
+    
+    if burst == 'Ordinary type Ⅲ burst':
+    
+
+        freq_drift_solar_maximum = velocity_2fp_list_factor1_ordinary[ordinary_solar_max_idx]
+        color_1 = "orange"
+        freq_drift_solar_minimum = velocity_2fp_list_factor1_ordinary[ordinary_solar_min_idx]
+        color_2 = "deepskyblue"
+        
+        max_val = 2.4
+        min_val = 0
+        bin_size = 48
+        
+        x_hist = (plt.hist(freq_drift_solar_maximum, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist = (plt.hist(freq_drift_solar_maximum, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_maximum))
+        x_hist_1 = (plt.hist(freq_drift_solar_minimum, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist_1 = (plt.hist(freq_drift_solar_minimum, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_minimum))
+        
+    
+        plt.close()
+        width = x_hist[1]-x_hist[0]
+        for i in range(len(y_hist)):
+            if i == 0:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3, label =  'Around the solar maximum\n'+ str(len(freq_drift_solar_maximum)) + ' events')
+                # plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Around the solar minimum\n'+ str(len(freq_drift_solar_minimum)) + ' events')
+            else:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
+                # plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
+        plt.title('Radial velocity @ ' + str(freq_check) + '[MHz]' + '\n' + burst)
+    # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
+        plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
+        plt.xlabel('Radial velocity [c]',fontsize=15)
+        plt.ylabel('Occurrence rate',fontsize=15)
+            # plt.xticks([0,5,10,15], ['0 - 1','5 - 6','10 - 11', '15 - 16']) 
+        plt.xticks(rotation = 20)
+        plt.ylim(0,0.5)
+        plt.xlim(min_val-0.1, max_val+0.1)
+        plt.show()
+        plt.close()
+
+
+        freq_drift_solar_maximum = velocity_2fp_list_factor3_ordinary
+        color_1 = "orange"
+        freq_drift_solar_minimum = velocity_2fp_list_factor1_ordinary[ordinary_solar_min_idx]
+        color_2 = "deepskyblue"
+        
+        max_val = 2.4
+        min_val = 0
+        bin_size = 48
+        
+        x_hist = (plt.hist(freq_drift_solar_maximum, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist = (plt.hist(freq_drift_solar_maximum, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_maximum))
+        x_hist_1 = (plt.hist(freq_drift_solar_minimum, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist_1 = (plt.hist(freq_drift_solar_minimum, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_minimum))
+        
+    
+        plt.close()
+        width = x_hist[1]-x_hist[0]
+        for i in range(len(y_hist)):
+            if i == 0:
+                # plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3, label =  'Around the solar maximum\n'+ str(len(freq_drift_solar_maximum)) + ' events')
+                plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Around the solar minimum\n'+ str(len(freq_drift_solar_minimum)) + ' events')
+            else:
+                # plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
+                plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
+        plt.title('Radial velocity @ ' + str(freq_check) + '[MHz]' + '\n' + burst)
+    # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
+        plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
+        plt.xlabel('Radial velocity [c]',fontsize=15)
+        plt.ylabel('Occurrence rate',fontsize=15)
+            # plt.xticks([0,5,10,15], ['0 - 1','5 - 6','10 - 11', '15 - 16']) 
+        plt.xticks(rotation = 20)
+        plt.ylim(0,0.5)
+        plt.xlim(min_val-0.1, max_val+0.1)
+        plt.show()
+        plt.close()
+
+
+
+period_list = ['Around the solar maximum', 'Around the solar minimum']
+for period in period_list:
+    if period == 'Around the solar maximum':
+    
+        text = ''
+        freq_drift_solar_maximum_ordinary = velocity_2fp_list_factor1_ordinary[ordinary_solar_max_idx]
+        color_1 = "orange"
+        freq_drift_solar_maximum_micro = velocity_2fp_list_micro[micro_solar_max_idx]
+        color_2 = "r"
+        
+        
+        # if max(freq_drift_solar_minimum) >= max(freq_drift_solar_maximum):
+        #     max_val = max(freq_drift_solar_minimum)
+        # else:
+        #     max_val = max(freq_drift_solar_maximum)
+        
+        # if min(freq_drift_solar_minimum) <= min(freq_drift_solar_maximum):
+        #     min_val = min(freq_drift_solar_minimum)
+        # else:
+        #     min_val = min(freq_drift_solar_maximum)
+
+        max_val = 2.4
+        min_val = 0
+        bin_size = 48
+        
+        x_hist = (plt.hist(freq_drift_solar_maximum_ordinary, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist = (plt.hist(freq_drift_solar_maximum_ordinary, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_maximum_ordinary))
+        x_hist_1 = (plt.hist(freq_drift_solar_maximum_micro, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist_1 = (plt.hist(freq_drift_solar_maximum_micro, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_maximum_micro))
+        plt.close()
+        width = x_hist[1]-x_hist[0]
+        for i in range(len(y_hist)):
+            if i == 0:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3, label =  'Ordinary type Ⅲ burst\n'+ str(len(freq_drift_solar_maximum_ordinary)) + ' events')
+                # plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3, label = 'Around the solar maximum\n'+ str(len(freq_drift_micro[micro_idx2])) + ' events')
+                plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Micro type Ⅲ burst\n'+ str(len(freq_drift_solar_maximum_micro)) + ' events')
+                # plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Around the solar minimum\n'+ str(len(freq_drift_micro[micro_idx2])) + ' events')
+            else:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
+                plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
+        plt.title('Radial velocity @ ' + str(freq_check) + '[MHz]' + '\n' + period + text)
+    # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
+        plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
+        plt.xlabel('Radial velocity [c]',fontsize=15)
+        plt.ylabel('Occurrence rate',fontsize=15)
+        # plt.xticks([0,5,10,15], ['0 - 1','5 - 6','10 - 11', '15 - 16']) 
+        plt.xticks(rotation = 20)
+        plt.ylim(0,0.5)
+        plt.xlim(min_val-0.1, max_val+0.1)
+        plt.show()
+        plt.close()
+
+
+
+        text = ''
+        freq_drift_solar_maximum_ordinary = velocity_2fp_list_factor3_ordinary
+        color_1 = "orange"
+        freq_drift_solar_maximum_micro = velocity_2fp_list_micro[micro_solar_max_idx]
+        color_2 = "r"
+        
+        
+        # if max(freq_drift_solar_minimum) >= max(freq_drift_solar_maximum):
+        #     max_val = max(freq_drift_solar_minimum)
+        # else:
+        #     max_val = max(freq_drift_solar_maximum)
+        
+        # if min(freq_drift_solar_minimum) <= min(freq_drift_solar_maximum):
+        #     min_val = min(freq_drift_solar_minimum)
+        # else:
+        #     min_val = min(freq_drift_solar_maximum)
+
+        max_val = 2.4
+        min_val = 0
+        bin_size = 48
+        
+        x_hist = (plt.hist(freq_drift_solar_maximum_ordinary, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist = (plt.hist(freq_drift_solar_maximum_ordinary, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_maximum_ordinary))
+        x_hist_1 = (plt.hist(freq_drift_solar_maximum_micro, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist_1 = (plt.hist(freq_drift_solar_maximum_micro, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_maximum_micro))
+        plt.close()
+        width = x_hist[1]-x_hist[0]
+        for i in range(len(y_hist)):
+            if i == 0:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3, label =  'Ordinary type Ⅲ burst\n'+ str(len(freq_drift_solar_maximum_ordinary)) + ' events')
+                # plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3, label = 'Around the solar maximum\n'+ str(len(freq_drift_micro[micro_idx2])) + ' events')
+                plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Micro type Ⅲ burst\n'+ str(len(freq_drift_solar_maximum_micro)) + ' events')
+                # plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Around the solar minimum\n'+ str(len(freq_drift_micro[micro_idx2])) + ' events')
+            else:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
+                plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
+        plt.title('Radial velocity @ ' + str(freq_check) + '[MHz]' + '\n' + period + text)
+    # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
+        plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
+        plt.xlabel('Radial velocity [c]',fontsize=15)
+        plt.ylabel('Occurrence rate',fontsize=15)
+        # plt.xticks([0,5,10,15], ['0 - 1','5 - 6','10 - 11', '15 - 16']) 
+        plt.xticks(rotation = 20)
+        plt.ylim(0,0.5)
+        plt.xlim(min_val-0.1, max_val+0.1)
+        plt.show()
+        plt.close()
+
+    if period == 'Around the solar minimum':
+    
+        text = ''
+        freq_drift_solar_minimum_ordinary = velocity_2fp_list_factor1_ordinary[ordinary_solar_min_idx]
+        color_1 = "deepskyblue"
+        freq_drift_solar_minimum_micro = velocity_2fp_list_micro[micro_solar_min_idx]
+        color_2 = "b"
+        
+        
+        # if max(freq_drift_solar_minimum) >= max(freq_drift_solar_maximum):
+        #     max_val = max(freq_drift_solar_minimum)
+        # else:
+        #     max_val = max(freq_drift_solar_maximum)
+        
+        # if min(freq_drift_solar_minimum) <= min(freq_drift_solar_maximum):
+        #     min_val = min(freq_drift_solar_minimum)
+        # else:
+        #     min_val = min(freq_drift_solar_maximum)
+        max_val = 2.4
+        min_val = 0
+        bin_size = 48
+        
+        x_hist = (plt.hist(freq_drift_solar_minimum_ordinary, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist = (plt.hist(freq_drift_solar_minimum_ordinary, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_minimum_ordinary))
+        x_hist_1 = (plt.hist(freq_drift_solar_minimum_micro, bins = bin_size, range = (min_val,max_val), density= None)[1])
+        y_hist_1 = (plt.hist(freq_drift_solar_minimum_micro, bins = bin_size, range = (min_val,max_val), density= None)[0]/len(freq_drift_solar_minimum_micro))
+        plt.close()
+        width = x_hist[1]-x_hist[0]
+        for i in range(len(y_hist)):
+            if i == 0:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3, label =  'Ordinary type Ⅲ burst\n'+ str(len(freq_drift_solar_minimum_ordinary)) + ' events')
+                # plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3, label = 'Around the solar maximum\n'+ str(len(freq_drift_micro[micro_idx2])) + ' events')
+                plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Micro type Ⅲ burst\n'+ str(len(freq_drift_solar_minimum_micro)) + ' events')
+
+                # plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3, label = 'Around the solar minimum\n'+ str(len(freq_drift_micro[micro_idx2])) + ' events')
+            else:
+                plt.bar(x_hist[i] + (x_hist[1]-x_hist[0])/2, y_hist[i], width= width, color = color_1, alpha = 0.3)
+                plt.bar(x_hist_1[i] + (x_hist_1[1]-x_hist_1[0])/2, y_hist_1[i], width= width, color = color_2, alpha = 0.3)
+
+        plt.title('Radial velocity @ ' + str(freq_check) + '[MHz]' + '\n' + period + text)
+    # plt.text(0.8, 0.1, "Armadillo", fontdict = font_dict)
+        plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize = 10)
+        plt.xlabel('Radial velocity [c]',fontsize=15)
+        plt.ylabel('Occurrence rate',fontsize=15)
+        # plt.xticks([0,5,10,15], ['0 - 1','5 - 6','10 - 11', '15 - 16']) 
+        plt.xticks(rotation = 20)
+        plt.ylim(0,0.5)
+        plt.xlim(min_val-0.1, max_val+0.1)
+        plt.show()
+        plt.close()
+
+
+
+####################################
 
 box_plot()
 

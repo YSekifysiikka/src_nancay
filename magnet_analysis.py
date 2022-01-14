@@ -26,13 +26,14 @@ ylim = [-22, -12]
 
 
 Parent_directory = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab'
+Parent_directory = '/Volumes/GoogleDrive/マイドライブ/lab'
 
 
 # check_radius = [1.15,1.5]
 # check_radius = [1.3,1.65]
 # check_radius = [1.3,1.5,1.95]
 # check_radius = [1.5]
-file_name = glob.glob('/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/new_result/'+CR+'/bss_'+CR+'.fits')[0]
+file_name = glob.glob(Parent_directory + '/solar_burst/magnet/new_result/'+CR+'/bss_'+CR+'.fits')[0]
 bss_image_file = get_pkg_data_filename(file_name)
 bss_image_data = fits.getdata(bss_image_file, ext=0)
 bss_image_data = np.flipud(bss_image_data)
@@ -48,7 +49,7 @@ y = [0, 30, 60, 90, 120, 150, 179]
 plt.yticks(y, ['90', '60', '30', '0','-30', '-60', '-90',])
 # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
 plt.title('CR: ' + CR)
-save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
+save_name = Parent_directory + '/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
 plt.savefig(save_name)
 plt.show()
 
@@ -67,7 +68,7 @@ angle_std = []
 
 
 #磁力線のradialからの平均ずれ角
-file_names = glob.glob('/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/new_result/'+CR+'/amn_'+CR+'*.fits')
+file_names = glob.glob(Parent_directory + '/solar_burst/magnet/new_result/'+CR+'/amn_'+CR+'*.fits')
 for file_name in file_names:
     start = int(file_name.split('.fits')[0].split('_')[-1].split('-')[0])
     end = int(file_name.split('.fits')[0].split('_')[-1].split('-')[1])
@@ -79,7 +80,7 @@ for file_name in file_names:
         # if (((start+end)/20 == check_radius[0]) | ((start+end)/20 == check_radius[1])):
         # if (((start+end)/20 == check_radius[0])):
         print ((start+end)/20, start, end)
-        file_name = glob.glob('/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/new_result/'+CR+'/amn_'+CR+'_' + str(start) + '-' + str(end) + '.fits')[0]
+        file_name = glob.glob(Parent_directory + '/solar_burst/magnet/new_result/'+CR+'/amn_'+CR+'_' + str(start) + '-' + str(end) + '.fits')[0]
         amn_image_file = get_pkg_data_filename(file_name)
         amn_image_data = fits.getdata(amn_image_file, ext=0)
         amn_image_data = np.flipud(amn_image_data)
@@ -96,13 +97,13 @@ for file_name in file_names:
         plt.yticks(y, ['90', '60', '30', '0','-30', '-60', '-90',])
         # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
         plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
-        save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
+        save_name = Parent_directory + '/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
         plt.savefig(save_name)
         plt.show()
         
         
         #磁力線のradialからの最大ずれ角
-        file_name = glob.glob('/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/new_result/'+CR+'/amx_'+CR+'_' + str(start) + '-' + str(end) + '.fits')[0]
+        file_name = glob.glob(Parent_directory + '/solar_burst/magnet/new_result/'+CR+'/amx_'+CR+'_' + str(start) + '-' + str(end) + '.fits')[0]
         amx_image_file = get_pkg_data_filename(file_name)
         amx_image_data = fits.getdata(amx_image_file, ext=0)
         amx_image_data = np.flipud(amx_image_data)
@@ -119,17 +120,17 @@ for file_name in file_names:
         plt.yticks(y, ['90', '60', '30', '0','-30', '-60', '-90',])
         # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
         plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
-        save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
+        save_name = Parent_directory + '/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
         plt.savefig(save_name)
         plt.show()
         
         #ソース面の座標[i,j]に繋がる光球面上の経度
-        file_name = glob.glob('/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/new_result/'+CR+'/xph_'+CR+'.fits')[0]
+        file_name = glob.glob(Parent_directory + '/solar_burst/magnet/new_result/'+CR+'/xph_'+CR+'.fits')[0]
         xph_image_file = get_pkg_data_filename(file_name)
         xph_image_data = fits.getdata(xph_image_file, ext=0)
         
         #ソース面の座標[i,j]に繋がる光球面上の緯度
-        file_name = glob.glob('/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/new_result/'+CR+'/yth_'+CR+'.fits')[0]
+        file_name = glob.glob(Parent_directory + '/solar_burst/magnet/new_result/'+CR+'/yth_'+CR+'.fits')[0]
         yth_image_file = get_pkg_data_filename(file_name)
         yth_image_data = fits.getdata(yth_image_file, ext=0)
         
@@ -172,7 +173,7 @@ for file_name in file_names:
         # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
         plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
         plt.legend()
-        save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
+        save_name = Parent_directory + '/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
         plt.savefig(save_name)
         plt.show()
         
@@ -201,7 +202,7 @@ for file_name in file_names:
         plt.title('CR: ' + CR+'  @' + str((start+end)/20) + 'Rs')
         # plt.title('CR: ' + CR+'  ' + str(start/10) +'-'+ str(end/10))
 
-        save_name = '/Volumes/GoogleDrive-110582226816677617731/マイドライブ/lab/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
+        save_name = Parent_directory + '/solar_burst/magnet/plot_new/'+CR+ '/' + file_name.split('/')[-1].split('.')[0] + '.png'
         plt.savefig(save_name)
         plt.show()
         

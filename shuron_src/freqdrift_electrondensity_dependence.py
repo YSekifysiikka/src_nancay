@@ -442,12 +442,12 @@ for i in range(3):
 # velocity_ci_plot(velocity_ci_median, velocity_ci_se)
 
 
-# residual_allen_micro = []
-# residual_allen_ordinary = []
-# residual_fp_micro = []
-# residual_2fp_micro = []
-# residual_fp_ordinary = []
-# residual_2fp_ordinary = []
+residual_allen_micro = np.array(residual_allen_micro)
+residual_allen_ordinary = np.array(residual_allen_ordinary)
+residual_fp_micro = np.array(residual_fp_micro)
+residual_2fp_micro = np.array(residual_2fp_micro)
+residual_fp_ordinary = np.array(residual_fp_ordinary)
+residual_2fp_ordinary = np.array(residual_2fp_ordinary)
 
 plt.hist(residual_allen_micro, range=(0, 1.5))
 plt.title('Micro type III burst\n(Baumbach-Allen model  &  fp)')
@@ -464,7 +464,7 @@ plt.show()
 plt.close()
 
 plt.hist(residual_2fp_micro, range=(0, 1.5))
-plt.title('Micro type III burst\n(Wang model  &  f = 2fp)')
+plt.title('Micro type III burst\n(Wang model  &  2fp)')
 plt.xlabel('Standard deviation [s]', fontsize = 12)
 plt.ylabel('Number of events', fontsize = 12)
 plt.show()
@@ -490,3 +490,18 @@ plt.xlabel('Standard deviation [s]', fontsize = 12)
 plt.ylabel('Number of events', fontsize = 12)
 plt.show()
 plt.close()
+
+
+
+# test = residual_allen_micro
+# test = residual_fp_micro
+# test = residual_2fp_micro
+# test = residual_allen_ordinary
+# test = residual_fp_ordinary
+test = residual_2fp_ordinary
+print (np.mean(test))
+print (sum(i <= 1.35 for i in test)/len(test))
+
+
+
+
